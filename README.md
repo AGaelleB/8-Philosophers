@@ -8,15 +8,61 @@ Debut le 19 juin 2023
 
 ## **LIENS UTILS :**
 
-Philosophers visualizer : https://nafuka11.github.io/philosophers-visualizer/
+Tips : 
+- https://private-rooster-996.notion.site/philosophers-VM-c60be9c836084edfbcd9c07e29b429c4
+- https://www.codequoi.com/threads-mutex-et-programmation-concurrente-en-c/
 
+Visualizer : https://nafuka11.github.io/philosophers-visualizer/
+
+Tester : 
+- https://github.com/cacharle/philosophers_test
+- https://github.com/nesvoboda/socrates
+- https://github.com/newlinuxbot/Philosphers-42Project-Tester
 
 ## **COMMANDES :**
 
 
+
+
+## **La programmation concurrente :**
+
+La programmation concurrente en opposition à la programmation séquentielle.
+
+Permet à un programme d’effectuer plusieurs tâches simultanément au lieu de devoir attendre la fin d’une opération pour commencer la suivante.
+
+## **Threads :**
+
+Un thread (ou un fil d’exécution en français), c’est une suite logique d’instructions à l’intérieur d’un processus qui est automatiquement gérée par le noyau du système d’exploitation. Un programme séquentiel consiste en un seul thread. Mais les systèmes d’exploitation modernes nous permettent d’accommoder plusieurs threads dans nos programmes, qui se déroulent tous en parallèle.
+
+En C, l’interface standard pour manipuler les threads est POSIX avec la bibliothèque <pthread.h>.
+
+phthread_t      ->  1 - creer une structure
+pthread_create  ->  2 - creer le thread
+pthread_join    ->  3 - wait execution
+
+## **Mutex :**
+
+Un mutex est l'abrégé de « mutual exclusion ».
+On peut penser à un mutex comme au verrou de la porte des toilettes. Un thread vient le verrouiller pour indiquer que les toilettes sont occupées. Les autres threads devront alors attendre patiemment que la porte soit déverrouillée avant de pouvoir accéder aux toilettes à leur tour.
+
+
+
+## **Semaphores :**
+
+Les semaphores representent les "fourchettes" exemples : semaphores fork[nb of philo].
+Lorsqu un philo relachera sa fourcette il executera un signal.
+Signal binaire : 1 = free, 0 = use
+
+
 **=> TEST :**
 
+Le drapeau -fsanitize=thread -g qu’on ajoute au moment de la compilation. L’option -g permet d’afficher les numéros de ligne qui ont produit l’erreur.
 
-## **threads :**
+L’outil de détection d’erreurs de thread Helgrind avec lequel on peut exécuter notre programme, comme ceci : 
+valgrind --tool=helgrind ./programme.
 
+L’outil de détection d’erreurs de threads DRD, qu’on lance aussi au moment de l’exécution comme ceci : 
+valgrind --tool=drd ./programme.
+
+Attention, valgrind et -fsanitize=thread ne s’entendent pas du tout et ne doivent pas s’utiliser ensemble !
 
