@@ -46,13 +46,15 @@ Un mutex est l'abrégé de « mutual exclusion ».
 On peut penser à un mutex comme au verrou de la porte des toilettes. Un thread vient le verrouiller pour indiquer que les toilettes sont occupées. Les autres threads devront alors attendre patiemment que la porte soit déverrouillée avant de pouvoir accéder aux toilettes à leur tour.
 
 
-
 ## **Semaphores :**
 
 Les semaphores representent les "fourchettes" exemples : semaphores fork[nb of philo].
 Lorsqu un philo relachera sa fourcette il executera un signal.
 Signal binaire : 1 = free, 0 = use
 
+
+##
+##
 
 **=> TEST :**
 
