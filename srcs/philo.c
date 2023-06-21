@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:19 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/21 16:37:41 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/21 17:15:03 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ Chaque programme doit prendre les arguments suivants :
 
 int	main(int ac, char **av)
 {
-	// printf("Debut Philosophers");
-
 	if(ac != 6)
 		return (write_error("Wrong amount of arguments"));
 	

@@ -15,6 +15,7 @@ Vous découvrirez les mutex, les sémaphores et la mémoire partagée.
 Tips : 
 - https://private-rooster-996.notion.site/philosophers-VM-c60be9c836084edfbcd9c07e29b429c4
 - https://www.codequoi.com/threads-mutex-et-programmation-concurrente-en-c/
+- https://www.notion.so/Philosophers-2b872948598e4f0cba91c66d8b5ba821
 
 Visualizer : https://nafuka11.github.io/philosophers-visualizer/
 
@@ -57,6 +58,8 @@ Les mutex permettent notamment d'éviter les data race.
 Une Data Race survient quand (a) une donnée partagée (b) est accédée par au moins deux threads (c) dont au moins un en écriture (d) et ce, sans synchronisation.
 
 ## **Semaphores :**
+
+[UTILS FOR BONUS PART]
 
 Les **semaphores** representent les "fourchettes" exemples : semaphores fork[nb of philo].
 Lorsqu un philo relachera sa fourcette il executera un signal.

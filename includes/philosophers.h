@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:42 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/21 16:31:32 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/21 17:18:41 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,6 @@
 # include <errno.h>
 # include <pthread.h>
 
-# include "../includes/ft_printf.h"
-# include "../includes/get_next_line.h"
-# include "../includes/libft.h"
-
 # define RESET "\033[0m"
 # define BLACK "\033[30m"
 # define RED "\033[31m"
@@ -39,10 +35,6 @@
 # define MAGENTA "\033[35m"
 # define CYAN "\033[36m"
 # define WHITE "\033[37m"
-
-# define NC	"\e[0m" // A SUPPRIMER 
-
-
 
 typedef	struct			s_philosopher
 {
