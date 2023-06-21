@@ -6,7 +6,7 @@
 #    By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/17 10:44:39 by abonnefo          #+#    #+#              #
-#    Updated: 2023/06/20 17:49:34 by abonnefo         ###   ########.fr        #
+#    Updated: 2023/06/21 16:31:14 by abonnefo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = philosophers
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -g3 -g
+CFLAGS = -Wall #-Wextra -Werror -g3 -g
 
 OBJ_DIR_PHILOSOPHERS = srcs/obj_philosophers
 

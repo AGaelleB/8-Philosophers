@@ -4,6 +4,10 @@ Debut le 19 juin 2023
 
 ## **INTRODUCTION :**
 
+Ce projet est une introduction au threading et aux processus, et sur comment travailler
+sur le même espace mémoire.
+Vous apprendrez à manipuler des threads.
+Vous découvrirez les mutex, les sémaphores et la mémoire partagée.
 
 
 ## **LIENS UTILS :**
@@ -32,7 +36,9 @@ Permet à un programme d’effectuer plusieurs tâches simultanément au lieu de
 
 ## **Threads :**
 
-Un thread (ou un fil d’exécution en français), c’est une suite logique d’instructions à l’intérieur d’un processus qui est automatiquement gérée par le noyau du système d’exploitation. Un programme séquentiel consiste en un seul thread. Mais les systèmes d’exploitation modernes nous permettent d’accommoder plusieurs threads dans nos programmes, qui se déroulent tous en parallèle.
+Un thread (ou un fil d’exécution en français), c’est une suite logique d’instructions à l’intérieur d’un processus qui est automatiquement gérée par le noyau du système d’exploitation.
+
+En resumé, il s'agit d'une instruction envoyé au processus. 
 
 En C, l’interface standard pour manipuler les threads est POSIX avec la bibliothèque <pthread.h>.
 
@@ -44,14 +50,24 @@ pthread_join    ->  3 - wait execution
 
 Un mutex est l'abrégé de « mutual exclusion ».
 On peut penser à un mutex comme au verrou de la porte des toilettes. Un thread vient le verrouiller pour indiquer que les toilettes sont occupées. Les autres threads devront alors attendre patiemment que la porte soit déverrouillée avant de pouvoir accéder aux toilettes à leur tour.
+Les mutex permettent notamment d'éviter les data race. 
 
+## **Data race :**
+
+Une Data Race survient quand (a) une donnée partagée (b) est accédée par au moins deux threads (c) dont au moins un en écriture (d) et ce, sans synchronisation.
 
 ## **Semaphores :**
 
-Les semaphores representent les "fourchettes" exemples : semaphores fork[nb of philo].
+Les **semaphores** representent les "fourchettes" exemples : semaphores fork[nb of philo].
 Lorsqu un philo relachera sa fourcette il executera un signal.
-Signal binaire : 1 = free, 0 = use
 
+Un semaphore est une variable de structure utilisée pour contrôler l'accès à une ressource partagée par plusieurs processus (ou threads).
+
+Il évite les problèmes de section critique dans un système concurrent tel qu'un système d'exploitation multitâche.
+
+**Sémaphores binaires** : ils sont limités aux valeurs 0 et 1 (ou verrouillé/déverrouillé, indisponible/disponible) et sont utilisés pour implémenter les verrous.
+
+**Les sémaphores de comptage** : permettent un comptage arbitraire/aléatoire des ressources.
 
 ##
 ##
