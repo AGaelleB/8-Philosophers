@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:42 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/21 17:18:41 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/22 18:09:22 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,32 +36,30 @@
 # define CYAN "\033[36m"
 # define WHITE "\033[37m"
 
-typedef	struct			s_philosopher
+typedef	struct			s_philo
 {
 	int					id;
-	int					x_ate;
+	int					nb_time_eat;
 	int					left_fork_id;
 	int					right_fork_id;
-	long long			t_last_meal;
-	struct s_rules		*rules;
-	pthread_t			thread_id;
-}						t_philosopher;
+	long long			time_last_eat;
+	pthread_mutex_t		mutex; // permet d init des mutex 
+	// pthread_t			thread_id;
+}						t_philo;
 
-typedef struct			s_rules
+typedef struct			s_init
 {
-	int					nb_philo;
-	int					time_death;
-	int					time_eat;
-	int					time_sleep;
-	int					nb_eat;
-	// int					dieded;
-	// int					all_ate;
-	// long long			first_timestamp;
-	pthread_mutex_t		meal_check;
-	pthread_mutex_t		forks[250];
-	pthread_mutex_t		writing;
-	t_philosopher		philosophers[250];
-}						t_rules;
+	int					nb_of_philo;
+	int					time_to_die;
+	int					time_to_eat;
+	int					time_to_sleep;
+	int					nb_must_eat;
+	t_philo				*philo;
+	
+	// pthread_mutex_t		meal_check;
+	// pthread_mutex_t		forks[250];
+	// pthread_mutex_t		writing;
+}						t_init;
 
 
 typedef struct s_cmd
@@ -82,6 +80,10 @@ typedef struct s_data
 
 /********************************* utils.c ************************************/
 int	write_error(char *str);
+
+/********************************* libfr_philo.c ************************************/
+int	ft_atoi_philo(char *str);
+
 
 /********************************** path.c ************************************/
 

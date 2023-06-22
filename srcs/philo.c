@@ -6,27 +6,103 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:19 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/21 17:15:03 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/22 18:21:42 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-/*
-Chaque programme doit prendre les arguments suivants :
-
-- number_of_philosophers 
-- time_to_die 
-- time_to_eat 
-- time_to_sleep
-- [number_of_times_each_philosopher_must_eat]
-*/
-
 #include "../includes/philosophers.h"
+
+t_init	*init_mutex(t_init *data)
+{
+	int	i;
+	int	mutex;
+
+	i = data->nb_of_philo - 1;
+	while(i >= 0)
+	{
+		mutex = pthread_mutex_init(&data->philo[i].mutex, NULL);
+		if (mutex != 0)
+		{
+			printf("Failed to initialize mutex for philosopher %d\n", i); // ATT PRINTF
+			free(data->philo);
+			free(data);
+			return (NULL);
+		}
+		i--;
+	}
+	return (data);
+}
+
+t_init	*init_philo(t_init *data)
+{
+	int	i;
+
+	i = data->nb_of_philo - 1;
+
+	data->philo = malloc(sizeof(t_philo) * data->nb_of_philo);
+	if (data->philo == NULL)
+		return (NULL);
+	while(i >= 0)
+	{
+		data->philo[i].id = i;
+		data->philo[i].nb_time_eat = 0;
+		data->philo[i].left_fork_id = i;
+		data->philo[i].right_fork_id = (i + 1) % data->nb_of_philo; // lili  Cela permet de connecter le dernier philosophe avec la première fourchette du tableau, formant ainsi une boucle.
+		data->philo[i].time_last_eat = 0;
+
+		printf("%s***** INIT PHILO nb : '%d' *****\n", BLUE, i);
+		printf("id = %d\n", data->philo[i].id);
+		printf("nb_time_eat = %d\n", data->philo[i].nb_time_eat);
+		printf("left_fork_id = %d\n", data->philo[i].left_fork_id );
+		printf("right_fork_id = %d\n", data->philo[i].right_fork_id);
+		printf("time_last_eat = %lld\n", data->philo[i].time_last_eat);
+		printf("i = %d\n", i);
+		printf("********** END INIT ***********%s\n\n", RESET);
+		
+		i--;
+	}
+	return (data);
+}
+
+t_init	*init_recup_data(t_init *data, int ac, char **av)
+{
+
+	data = malloc(sizeof(t_init));
+	if (data == NULL)
+		return (NULL);
+	data->nb_of_philo = ft_atoi_philo(av[1]);
+	data->time_to_die = ft_atoi_philo(av[2]);
+	data->time_to_eat = ft_atoi_philo(av[3]);
+	data->time_to_sleep = ft_atoi_philo(av[4]);
+	data->nb_must_eat = ft_atoi_philo(av[5]);
+
+	printf("%s***** INIT DATA *****\n", MAGENTA);
+	printf("nb_of_philo = %d\n", data->nb_of_philo);
+	printf("time_to_die = %d\n", data->time_to_die);
+	printf("time_to_eat = %d\n", data->time_to_eat);
+	printf("time_to_sleep = %d\n", data->time_to_sleep);
+	printf("nb_must_eat = %d\n", data->nb_must_eat);
+	printf("****** END INIT ******\n\n%s", RESET);
+
+	return (data);
+}
 
 int	main(int ac, char **av)
 {
+	t_init	*data;
+
+	data = NULL;
+
 	if(ac != 6)
 		return (write_error("Wrong amount of arguments"));
-	
+	data = init_recup_data(data, ac, av);
+	if (data == NULL)
+		return (write_error("Failed to initialize data"));
+	data = init_philo(data);
+	if (data == NULL)
+		return (write_error("Failed to initialize philo"));
+	data = init_mutex(data);
+	if (data == NULL)
+		return (write_error("Failed to initialize mutex"));
 	return (0);
 }

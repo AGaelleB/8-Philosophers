@@ -6,7 +6,7 @@
 #    By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/17 10:44:39 by abonnefo          #+#    #+#              #
-#    Updated: 2023/06/21 17:17:48 by abonnefo         ###   ########.fr        #
+#    Updated: 2023/06/22 13:02:50 by abonnefo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ OBJ_DIR_PHILOSOPHERS = srcs/obj_philosophers
 
 SRCS = srcs/philo.c \
 	srcs/utils.c \
+	srcs/libft_philo.c \
 
 OBJS = $(SRCS:%.c=$(OBJ_DIR_PHILOSOPHERS)/%.o) \
 
