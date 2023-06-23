@@ -22,3 +22,24 @@ Surveiller les philosophes : Un autre thread doit surveiller tous les philosophe
 Nettoyer : Lorsque le programme se termine, assurez-vous de libérer toutes les ressources utilisées (threads, mutex, sémaphores, etc.)
 
 Veuillez noter que c'est une approche de haut niveau et que chaque étape peut nécessiter de diviser davantage en sous-tâches en fonction de vos besoins spécifiques. J'espère que cela vous aidera à démarrer votre projet.
+
+
+********************************
+
+L'étape suivante serait de commencer à implémenter la logique principale du problème des philosophes à dîner. Cela pourrait impliquer des choses comme :
+
+Créer une fonction pour simuler l'action d'un philosophe. Cette fonction pourrait prendre en entrée un pointeur vers la structure du philosophe, et elle devrait boucler indéfiniment (ou jusqu'à ce que le philosophe ait mangé le nombre requis de fois), exécutant le cycle "penser - prendre les fourchettes - manger - lâcher les fourchettes - dormir".
+
+Dans cette fonction, implémentez le comportement correct pour prendre et lâcher les fourchettes. Souvenez-vous qu'un philosophe doit prendre deux fourchettes avant de commencer à manger, et qu'il doit les lâcher quand il a fini. Vous devez utiliser pthread_mutex_lock et pthread_mutex_unlock pour assurer que deux philosophes n'essayent pas de prendre la même fourchette en même temps (ce qui provoquerait un interblocage, ou "deadlock"). Assurez-vous que le philosophe prend d'abord la fourchette avec le plus petit identifiant pour éviter les interblocages.
+
+Gardez une trace du moment où chaque philosophe commence à manger. Cela pourrait être fait en stockant le temps actuel dans la variable time_last_eat chaque fois qu'un philosophe commence à manger.
+
+Mettez en place une vérification pour voir si un philosophe est mort. Un philosophe meurt s'il n'a pas commencé à manger dans l'intervalle de time_to_die. Vous pourriez faire cela en créant une autre boucle dans la fonction principale qui vérifie continuellement si chaque philosophe a commencé à manger dans le temps imparti.
+
+Enfin, vous devez créer un thread pour chaque philosophe et le faire exécuter la fonction que vous avez créée à l'étape 1. Vous pouvez faire cela dans la fonction principale, après avoir initialisé tous les philosophes et les fourchettes.
+
+Une fois que vous avez créé tous les threads, vous devez attendre qu'ils se terminent en utilisant pthread_join. Notez que dans ce cas, les threads ne se termineront probablement jamais d'eux-mêmes (à moins qu'ils n'aient un nombre fixe de fois à manger), donc votre programme devra probablement être terminé manuellement.
+
+Assurez-vous de traiter tous les cas d'erreur possibles, par exemple si pthread_create ou pthread_join échoue. Vous devriez également nettoyer correctement à la fin de votre programme, en libérant toute la mémoire que vous avez allouée et en détruisant tous les mutex que vous avez créés.
+
+Enfin, vous devrez écrire le code pour imprimer les états des philosophes (prendre une fourchette, manger, dormir, penser, mourir) de manière thread-safe. Vous pouvez le faire en utilisant un autre mutex pour protéger les appels printf/write.

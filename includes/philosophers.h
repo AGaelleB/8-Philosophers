@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:42 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/22 18:09:22 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/23 12:53:12 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@
 
 typedef	struct			s_philo
 {
-	int					id;
+	int					philo_id;
 	int					nb_time_eat;
 	int					left_fork_id;
 	int					right_fork_id;
 	long long			time_last_eat;
 	pthread_mutex_t		mutex; // permet d init des mutex 
-	// pthread_t			thread_id;
+	pthread_t			thread_philo; //creation de mes threads
 }						t_philo;
 
 typedef struct			s_init
@@ -56,11 +56,7 @@ typedef struct			s_init
 	int					nb_must_eat;
 	t_philo				*philo;
 	
-	// pthread_mutex_t		meal_check;
-	// pthread_mutex_t		forks[250];
-	// pthread_mutex_t		writing;
 }						t_init;
-
 
 typedef struct s_cmd
 {
@@ -76,15 +72,18 @@ typedef struct s_data
 	struct s_data	*next;
 }	t_data;
 
-/********************************* philosophers.c ************************************/
+/********************************* philo.c ************************************/
 
 /********************************* utils.c ************************************/
 int	write_error(char *str);
+void	ft_free_tab(char **tab);
 
-/********************************* libfr_philo.c ************************************/
+/******************************* libft_philo.c ********************************/
 int	ft_atoi_philo(char *str);
 
-
-/********************************** path.c ************************************/
+/********************************** init.c ************************************/
+t_init	*init_mutex(t_init *data);
+t_init	*init_philo(t_init *data);
+t_init	*init_recup_data(t_init *data, int ac, char **av);
 
 #endif
