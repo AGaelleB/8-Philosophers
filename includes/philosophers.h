@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:42 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/23 12:53:12 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/23 14:53:22 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <pthread.h>
+#include <sys/time.h>
 
 # define RESET "\033[0m"
 # define BLACK "\033[30m"
@@ -75,8 +76,10 @@ typedef struct s_data
 /********************************* philo.c ************************************/
 
 /********************************* utils.c ************************************/
-int	write_error(char *str);
-void	ft_free_tab(char **tab);
+int			write_error(char *str);
+void		ft_free_tab(char **tab);
+long long	timestamp(void);
+
 
 /******************************* libft_philo.c ********************************/
 int	ft_atoi_philo(char *str);
@@ -85,5 +88,15 @@ int	ft_atoi_philo(char *str);
 t_init	*init_mutex(t_init *data);
 t_init	*init_philo(t_init *data);
 t_init	*init_recup_data(t_init *data, int ac, char **av);
+
+/***************************** actions_philos.c ********************************/
+
+void	action_think(t_philo *philo);
+void	action_eat(t_philo *philo);
+void	action_drop_fork(t_philo *philo);
+void	action_grab_fork(t_philo *philo);
+void	action_sleep(t_philo *philo);
+void	check_if_philo_died(t_philo *philo);
+
 
 #endif
