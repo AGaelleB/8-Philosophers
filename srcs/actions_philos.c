@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/26 16:15:29 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 16:16:13 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 void	action_think(t_philo *philo)
 {
-	
-	printf("%sphilo->time_init = %lld\n%s", YELLOW, philo->time_init, RESET);
-
+	// printf("%sphilo->time_init = %lld\n%s", YELLOW, philo->time_init, RESET);
 	print_action(philo, philo->philo_id, "is thinking");
 }
 
