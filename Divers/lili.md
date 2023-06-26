@@ -43,3 +43,15 @@ Une fois que vous avez créé tous les threads, vous devez attendre qu'ils se te
 Assurez-vous de traiter tous les cas d'erreur possibles, par exemple si pthread_create ou pthread_join échoue. Vous devriez également nettoyer correctement à la fin de votre programme, en libérant toute la mémoire que vous avez allouée et en détruisant tous les mutex que vous avez créés.
 
 Enfin, vous devrez écrire le code pour imprimer les états des philosophes (prendre une fourchette, manger, dormir, penser, mourir) de manière thread-safe. Vous pouvez le faire en utilisant un autre mutex pour protéger les appels printf/write.
+
+
+
+
+
+
+**************************************
+
+De plus, à première vue, il semble que votre programme soit bloqué à l'étape "thinking" parce que les autres étapes dépendent d'une certaine synchronisation entre les threads qui n'est peut-être pas mise en place correctement. Vous devriez vérifier votre gestion des mutex et votre logique de synchronisation des threads. Par exemple, dans votre fonction action_grab_fork, vous utilisez des mutex pour synchroniser l'accès aux fourchettes, mais il est possible que vous rencontriez une situation de blocage, où chaque philosophe a saisi une fourchette et attend que l'autre la libère.
+
+Encore une fois, il serait utile d'ajouter plus de messages de journalisation pour suivre le déroulement de votre programme et identifier l'endroit exact où les choses tournent mal. Vous pourriez aussi envisager d'ajouter un délai après chaque action pour aider à observer l'ordre des opérations.
+

@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/26 17:51:00 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 18:39:37 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,15 +80,4 @@ void	action_drop_fork(t_philo *philo, t_init *data)
 void	action_sleep(t_philo *philo)
 {
 	print_action(philo, philo->philo_id, "is sleeping");
-}
-
-void	check_if_philo_died(t_philo *philo)
-{
-	/*
-	Un philosophe meurt s'il n'a pas commencé à manger dans l'intervalle de 
-	time_to_die. 
-	Creer une autre boucle dans la fonction principale qui vérifie continuellement
-	si chaque philosophe a commencé à manger dans le temps imparti
-	*/
-
 }

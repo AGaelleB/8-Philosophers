@@ -6,11 +6,22 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/26 18:22:58 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 18:40:01 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philosophers.h"
+
+void	check_if_philo_died(t_philo *philo)
+{
+	/*
+	Un philosophe meurt s'il n'a pas commencé à manger dans l'intervalle de 
+	time_to_die. 
+	Creer une autre boucle dans la fonction principale qui vérifie continuellement
+	si chaque philosophe a commencé à manger dans le temps imparti
+	*/
+
+}
 
 void *thread_routine(void *data)
 {
@@ -28,7 +39,6 @@ void *thread_routine(void *data)
 	action_sleep(philo);
 	return (NULL);
 }
-
 
 void	run_routine_philo(t_init *data)
 {
