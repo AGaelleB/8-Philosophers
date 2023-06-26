@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:19 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/26 15:35:44 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 18:30:47 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ int	main(int ac, char **av)
 	data = init_mutex(data);
 	if (data == NULL)
 		return (write_error("Failed to initialize mutex"));
+	data = init_forks(data);
+	if (data == NULL)
+		return (write_error("Failed to initialize forks"));
 	run_routine_philo(data);
+
+	cleanup_forks(data);
 	return (0);
 }

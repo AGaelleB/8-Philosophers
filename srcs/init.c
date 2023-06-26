@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/26 17:43:46 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 18:34:36 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,35 @@ t_init	*init_mutex(t_init *data)
 	}
 	return (data);
 }
+
+t_init	*init_forks(t_init *data)
+{
+	int i;
+
+	data->forks = malloc(sizeof(pthread_mutex_t) * data->nb_of_philo);
+	if (data->forks == NULL)
+		return (NULL);
+
+	i = data->nb_of_philo - 1;
+	while (i >= 0)
+	{
+		if (pthread_mutex_init(&data->forks[i], NULL) != 0)
+		{
+			// Ajout d'un nettoyage pour éviter les leaks
+			while(i < data->nb_of_philo)
+			{
+				pthread_mutex_destroy(&data->forks[i]);
+				i++;
+			}
+			free(data->forks);
+			return (NULL);
+		}
+		i--;
+	}
+	return (data);
+}
+
+
 
 t_init	*init_philo(t_init *data)
 {

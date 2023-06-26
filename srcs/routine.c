@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/26 18:20:12 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 18:22:58 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ void *thread_routine(void *data)
 	philo = (t_philo*)data;
 	init = (t_init*)data;
 	
-
-	printf("Debut de la routine\n");
-	
+	// printf("Debut de la routine\n");
 	action_think(philo);
 	action_grab_fork(philo, init);
 	action_eat(philo, init);

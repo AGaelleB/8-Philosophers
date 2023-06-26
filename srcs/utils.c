@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/26 16:11:12 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 18:29:22 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,23 @@ void	print_action(t_philo *philo, int id, char *str)
 	printf("%i ", id + 1);
 	printf("%s\n", str);
 
+}
+
+void cleanup_forks(t_init *data)
+{
+	int	i;
+
+	if (data->forks != NULL)
+	{
+		i = data->nb_of_philo - 1;
+		while (i >= 0)
+		{
+			pthread_mutex_destroy(&data->forks[i]);
+			i--;
+		}
+
+		free(data->forks);
+		data->forks = NULL;
+	}
 }
 

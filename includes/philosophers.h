@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:42 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/26 18:21:36 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 18:30:25 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ typedef struct			s_init
 int			write_error(char *str);
 void		ft_free_tab(char **tab);
 long long	get_time(void);
-// void	print_action(t_init *time, int id, char *str);
-void	print_action(t_philo *philo, int id, char *str);
+void		print_action(t_philo *philo, int id, char *str);
+void		cleanup_forks(t_init *data);
 
 
 /******************************* libft_philo.c ********************************/
@@ -78,6 +78,7 @@ int	ft_atoi_philo(char *str);
 t_init	*init_mutex(t_init *data);
 t_init	*init_philo(t_init *data);
 t_init	*init_recup_data(t_init *data, int ac, char **av);
+t_init	*init_forks(t_init *data);
 
 /***************************** actions_philos.c ********************************/
 
