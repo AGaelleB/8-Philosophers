@@ -1,165 +1,4 @@
-Règles communes
-Vous devez faire un programme pour la partie obligatoire et, dans le cas où vous choi-
-sissez aussi de faire les bonus, un programme pour la partie bonus. Ces deux programmes
-doivent respecter les règles suivantes, communes aux deux parties :
-•Les variables globales sont interdites !
-•Chaque programme doit prendre les arguments suivants :
-number_of_philosophers time_to_die time_to_eat time_to_sleep
-[number_of_times_each_philosopher_must_eat]
-◦number_of_philosophers : Le nombre de philosophes, mais aussi le nombre
-de fourchettes.
-◦time_to_die (en millisecondes) : Si un philosophe n’a pas commencé à manger
-time_to_die millisecondes après le début de son précédent repas ou depuis le
-début de la simulation, il meurt.
-◦time_to_eat (en millisecondes) : Le temps qu’un philosophe prend à manger.
-Pendant ce temps, un philosophe doit garder ses deux fourchettes.
-◦time_to_sleep (en millisecondes) : Le temps qu’un philosophe passe à dormir.
-◦number_of_times_each_philosopher_must_eat (argument optionnel) : Si tous
-les philosophes ont mangé au moins number_of_times_each_philosopher_must_eat
-fois, la simulation prend fin. Si cet argument n’est pas spécifié, alors la simu-
-lation prend fin à la mort d’un philosophe.
-•Chaque philosophe se voit assigner un numéro entre 1 et number_of_philosophers.
-•Le philosophe numéro 1 est assis à côté du philosophe numéro number_of_philosophers.
-Les autres suivent cette logique : philosophe numéro N est assis entre philosophe
-numéro N - 1 et philosophe numéro N + 1.
-5
-Philosophers Qui aurait cru que philosopher serait si mortel ?
-Concernant les logs de votre programme :
-•Tout changement d’état d’un philosophe doit être formatté comme suit :
-◦timestamp_in_ms X has taken a fork
-◦timestamp_in_ms X is eating
-◦timestamp_in_ms X is sleeping
-◦timestamp_in_ms X is thinking
-◦timestamp_in_ms X died
-Remplacez timestamp_in_ms par le timestamp actuel en millisecondes
-et X par le numéro du philosophe.
-•Tout message affiché ne doit pas être mélangé avec un autre message.
-•Il ne doit pas y avoir plus de 10 ms entre la mort d’un philosophe et l’affichage du
-message annonçant sa mort.
-•Encore une fois, les philosophes doivent éviter de mourir.
-Votre programme ne doit pas avoir de data race.
-6
-Chapitre V
-Partie obligatoire
-Nom du pro-
-gramme
-philo
-Fichiers de rendu Makefile, *.h, *.c, dans un dossier philo/
-Makefile NAME, all, clean, fclean, re
-Arguments number_of_philosophers time_to_die time_to_eat
-time_to_sleep
-[number_of_times_each_philosopher_must_eat]
-Fonctions ex-
-ternes autorisées
-memset, printf, malloc, free, write,
-usleep, gettimeofday, pthread_create,
-pthread_detach, pthread_join, pthread_mutex_init,
-pthread_mutex_destroy, pthread_mutex_lock,
-pthread_mutex_unlock
-Libft autorisée Non
-Description Philosophers avec des threads et des mutex
-Les règles spécifiques à la partie obligatoire sont :
-•Chaque philosophe doit être représenté par un thread.
-•Une fourchette est placée entre chaque paire de philosophes. Cela signifie que, s’il
-y a plusieurs philosophes, chaque philosophe a une fourchette à sa gauche et une à
-sa droite. S’il n’y a qu’un seul philosophe, il n’y aura donc qu’une seule fourchette
-sur la table.
-•Afin d’empêcher les philosophes de dupliquer les fourchettes, vous devez protéger
-leur état en mémoire avec un mutex pour chacune d’entre elle.
-
-
-
-/*mon .h*/
-
-#ifndef PHILOSOPHERS_H
-# define PHILOSOPHERS_H
-
-# include <fcntl.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <stddef.h>
-# include <stdio.h>
-# include <stdint.h>
-# include <string.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <sys/wait.h>
-# include <errno.h>
-# include <pthread.h>
-#include <sys/time.h>
-
-# define RESET "\033[0m"
-# define BLACK "\033[30m"
-# define RED "\033[31m"
-# define GREEN "\033[32m"
-# define YELLOW "\033[33m"
-# define BLUE "\033[34m"
-# define MAGENTA "\033[35m"
-# define CYAN "\033[36m"
-# define WHITE "\033[37m"
-
-typedef	struct			s_philo
-{
-	int					philo_id;
-	int					nb_time_eat;
-	int					left_fork_id;
-	int					right_fork_id;
-	long long			time_last_eat;
-	pthread_mutex_t		mutex; // permet d init des mutex 
-	pthread_t			thread_philo; //creation de mes threads
-
-}						t_philo;
-
-typedef struct			s_init
-{
-	int					nb_of_philo;
-	int					time_to_die;
-	int					time_to_eat;
-	int					time_to_sleep;
-	int					nb_must_eat;
-	long long			time_init;
-	t_philo				*philo;
-	
-}						t_init;
-
-
-/********************************* philo.c ************************************/
-
-/********************************* utils.c ************************************/
-int			write_error(char *str);
-void		ft_free_tab(char **tab);
-long long	get_time(void);
-void	print_action(t_init *time, int id, char *str);
-
-
-/******************************* libft_philo.c ********************************/
-int	ft_atoi_philo(char *str);
-
-/********************************** init.c ************************************/
-t_init	*init_mutex(t_init *data);
-t_init	*init_philo(t_init *data);
-t_init	*init_recup_data(t_init *data, int ac, char **av);
-
-/***************************** actions_philos.c ********************************/
-
-void	action_think(t_philo *philo, t_init *data);
-void	action_eat(t_philo *philo, t_init	*data);
-void	action_drop_fork(t_philo *philo, t_init	*data);
-void	action_grab_fork(t_philo *philo, t_init *data);
-void	action_sleep(t_philo *philo, t_init	*data);
-void	check_if_philo_died(t_philo *philo, t_init *data);
-
-/***************************** routine.c ********************************/
-
-void	*thread_routine(void *data);
-void	run_routine_philo(t_init *data);
-
-#endif
-
-
-/*mes fichier .c*/
-
-#include "../includes/philosophers.h"
+mon code
 
 int	write_error(char *str)
 {
@@ -183,16 +22,15 @@ long long	get_time(void)
 	// 1 sec = 1 000 milisecondes
 }
 
-void	print_action(t_init *init, int id, char *str)
+void	print_action(t_philo *philo, int id, char *str)
 {
 	// printf("%sinit->time_init = %lld\n%s", YELLOW, init->time_init, RESET);
 	
-	printf("%lli ", get_time() - init->time_init);
+	printf("%lli ", get_time() - philo->time_init);
 	printf("%i ", id + 1);
 	printf("%s\n", str);
 
 }
-
 
 int	ft_atoi_philo(char *str)
 {
@@ -213,8 +51,6 @@ int	ft_atoi_philo(char *str)
 	return (sign * result);
 }
 
-
-#include "../includes/philosophers.h"
 
 t_init	*init_mutex(t_init *data)
 {
@@ -268,24 +104,22 @@ t_init	*init_recup_data(t_init *data, int ac, char **av)
 	data->time_to_die = ft_atoi_philo(av[2]);
 	data->time_to_eat = ft_atoi_philo(av[3]);
 	data->time_to_sleep = ft_atoi_philo(av[4]);
-	data->nb_must_eat = ft_atoi_philo(av[5]);
+	if(ac == 6)
+		data->nb_must_eat = ft_atoi_philo(av[5]);
+	else
+		data->nb_must_eat = 0;
 	return (data);
 }
 
-
-#include "../includes/philosophers.h"
-
-// timestamp_in_ms X has taken a fork
-
-void	action_think(t_philo *philo, t_init *data)
+void	action_think(t_philo *philo)
 {
-	printf("%sdata->time_init = %lld\n%s", YELLOW, data->time_init, RESET);
-
-	print_action(data, philo->philo_id, "is thinking");
+	// printf("%sphilo->time_init = %lld\n%s", YELLOW, philo->time_init, RESET);
+	print_action(philo, philo->philo_id, "is thinking");
 }
 
-void	action_eat(t_philo *philo, t_init	*data)
+void	action_eat(t_philo *philo, t_init *data) // ICI
 {
+	// t_init	*data;
 	// ajouter aussi un check de si le temps entre 2 repas a ete respecté, sinon dead
 
 	if (data->nb_must_eat != 0)
@@ -300,48 +134,54 @@ void	action_eat(t_philo *philo, t_init	*data)
 			// que la simulation doit se terminer.
 		}
 	}
-	print_action(data, philo->philo_id, "is eating");
+	print_action(philo, philo->philo_id, "is eating");
 	philo->time_last_eat = get_time();
-}
-
-void	action_drop_fork(t_philo *philo, t_init	*data)
-{
-	if (philo->left_fork_id < philo->right_fork_id)
-	{
-		pthread_mutex_unlock(&philo->left_fork_id);
-		pthread_mutex_unlock(&philo->right_fork_id);
-	}
-	else
-	{
-		pthread_mutex_unlock(&philo->right_fork_id);
-		pthread_mutex_unlock(&philo->left_fork_id);
-	}
 }
 
 void	action_grab_fork(t_philo *philo, t_init *data)
 {
+	// t_init	*data;
+	
 	// Philo prend d'abord la fourchette avec le plus petit identifiant
 	if (philo->left_fork_id < philo->right_fork_id)
 	{
-		pthread_mutex_lock(&philo->left_fork_id);
-		pthread_mutex_lock(&philo->right_fork_id);
+		pthread_mutex_lock(&data->forks[philo->left_fork_id]);
+		pthread_mutex_lock(&data->forks[philo->right_fork_id]);
 	}
 	else 
 	{
-		pthread_mutex_lock(&philo->right_fork_id);
-		pthread_mutex_lock(&philo->left_fork_id);
+		pthread_mutex_lock(&data->forks[philo->right_fork_id]);
+		pthread_mutex_lock(&data->forks[philo->left_fork_id]);
 	}
-	print_action(data, philo->philo_id, "has taken a fork");
+	print_action(philo, philo->philo_id, "has taken a fork");
 	action_eat(philo, data);
 	action_drop_fork(philo, data);
 
 }
-void	action_sleep(t_philo *philo, t_init	*data)
+
+void	action_drop_fork(t_philo *philo, t_init *data)
 {
-	print_action(data, philo->philo_id, "is sleeping");
+	// t_init	*data;
+
+	if (philo->left_fork_id < philo->right_fork_id)
+	{
+		pthread_mutex_unlock(&data->forks[philo->left_fork_id]);
+		pthread_mutex_unlock(&data->forks[philo->right_fork_id]);
+
+	}
+	else
+	{
+		pthread_mutex_unlock(&data->forks[philo->right_fork_id]);
+		pthread_mutex_unlock(&data->forks[philo->left_fork_id]);
+	}
 }
 
-void	check_if_philo_died(t_philo *philo, t_init *data)
+void	action_sleep(t_philo *philo)
+{
+	print_action(philo, philo->philo_id, "is sleeping");
+}
+
+void	check_if_philo_died(t_philo *philo)
 {
 	/*
 	Un philosophe meurt s'il n'a pas commencé à manger dans l'intervalle de 
@@ -355,32 +195,38 @@ void	check_if_philo_died(t_philo *philo, t_init *data)
 
 void *thread_routine(void *data)
 {
+	t_init	*init;
 	t_philo	*philo;
+
 	philo = (t_philo*)data;
+	init = philo->init_data;  // Use the init_data from the philo struct
 
 	printf("Debut de la routine\n");
 	
-	action_think(philo, data);
-	action_grab_fork(philo, data);
-	action_eat(philo, data);
-	action_drop_fork(philo, data);
-	action_sleep(philo, data);
+	action_think(philo);
+	action_grab_fork(philo, init);
+	action_eat(philo, init);
+	action_drop_fork(philo, init);
+	action_sleep(philo);
 	return (NULL);
 }
+
 
 void	run_routine_philo(t_init *data)
 {
 	int	i;
+	long long time_init;
 
 	// j init mon time ici
-	data->time_init = get_time();
-	printf("%sdata->time_init = %lld\n%s", BLUE, data->time_init, RESET);
-
+	time_init = get_time();
+	// printf("%time_init = %lld\n%s", BLUE, time_init, RESET);
 
 	i = data->nb_of_philo - 1;
 	// create threads and pass the specific philosopher to each thread
 	while(i >= 0)
 	{
+		data->philo[i].time_init = time_init;
+		data->philo[i].init_data = data; // utile ? 
 		pthread_create(&data->philo[i].thread_philo, NULL, thread_routine, &data->philo[i]);
 		i--;
 	}
@@ -393,8 +239,6 @@ void	run_routine_philo(t_init *data)
 		i--;
 	}
 }
-
-#include "../includes/philosophers.h"
 
 int	main(int ac, char **av)
 {
@@ -416,3 +260,4 @@ int	main(int ac, char **av)
 	run_routine_philo(data);
 	return (0);
 }
+
