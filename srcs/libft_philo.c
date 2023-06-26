@@ -6,9 +6,11 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:02:31 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/22 13:20:21 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 15:45:07 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../includes/philosophers.h"
 
 int	ft_atoi_philo(char *str)
 {

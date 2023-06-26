@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:42 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/23 14:53:22 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 16:11:29 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ typedef	struct			s_philo
 	long long			time_last_eat;
 	pthread_mutex_t		mutex; // permet d init des mutex 
 	pthread_t			thread_philo; //creation de mes threads
+	long long			time_init;
+
 }						t_philo;
 
 typedef struct			s_init
@@ -55,30 +57,21 @@ typedef struct			s_init
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					nb_must_eat;
+	// long long			time_init;
 	t_philo				*philo;
 	
 }						t_init;
 
-typedef struct s_cmd
-{
-	char	*path;
-	char	**args;
-}	t_cmd;
 
-typedef struct s_data
-{
-	char			**all_argcs;
-	t_cmd			cmd1;
-	t_cmd			cmd2;
-	struct s_data	*next;
-}	t_data;
 
 /********************************* philo.c ************************************/
 
 /********************************* utils.c ************************************/
 int			write_error(char *str);
 void		ft_free_tab(char **tab);
-long long	timestamp(void);
+long long	get_time(void);
+// void	print_action(t_init *time, int id, char *str);
+void	print_action(t_philo *philo, int id, char *str);
 
 
 /******************************* libft_philo.c ********************************/
@@ -91,6 +84,13 @@ t_init	*init_recup_data(t_init *data, int ac, char **av);
 
 /***************************** actions_philos.c ********************************/
 
+// void	action_think(t_philo *philo, t_init *data);
+// void	action_eat(t_philo *philo, t_init	*data);
+// void	action_drop_fork(t_philo *philo, t_init	*data);
+// void	action_grab_fork(t_philo *philo, t_init *data);
+// void	action_sleep(t_philo *philo, t_init	*data);
+// void	check_if_philo_died(t_philo *philo, t_init *data);
+
 void	action_think(t_philo *philo);
 void	action_eat(t_philo *philo);
 void	action_drop_fork(t_philo *philo);
@@ -98,5 +98,10 @@ void	action_grab_fork(t_philo *philo);
 void	action_sleep(t_philo *philo);
 void	check_if_philo_died(t_philo *philo);
 
+
+/***************************** routine.c ********************************/
+
+void	*thread_routine(void *data);
+void	run_routine_philo(t_init *data);
 
 #endif

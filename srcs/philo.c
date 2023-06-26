@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:19 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/23 14:57:20 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 15:35:44 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	main(int ac, char **av)
 	data = init_mutex(data);
 	if (data == NULL)
 		return (write_error("Failed to initialize mutex"));
-
 	run_routine_philo(data);
 	return (0);
 }

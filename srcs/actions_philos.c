@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/23 14:59:20 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 16:15:29 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 void	action_think(t_philo *philo)
 {
-	printf("%lld %d is thinking\n", timestamp(), philo->philo_id);
+	
+	printf("%sphilo->time_init = %lld\n%s", YELLOW, philo->time_init, RESET);
+
+	print_action(philo, philo->philo_id, "is thinking");
 }
 
 void	action_eat(t_philo *philo)
 {
-	t_init	*data;
-
 	// ajouter aussi un check de si le temps entre 2 repas a ete respecté, sinon dead
+	t_init	*data;
 
 	if (data->nb_must_eat != 0)
 	{
@@ -35,9 +37,8 @@ void	action_eat(t_philo *philo)
 			// que la simulation doit se terminer.
 		}
 	}
-
-	printf("%lld %d is eating\n", timestamp(), philo->philo_id);
-	philo->time_last_eat = timestamp();
+	print_action(philo, philo->philo_id, "is eating");
+	philo->time_last_eat = get_time();
 }
 
 void	action_drop_fork(t_philo *philo)
@@ -67,15 +68,14 @@ void	action_grab_fork(t_philo *philo)
 		pthread_mutex_lock(&philo->right_fork_id);
 		pthread_mutex_lock(&philo->left_fork_id);
 	}
-	printf("%lld %d has taken a fork\n", timestamp(),philo->philo_id);
+	print_action(philo, philo->philo_id, "has taken a fork");
 	action_eat(philo);
 	action_drop_fork(philo);
 
 }
 void	action_sleep(t_philo *philo)
 {
-
-	printf("%lld %d is sleeping\n", timestamp(),philo->philo_id);
+	print_action(philo, philo->philo_id, "is sleeping");
 }
 
 void	check_if_philo_died(t_philo *philo)
