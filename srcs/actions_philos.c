@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/26 16:16:13 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 17:51:00 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	action_think(t_philo *philo)
 	print_action(philo, philo->philo_id, "is thinking");
 }
 
-void	action_eat(t_philo *philo)
+void	action_eat(t_philo *philo, t_init *data) // ICI
 {
+	// t_init	*data;
 	// ajouter aussi un check de si le temps entre 2 repas a ete respecté, sinon dead
-	t_init	*data;
 
 	if (data->nb_must_eat != 0)
 	{
@@ -39,38 +39,44 @@ void	action_eat(t_philo *philo)
 	philo->time_last_eat = get_time();
 }
 
-void	action_drop_fork(t_philo *philo)
+void	action_grab_fork(t_philo *philo, t_init *data)
 {
-	if (philo->left_fork_id < philo->right_fork_id)
-	{
-		pthread_mutex_unlock(&philo->left_fork_id);
-		pthread_mutex_unlock(&philo->right_fork_id);
-	}
-	else
-	{
-		pthread_mutex_unlock(&philo->right_fork_id);
-		pthread_mutex_unlock(&philo->left_fork_id);
-	}
-}
-
-void	action_grab_fork(t_philo *philo)
-{
+	// t_init	*data;
+	
 	// Philo prend d'abord la fourchette avec le plus petit identifiant
 	if (philo->left_fork_id < philo->right_fork_id)
 	{
-		pthread_mutex_lock(&philo->left_fork_id);
-		pthread_mutex_lock(&philo->right_fork_id);
+		pthread_mutex_lock(&data->forks[philo->left_fork_id]);
+		pthread_mutex_lock(&data->forks[philo->right_fork_id]);
 	}
 	else 
 	{
-		pthread_mutex_lock(&philo->right_fork_id);
-		pthread_mutex_lock(&philo->left_fork_id);
+		pthread_mutex_lock(&data->forks[philo->right_fork_id]);
+		pthread_mutex_lock(&data->forks[philo->left_fork_id]);
 	}
 	print_action(philo, philo->philo_id, "has taken a fork");
-	action_eat(philo);
-	action_drop_fork(philo);
+	action_eat(philo, data);
+	action_drop_fork(philo, data);
 
 }
+
+void	action_drop_fork(t_philo *philo, t_init *data)
+{
+	// t_init	*data;
+
+	if (philo->left_fork_id < philo->right_fork_id)
+	{
+		pthread_mutex_unlock(&data->forks[philo->left_fork_id]);
+		pthread_mutex_unlock(&data->forks[philo->right_fork_id]);
+
+	}
+	else
+	{
+		pthread_mutex_unlock(&data->forks[philo->right_fork_id]);
+		pthread_mutex_unlock(&data->forks[philo->left_fork_id]);
+	}
+}
+
 void	action_sleep(t_philo *philo)
 {
 	print_action(philo, philo->philo_id, "is sleeping");

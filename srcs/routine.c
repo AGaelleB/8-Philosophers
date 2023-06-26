@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/26 16:16:19 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 18:05:31 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,22 @@
 
 void *thread_routine(void *data)
 {
+	t_init	*init;
 	t_philo	*philo;
-	long long time_init;
 
 	philo = (t_philo*)data;
-	time_init = philo->time_init;
+	init = philo->init_data;  // Use the init_data from the philo struct
 
 	printf("Debut de la routine\n");
 	
 	action_think(philo);
-	action_grab_fork(philo);
-	action_eat(philo);
-	action_drop_fork(philo);
+	action_grab_fork(philo, init);
+	action_eat(philo, init);
+	action_drop_fork(philo, init);
 	action_sleep(philo);
 	return (NULL);
 }
+
 
 void	run_routine_philo(t_init *data)
 {
@@ -44,6 +45,7 @@ void	run_routine_philo(t_init *data)
 	while(i >= 0)
 	{
 		data->philo[i].time_init = time_init;
+		data->philo[i].init_data = data; // utile ? 
 		pthread_create(&data->philo[i].thread_philo, NULL, thread_routine, &data->philo[i]);
 		i--;
 	}

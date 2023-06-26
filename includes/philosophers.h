@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:42 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/26 16:11:29 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/26 18:03:42 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@
 # define CYAN "\033[36m"
 # define WHITE "\033[37m"
 
+// indique qu'il y aura un t_init qui sera défini à l'avenir. 
+// permet d'utiliser t_init dans la déf de s_philo même avant que s_init soit entièrement défini.
+typedef struct s_init t_init;
+
 typedef	struct			s_philo
 {
 	int					philo_id;
@@ -46,8 +50,8 @@ typedef	struct			s_philo
 	long long			time_last_eat;
 	pthread_mutex_t		mutex; // permet d init des mutex 
 	pthread_t			thread_philo; //creation de mes threads
-	long long			time_init;
-
+	long long			time_init; // ici car bug dans init
+	t_init				*init_data; // pour mon thread_routine
 }						t_philo;
 
 typedef struct			s_init
@@ -57,9 +61,8 @@ typedef struct			s_init
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					nb_must_eat;
-	// long long			time_init;
 	t_philo				*philo;
-	
+	pthread_mutex_t		*forks; // me permet d utiliser pthread_mutex_lock sans erreurs
 }						t_init;
 
 
@@ -84,17 +87,10 @@ t_init	*init_recup_data(t_init *data, int ac, char **av);
 
 /***************************** actions_philos.c ********************************/
 
-// void	action_think(t_philo *philo, t_init *data);
-// void	action_eat(t_philo *philo, t_init	*data);
-// void	action_drop_fork(t_philo *philo, t_init	*data);
-// void	action_grab_fork(t_philo *philo, t_init *data);
-// void	action_sleep(t_philo *philo, t_init	*data);
-// void	check_if_philo_died(t_philo *philo, t_init *data);
-
 void	action_think(t_philo *philo);
-void	action_eat(t_philo *philo);
-void	action_drop_fork(t_philo *philo);
-void	action_grab_fork(t_philo *philo);
+void	action_eat(t_philo *philo, t_init *data);
+void	action_drop_fork(t_philo *philo, t_init *data);
+void	action_grab_fork(t_philo *philo, t_init *data);
 void	action_sleep(t_philo *philo);
 void	check_if_philo_died(t_philo *philo);
 
