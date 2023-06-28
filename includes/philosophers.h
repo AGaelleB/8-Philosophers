@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:42 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/28 15:19:16 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/28 17:10:12 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef	struct			s_philo
 	pthread_mutex_t		mutex; // permet d init des mutex 
 	pthread_t			thread_philo; //creation de mes threads
 	long long			time_init; // ici car bug dans init
-	int					flag_philo_died;
+	int					flag_end_routine; // a supprimer
 }						t_philo;
 
 typedef struct			s_init
@@ -60,6 +60,9 @@ typedef struct			s_init
 	int					time_to_think;
 	t_philo				*philo;
 	pthread_mutex_t		*forks; // me permet d utiliser pthread_mutex_lock sans erreurs
+	int					death_flag;
+	pthread_mutex_t		death_mutex;
+
 }						t_init;
 
 typedef struct	s_data

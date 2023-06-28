@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/28 15:18:51 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/28 16:50:20 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ long long	get_time_philo(void)
 void	print_action(t_philo *philo, int id, char *str)
 {
 	
-	if (!philo->flag_philo_died) // Vérifiez si la simulation est terminée.
+	if (!philo->flag_end_routine) // Vérifiez si la simulation est terminée.
 	{
 		printf("%lli ", get_time_philo() - philo->time_init);
 		printf("%i ", id); // + 1);

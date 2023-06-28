@@ -6,62 +6,43 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/28 15:57:31 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/28 17:17:30 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philosophers.h"
 
-int	check_if_philo_died(t_philo *philo, t_init *init) // OK
+int	check_if_philo_died(t_philo *philo, t_init *init)
 {
-	/*
-	Un philosophe meurt s'il n'a pas commencé à manger dans l'intervalle de 
-	time_to_die. 
-	*/
-
-	// printf("%s time_last_eat = %lld\n%s", BLUE, philo->time_last_eat, RESET);
-	// printf("%s time_to_die = %d\n%s", YELLOW, init->time_to_die, RESET);
-
 	if (philo->time_last_eat >= init->time_to_die)
 	{
 		print_action(philo, philo->philo_id, "died");
-		philo->flag_philo_died = 1;
-		return (-1);
+		pthread_mutex_lock(&init->death_mutex);
+		init->death_flag = 1;
+		pthread_mutex_unlock(&init->death_mutex);
+		return (philo->flag_end_routine = 1);
 	}
 	else
-		return (0);
-
-	// mettre fin au programme des le 1er philo died et ne pas afficher les autre died
+		return (philo->flag_end_routine = 0);
 }
 
 void *thread_routine(void *arg)
 {
 	t_data *data = (t_data *)arg;
-
-	while (check_if_philo_died(data->philo, data->init) == 0 && !data->philo->flag_philo_died)
+	while (check_if_philo_died(data->philo, data->init) == 0)
 	{
-		// Vérifiez si la simulation est terminée avant chaque action.
-		if (data->philo->flag_philo_died)
+		if (data->philo->flag_end_routine == 1)
 			break;
 		action_grab_fork(data->philo, data->init);
-		if (data->philo->flag_philo_died)
-			break;
-		action_eat(data->philo, data->init);
-		if (data->philo->flag_philo_died)
+		if (data->philo->flag_end_routine == 1)
 			break;
 		action_drop_fork(data->philo, data->init);
-		if (data->philo->flag_philo_died)
+		if (data->philo->flag_end_routine == 1)
 			break;
 		action_sleep(data->philo, data->init);
-		if (data->philo->flag_philo_died)
+		if (data->philo->flag_end_routine == 1)
 			break;
 		action_think(data->philo, data->init);
-
-		if (check_if_philo_died(data->philo, data->init) == -1)
-		{
-			data->philo->flag_philo_died = 1;  // Indiquer la fin de la simulation.
-			break;
-		}
 	}
 	return (NULL);
 }
@@ -72,7 +53,6 @@ void	run_routine_philo(t_init *init)
 	long long time_init;
 	t_data *data;
 
-	// j init mon time ici
 	time_init = get_time_philo();
 
 	// creation des threads par philosophers

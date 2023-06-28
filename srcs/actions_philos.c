@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/28 15:14:26 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/28 17:17:40 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,16 @@ void	action_think(t_philo *philo, t_init *data)
 void	action_eat(t_philo *philo, t_init *data) // ICI
 {
 	// ajouter aussi un check de si le temps entre 2 repas a ete respecté, sinon dead
-
+	// printf("debut action eat\n");
 	if (data->nb_must_eat != 0)
 	{
 		philo->nb_time_eat++;
 		if (philo->nb_time_eat >= data->nb_must_eat)
 		{
-			printf("Philosopher n.%d a mangé %d fois. Fin de la simulation.\n", philo->philo_id, philo->nb_time_eat);
+			print_action(philo, philo->philo_id, "is eating");
+			philo->flag_end_routine = 1;
+			printf("Philosopher n.%d a mangé %d/%d.\n", philo->philo_id, philo->nb_time_eat, data->nb_must_eat);
+			return ;
 			// ajouter ici la logique pour terminer la simulation
 			// définir un flag pour indiquer la fin de la simulation
 			// ou utiliser un mécanisme de synchro pour informer les autres threads
@@ -53,10 +56,10 @@ void	action_grab_fork(t_philo *philo, t_init *data)
 		pthread_mutex_lock(&data->forks[philo->right_fork_id]);
 		pthread_mutex_lock(&data->forks[philo->left_fork_id]);
 	}
-	print_action(philo, philo->philo_id, "has taken a fork");
+	print_action(philo, philo->philo_id, "has taken a fork"); // left fork 1
+	print_action(philo, philo->philo_id, "has taken a fork"); // right fork 2
 	action_eat(philo, data);
 	action_drop_fork(philo, data);
-
 }
 
 void	action_drop_fork(t_philo *philo, t_init *data)
