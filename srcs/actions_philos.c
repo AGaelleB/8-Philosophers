@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/29 15:26:51 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:32:29 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void action_eat(t_philo *philo, t_init *init)
 			print_action(philo, philo->philo_id, "is eating");
 			init->end_flag = 1;
 			printf("%sPhilosopher n.%d eat %d/%d. stopping program\n%s", RED, philo->philo_id, philo->nb_time_eat, init->nb_must_eat, RESET);
+			// il faut que les "i" philos aient mangé avant de stop
 			pthread_mutex_unlock(&init->death_mutex);
 			stop_all_if_flag(init);
 			return ;
