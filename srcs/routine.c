@@ -6,11 +6,24 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/28 17:17:30 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/29 13:44:46 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philosophers.h"
+#include "../includes/philo.h"
+
+void stop_all_if_flag(t_init *init)
+{
+	pthread_mutex_lock(&init->death_mutex);
+	if (init->end_flag == 1)
+	{
+		pthread_mutex_unlock(&init->death_mutex);
+		printf("%sEnd flag is set : %d stopping program%s\n", RED, init->end_flag == 1, RESET);
+		exit(0);
+	}
+	pthread_mutex_unlock(&init->death_mutex);
+}
+
 
 int	check_if_philo_died(t_philo *philo, t_init *init)
 {
@@ -18,30 +31,25 @@ int	check_if_philo_died(t_philo *philo, t_init *init)
 	{
 		print_action(philo, philo->philo_id, "died");
 		pthread_mutex_lock(&init->death_mutex);
-		init->death_flag = 1;
+		init->end_flag = 1;
 		pthread_mutex_unlock(&init->death_mutex);
-		return (philo->flag_end_routine = 1);
+		return (init->end_flag = 1);
 	}
 	else
-		return (philo->flag_end_routine = 0);
+		return (init->end_flag = 0);
 }
+
 
 void *thread_routine(void *arg)
 {
 	t_data *data = (t_data *)arg;
+
 	while (check_if_philo_died(data->philo, data->init) == 0)
 	{
-		if (data->philo->flag_end_routine == 1)
-			break;
+		stop_all_if_flag(data->init);
 		action_grab_fork(data->philo, data->init);
-		if (data->philo->flag_end_routine == 1)
-			break;
 		action_drop_fork(data->philo, data->init);
-		if (data->philo->flag_end_routine == 1)
-			break;
 		action_sleep(data->philo, data->init);
-		if (data->philo->flag_end_routine == 1)
-			break;
 		action_think(data->philo, data->init);
 	}
 	return (NULL);
@@ -55,10 +63,11 @@ void	run_routine_philo(t_init *init)
 
 	time_init = get_time_philo();
 
-	// creation des threads par philosophers
+	// création des threads par philosophers
 	i = init->nb_of_philo - 1;
 	while(i >= 0)
 	{
+		stop_all_if_flag(init);
 		data = malloc(sizeof(t_data));
 		if (data == NULL)
 			return ;
@@ -78,7 +87,3 @@ void	run_routine_philo(t_init *init)
 		i--;
 	}
 }
-
-
-
-

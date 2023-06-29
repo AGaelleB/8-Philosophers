@@ -6,17 +6,17 @@
 #    By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/17 10:44:39 by abonnefo          #+#    #+#              #
-#    Updated: 2023/06/23 14:54:59 by abonnefo         ###   ########.fr        #
+#    Updated: 2023/06/29 09:41:02 by abonnefo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = philosophers
+NAME = philo
 
 CC = gcc
 
 CFLAGS = -Wall #-Wextra -Werror -g3 -g
 
-OBJ_DIR_PHILOSOPHERS = srcs/obj_philosophers
+OBJ_DIR_PHILO = srcs/obj_philo
 
 SRCS = srcs/philo.c \
 	srcs/actions_philos.c \
@@ -25,13 +25,13 @@ SRCS = srcs/philo.c \
 	srcs/routine.c \
 	srcs/utils.c \
 
-OBJS = $(SRCS:%.c=$(OBJ_DIR_PHILOSOPHERS)/%.o) \
+OBJS = $(SRCS:%.c=$(OBJ_DIR_PHILO)/%.o) \
 
 AR = ar rcs
 
 RM = rm -f
 
-$(OBJ_DIR_PHILOSOPHERS)/%.o: %.c
+$(OBJ_DIR_PHILO)/%.o: %.c
 	@mkdir -p $(@D)
 	@$(CC) $(CFLAGS) -c $< -o $@
 

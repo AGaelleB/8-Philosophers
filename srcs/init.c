@@ -6,12 +6,11 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/28 17:16:42 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/29 09:42:51 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philosophers.h"
-
+#include "../includes/philo.h"
 t_init	*init_mutex(t_init *data)
 {
 	int	i;

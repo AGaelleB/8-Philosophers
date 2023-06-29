@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers.h                                     :+:      :+:    :+:   */
+/*   philo.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:42 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/28 17:10:12 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/29 09:41:41 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILOSOPHERS_H
-# define PHILOSOPHERS_H
+#ifndef PHILO_H
+# define PHILO_H
 
 # include <fcntl.h>
 # include <unistd.h>
@@ -26,6 +26,7 @@
 # include <errno.h>
 # include <pthread.h>
 #include <sys/time.h>
+#include <stdbool.h>
 
 # define RESET "\033[0m"
 # define BLACK "\033[30m"
@@ -47,7 +48,6 @@ typedef	struct			s_philo
 	pthread_mutex_t		mutex; // permet d init des mutex 
 	pthread_t			thread_philo; //creation de mes threads
 	long long			time_init; // ici car bug dans init
-	int					flag_end_routine; // a supprimer
 }						t_philo;
 
 typedef struct			s_init
@@ -60,7 +60,7 @@ typedef struct			s_init
 	int					time_to_think;
 	t_philo				*philo;
 	pthread_mutex_t		*forks; // me permet d utiliser pthread_mutex_lock sans erreurs
-	int					death_flag;
+	int					end_flag;
 	pthread_mutex_t		death_mutex;
 
 }						t_init;
@@ -80,28 +80,30 @@ long long	get_time_philo(void);
 void		print_action(t_philo *philo, int id, char *str);
 void		cleanup_forks(t_init *data);
 
+
 /******************************* libft_philo.c ********************************/
 int	ft_atoi_philo(char *str);
 
 /********************************** init.c ************************************/
-t_init	*init_mutex(t_init *data);
-t_init	*init_philo(t_init *data);
-t_init	*init_recup_data(t_init *data, int ac, char **av);
-t_init	*init_forks(t_init *data);
+t_init		*init_mutex(t_init *data);
+t_init		*init_philo(t_init *data);
+t_init		*init_recup_data(t_init *data, int ac, char **av);
+t_init		*init_forks(t_init *data);
 
 /***************************** actions_philos.c ********************************/
 
-void	action_think(t_philo *philo, t_init *data);
-void	action_eat(t_philo *philo, t_init *data);
-void	action_drop_fork(t_philo *philo, t_init *data);
-void	action_grab_fork(t_philo *philo, t_init *data);
-void	action_sleep(t_philo *philo, t_init *data);
+void		action_think(t_philo *philo, t_init *data);
+void		action_eat(t_philo *philo, t_init *data);
+void		action_drop_fork(t_philo *philo, t_init *data);
+void		action_grab_fork(t_philo *philo, t_init *data);
+void		action_sleep(t_philo *philo, t_init *data);
 
 /***************************** routine.c ********************************/
 
-void	*thread_routine(void *data);
-void	run_routine_philo(t_init *data);
-int		check_if_philo_died(t_philo *philo, t_init *data);
+void		*thread_routine(void *data);
+void		run_routine_philo(t_init *data);
+int			check_if_philo_died(t_philo *philo, t_init *data);
+void		stop_all_if_flag(t_init *init);
 
 
 #endif

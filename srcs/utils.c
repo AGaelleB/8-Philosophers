@@ -6,12 +6,11 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/28 16:50:20 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/29 11:35:23 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philosophers.h"
-
+#include "../includes/philo.h"
 int	write_error(char *str)
 {
 	int	len;
@@ -38,14 +37,14 @@ long long	get_time_philo(void)
 
 void	print_action(t_philo *philo, int id, char *str)
 {
-	
-	if (!philo->flag_end_routine) // Vérifiez si la simulation est terminée.
-	{
+	// Vérifiez si la simulation est terminée.
+	// if (init->end_flag != 1) 
+	// {
 		printf("%lli ", get_time_philo() - philo->time_init);
 		printf("%i ", id); // + 1);
 		printf("%s\n", str);
 		
-	}
+	// }
 }
 
 void cleanup_forks(t_init *data)
@@ -65,6 +64,7 @@ void cleanup_forks(t_init *data)
 		data->forks = NULL;
 	}
 }
+
 
 // void	ft_free_tab(char **tab)
 // {
