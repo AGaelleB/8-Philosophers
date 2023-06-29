@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/29 13:44:46 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:29:33 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,19 @@ void stop_all_if_flag(t_init *init)
 	pthread_mutex_unlock(&init->death_mutex);
 }
 
-
 int	check_if_philo_died(t_philo *philo, t_init *init)
 {
-	if (philo->time_last_eat >= init->time_to_die)
+	if ((get_time_philo() - philo->time_last_eat) >= init->time_to_die)
 	{
 		print_action(philo, philo->philo_id, "died");
 		pthread_mutex_lock(&init->death_mutex);
 		init->end_flag = 1;
 		pthread_mutex_unlock(&init->death_mutex);
-		return (init->end_flag = 1);
+		return (1);
 	}
 	else
-		return (init->end_flag = 0);
+		return (0);
 }
-
 
 void *thread_routine(void *arg)
 {
@@ -74,11 +72,11 @@ void	run_routine_philo(t_init *init)
 		data->init = init;
 		data->philo = &init->philo[i];
 		data->philo->time_init = time_init;
+		data->philo->time_last_eat = get_time_philo(); // Initialize time_last_eat to current time
 		// data->philo[i].init_data = init; // utile ? 
 		pthread_create(&init->philo[i].thread_philo, NULL, thread_routine, data);
 		i--;
 	}
-	
 	i = init->nb_of_philo - 1;
 	// pthread_join attend que tous les threads se terminent avant de continuer
 	while (i >= 0) 

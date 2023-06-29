@@ -57,7 +57,6 @@ typedef struct			s_init
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					nb_must_eat;
-	int					time_to_think;
 	t_philo				*philo;
 	pthread_mutex_t		*forks; // me permet d utiliser pthread_mutex_lock sans erreurs
 	int					end_flag;
@@ -96,13 +95,13 @@ void		action_think(t_philo *philo, t_init *data);
 void		action_eat(t_philo *philo, t_init *data);
 void		action_drop_fork(t_philo *philo, t_init *data);
 void		action_grab_fork(t_philo *philo, t_init *data);
-void		action_sleep(t_philo *philo, t_init *data);
+void	action_sleep(t_philo *philo, t_init *data);
 
 /***************************** routine.c ********************************/
 
-void		*thread_routine(void *data);
-void		run_routine_philo(t_init *data);
-int			check_if_philo_died(t_philo *philo, t_init *data);
+void	*thread_routine(void *data);
+void	run_routine_philo(t_init *data);
+int		check_if_philo_died(t_philo *philo, t_init *data);
 void		stop_all_if_flag(t_init *init);
 
 

@@ -6,11 +6,13 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/29 09:42:51 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/29 15:27:24 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+
 t_init	*init_mutex(t_init *data)
 {
 	int	i;
@@ -100,7 +102,6 @@ t_init	*init_recup_data(t_init *data, int ac, char **av)
 	data->time_to_die = ft_atoi_philo(av[2]);
 	data->time_to_eat = ft_atoi_philo(av[3]);
 	data->time_to_sleep = ft_atoi_philo(av[4]);
-	data->time_to_think = data->time_to_die - (data->time_to_eat + data->time_to_sleep);
 
 	if(ac == 6)
 		data->nb_must_eat = ft_atoi_philo(av[5]);
@@ -113,7 +114,6 @@ t_init	*init_recup_data(t_init *data, int ac, char **av)
 	// printf("time_to_eat = %d\n", data->time_to_eat);
 	// printf("time_to_sleep = %d\n", data->time_to_sleep);
 	// printf("nb_must_eat = %d\n", data->nb_must_eat);
-	// printf("time_to_think = %d\n", data->time_to_think);
 	// printf("****** END INIT ******\n\n%s", RESET);
 
 	return (data);
