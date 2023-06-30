@@ -59,12 +59,11 @@ typedef struct			s_init
 	int					nb_must_eat;
 	t_philo				*philo;
 	pthread_mutex_t		*forks; // me permet d utiliser pthread_mutex_lock sans erreurs
-	pthread_mutex_t write_mutex; // permet d ecrire sans superposer 
 	int					end_flag;
 	int					all_finished_eating; // verif si tous les repas sont pris
 	pthread_mutex_t		eat_count_mutex; // Mutex pour protéger le compteur
 	pthread_mutex_t		death_mutex;
-
+	pthread_mutex_t		write_mutex; // permet d ecrire sans superposer 
 }						t_init;
 
 typedef struct	s_data
@@ -79,9 +78,7 @@ typedef struct	s_data
 int			write_error(char *str);
 void		ft_free_tab(char **tab);
 long long	get_time_philo(void);
-// void		print_action(t_philo *philo, int id, char *str);
-void		print_action(t_data *data, int id, char *str);
-
+void		print_action(t_philo *philo, t_init *init, int id, char *str);
 void		cleanup_forks(t_init *data);
 
 
@@ -94,6 +91,7 @@ t_init		*init_philo(t_init *data);
 t_init		*init_recup_data(t_init *data, int ac, char **av);
 t_init		*init_forks(t_init *data);
 t_init		*init_eat_count_mutex(t_init *data);
+t_init		*init_write_mutex(t_init *init);
 
 /***************************** actions_philos.c ********************************/
 

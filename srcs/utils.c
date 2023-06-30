@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/30 16:03:50 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/30 17:31:59 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,25 @@ long long	get_time_philo(void)
 	// 1 sec = 1 000 milisecondes
 }
 
-void	print_action(t_data *data, int id, char *str)
-{
-	pthread_mutex_init(&data->init->write_mutex, NULL);
+// void	print_action(t_philo *philo, int id, char *str)
+// {
+// 	pthread_mutex_lock(&philo->init->write_mutex);
+// 	printf("%lli ", get_time_philo() - philo->time_init);
+// 	printf("%i ", id); // + 1);
+// 	printf("%s\n", str);
+// 	pthread_mutex_unlock(&philo->init->write_mutex);
+// }
 
-	pthread_mutex_lock(&data->init->write_mutex);
-	printf("%lli ", get_time_philo() - data->philo->time_init);
+
+void	print_action(t_philo *philo, t_init *init, int id, char *str)
+{
+	pthread_mutex_lock(&init->write_mutex);
+	printf("%lli ", get_time_philo() - philo->time_init);
 	printf("%i ", id); // + 1);
 	printf("%s\n", str);
-	pthread_mutex_unlock(&data->init->write_mutex);
-
+	pthread_mutex_unlock(&init->write_mutex);
 }
+
 
 void cleanup_forks(t_init *data)
 {

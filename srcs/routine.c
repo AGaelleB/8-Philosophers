@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/30 16:08:35 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/30 17:34:03 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ void stop_all_if_flag(t_init *init)
 	pthread_mutex_unlock(&init->death_mutex);
 }
 
-int	check_if_philo_died(t_data *data)
+int	check_if_philo_died(t_philo *philo, t_init *init)
 {
 	
 	if ((get_time_philo() - philo->time_last_eat) > init->time_to_die)
 	{
-		print_action(philo, philo->philo_id, "died");
+		print_action(philo, init, philo->philo_id, "died");
 		pthread_mutex_lock(&init->death_mutex);
 		init->end_flag = 1;
 		pthread_mutex_unlock(&init->death_mutex);
@@ -43,13 +43,13 @@ void *thread_routine(void *arg)
 {
 	t_data *data = (t_data *)arg;
 
-	while (check_if_philo_died(data) == 0)
+	while (check_if_philo_died(data->philo, data->init) == 0)
 	{
 		stop_all_if_flag(data->init);
-		action_grab_fork(data);
-		action_drop_fork(data);
-		action_sleep(data);
-		action_think(data);
+		action_grab_fork(data->philo, data->init);
+		action_drop_fork(data->philo, data->init);
+		action_sleep(data->philo, data->init);
+		action_think(data->philo, data->init);
 	}
 	return (NULL);
 }
