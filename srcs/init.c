@@ -6,12 +6,51 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/30 17:30:53 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/30 17:50:31 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
+t_init	*init_recup_data(t_init *data, int ac, char **av)
+{
+	data = malloc(sizeof(t_init));
+	if (data == NULL)
+		return (NULL);
+	data->nb_of_philo = ft_atoi_philo(av[1]);
+	data->time_to_die = ft_atoi_philo(av[2]);
+	data->time_to_eat = ft_atoi_philo(av[3]);
+	data->time_to_sleep = ft_atoi_philo(av[4]);
+	data->all_finished_eating = 0;
+	if(ac == 6)
+		data->nb_must_eat = ft_atoi_philo(av[5]);
+	else
+		data->nb_must_eat = 0;
+	return (data);
+}
+
+t_init	*init_philo(t_init *data)
+{
+	int	i;
+
+	i = data->nb_of_philo - 1;
+	data->philo = malloc(sizeof(t_philo) * (data->nb_of_philo));
+	if (data->philo == NULL)
+		return (NULL);
+	while(i >= 0)
+	{
+		data->philo[i].philo_id = i + 1; // + 1 ajouter pour decompte;
+		data->philo[i].nb_time_eat = 0;
+		data->philo[i].left_fork_id = i;
+		if (data->nb_of_philo == 1)
+			data->philo[i].right_fork_id = (i + 1);
+		else
+			data->philo[i].right_fork_id = (i + 1) % data->nb_of_philo; // lili  Cela permet de connecter le dernier philosophe avec la première fourchette du tableau, formant ainsi une boucle.
+		data->philo[i].time_last_eat = 0;
+		i--;
+	}
+	return (data);
+}
 
 t_init	*init_mutex(t_init *data)
 {
@@ -36,7 +75,6 @@ t_init	*init_mutex(t_init *data)
 
 t_init	*init_write_mutex(t_init *init)
 {
-	// Initialisation du mutex pour le write_mutex
 	if (pthread_mutex_init(&init->write_mutex, NULL) != 0)
 	{
 		printf("Failed to initialize mutex for write\n");
@@ -46,11 +84,8 @@ t_init	*init_write_mutex(t_init *init)
 	return (init);
 }
 
-
-
 t_init	*init_eat_count_mutex(t_init *data)
 {
-	// Initialisation du mutex pour le compteur
 	if (pthread_mutex_init(&data->eat_count_mutex, NULL) != 0)
 	{
 		printf("Failed to initialize mutex for eat count\n");
@@ -60,10 +95,6 @@ t_init	*init_eat_count_mutex(t_init *data)
 	}
 	return (data);
 }
-
-
-
-
 
 t_init	*init_forks(t_init *data)
 {
@@ -89,67 +120,5 @@ t_init	*init_forks(t_init *data)
 		}
 		i--;
 	}
-	return (data);
-}
-
-t_init	*init_philo(t_init *data)
-{
-	int	i;
-
-	i = data->nb_of_philo - 1;
-
-	data->philo = malloc(sizeof(t_philo) * (data->nb_of_philo));
-	if (data->philo == NULL)
-		return (NULL);
-	while(i >= 0)
-	{
-		data->philo[i].philo_id = i + 1; // + 1 ajouter pour decompte;
-		data->philo[i].nb_time_eat = 0;
-		data->philo[i].left_fork_id = i;
-		if (data->nb_of_philo == 1)
-			data->philo[i].right_fork_id = (i + 1);
-		else
-			data->philo[i].right_fork_id = (i + 1) % data->nb_of_philo; // lili  Cela permet de connecter le dernier philosophe avec la première fourchette du tableau, formant ainsi une boucle.
-		data->philo[i].time_last_eat = 0;
-
-		// printf("%s***** INIT PHILO nb : '%d' *****\n", BLUE, data->philo[i].philo_id);
-		// printf("philo_id = %d\n", data->philo[i].philo_id);
-		// printf("nb_time_eat = %d\n", data->philo[i].nb_time_eat);
-		// printf("left_fork_id = %d\n", data->philo[i].left_fork_id );
-		// printf("right_fork_id = %d\n", data->philo[i].right_fork_id);
-		// printf("time_last_eat = %lld\n", data->philo[i].time_last_eat);
-		// printf("i = %d\n", i);
-		// printf("********** END INIT ***********%s\n\n", RESET);
-		
-		i--;
-	}
-	return (data);
-}
-
-t_init	*init_recup_data(t_init *data, int ac, char **av)
-{
-
-	data = malloc(sizeof(t_init));
-	if (data == NULL)
-		return (NULL);
-	data->nb_of_philo = ft_atoi_philo(av[1]);
-	data->time_to_die = ft_atoi_philo(av[2]);
-	data->time_to_eat = ft_atoi_philo(av[3]);
-	data->time_to_sleep = ft_atoi_philo(av[4]);
-	data->all_finished_eating = 0;
-
-	if(ac == 6)
-		data->nb_must_eat = ft_atoi_philo(av[5]);
-	else
-		data->nb_must_eat = 0;
-		
-	// printf("%s***** INIT data *****\n", MAGENTA);
-	// printf("nb_of_philo = %d\n", data->nb_of_philo);
-	// printf("time_to_die = %d\n", data->time_to_die);
-	// printf("time_to_eat = %d\n", data->time_to_eat);
-	// printf("time_to_sleep = %d\n", data->time_to_sleep);
-	// printf("nb_must_eat = %d\n", data->nb_must_eat);
-	// printf("****** END INIT ******\n\n%s", RESET);
-
 	return (data);
 }
