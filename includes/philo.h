@@ -60,6 +60,8 @@ typedef struct			s_init
 	t_philo				*philo;
 	pthread_mutex_t		*forks; // me permet d utiliser pthread_mutex_lock sans erreurs
 	int					end_flag;
+	int					all_finished_eating; // verif si tous les repas sont pris
+	pthread_mutex_t		eat_count_mutex; // Mutex pour protéger le compteur
 	pthread_mutex_t		death_mutex;
 
 }						t_init;
@@ -88,6 +90,7 @@ t_init		*init_mutex(t_init *data);
 t_init		*init_philo(t_init *data);
 t_init		*init_recup_data(t_init *data, int ac, char **av);
 t_init		*init_forks(t_init *data);
+t_init		*init_eat_count_mutex(t_init *data);
 
 /***************************** actions_philos.c ********************************/
 
@@ -95,13 +98,13 @@ void		action_think(t_philo *philo, t_init *data);
 void		action_eat(t_philo *philo, t_init *data);
 void		action_drop_fork(t_philo *philo, t_init *data);
 void		action_grab_fork(t_philo *philo, t_init *data);
-void	action_sleep(t_philo *philo, t_init *data);
+void		action_sleep(t_philo *philo, t_init *data);
 
 /***************************** routine.c ********************************/
 
-void	*thread_routine(void *data);
-void	run_routine_philo(t_init *data);
-int		check_if_philo_died(t_philo *philo, t_init *data);
+void		*thread_routine(void *data);
+void		run_routine_philo(t_init *data);
+int			check_if_philo_died(t_philo *philo, t_init *data);
 void		stop_all_if_flag(t_init *init);
 
 

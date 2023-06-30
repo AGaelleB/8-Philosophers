@@ -6,11 +6,12 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:19 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/29 14:28:23 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/30 10:13:55 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
 int	main(int ac, char **av)
 {
 	t_init	*data;

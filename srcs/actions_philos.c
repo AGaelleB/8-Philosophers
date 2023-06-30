@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/29 15:32:29 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/30 10:19:27 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,19 @@ void action_eat(t_philo *philo, t_init *init)
 		philo->nb_time_eat++;
 		if (philo->nb_time_eat >= init->nb_must_eat)
 		{
+			pthread_mutex_lock(&init->eat_count_mutex);
+			init->all_finished_eating++;
+			pthread_mutex_unlock(&init->eat_count_mutex);
+			if (init->all_finished_eating == init->nb_of_philo)
+			{
+				init->end_flag = 1;
+				printf("%sAll Philosophers eat %d/%d. stopping program\n%s", RED, philo->nb_time_eat, init->nb_must_eat, RESET);
+				pthread_mutex_unlock(&init->death_mutex);
+				stop_all_if_flag(init);
+				return ;
+			}
 			print_action(philo, philo->philo_id, "is eating");
-			init->end_flag = 1;
-			printf("%sPhilosopher n.%d eat %d/%d. stopping program\n%s", RED, philo->philo_id, philo->nb_time_eat, init->nb_must_eat, RESET);
-			// il faut que les "i" philos aient mangé avant de stop
 			pthread_mutex_unlock(&init->death_mutex);
-			stop_all_if_flag(init);
 			return ;
 		}
 	}
@@ -48,7 +55,6 @@ void action_eat(t_philo *philo, t_init *init)
 	philo->time_last_eat = get_time_philo();
 	pthread_mutex_unlock(&init->death_mutex);
 }
-
 
 void	action_grab_fork(t_philo *philo, t_init *init)
 {
