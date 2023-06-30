@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/30 10:19:27 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/30 16:05:03 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	action_think(t_philo *philo, t_init *init)
 		init->end_flag = 1;
 		stop_all_if_flag(init);
 	}
-	print_action(philo, philo->philo_id, "is thinking");
+	print_action(init, philo->philo_id, "is thinking");
 }
 
 void action_eat(t_philo *philo, t_init *init)
@@ -46,12 +46,12 @@ void action_eat(t_philo *philo, t_init *init)
 				stop_all_if_flag(init);
 				return ;
 			}
-			print_action(philo, philo->philo_id, "is eating");
+			print_action(init, philo->philo_id, "is eating");
 			pthread_mutex_unlock(&init->death_mutex);
 			return ;
 		}
 	}
-	print_action(philo, philo->philo_id, "is eating");
+	print_action(init, philo->philo_id, "is eating");
 	philo->time_last_eat = get_time_philo();
 	pthread_mutex_unlock(&init->death_mutex);
 }
@@ -73,11 +73,11 @@ void	action_grab_fork(t_philo *philo, t_init *init)
 		pthread_mutex_lock(&init->forks[philo->right_fork_id]);
 		pthread_mutex_lock(&init->forks[philo->left_fork_id]);
 	}
-	print_action(philo, philo->philo_id, "has taken a fork"); // left fork 1
-	print_action(philo, philo->philo_id, "has taken a fork"); // right fork 2
+	print_action(init, philo->philo_id, "has taken a fork"); // left fork 1
+	print_action(init, philo->philo_id, "has taken a fork"); // right fork 2
 	action_eat(philo, init);
 	usleep(init->time_to_eat * 1000);
-	action_drop_fork(philo, init);
+	// action_drop_fork(philo, init); // doublons ?? 
 }
 
 void	action_drop_fork(t_philo *philo, t_init *init)
@@ -92,7 +92,6 @@ void	action_drop_fork(t_philo *philo, t_init *init)
 	{
 		pthread_mutex_unlock(&init->forks[philo->left_fork_id]);
 		pthread_mutex_unlock(&init->forks[philo->right_fork_id]);
-
 	}
 	else
 	{
@@ -108,9 +107,6 @@ void	action_sleep(t_philo *philo, t_init *init)
 		init->end_flag = 1;
 		stop_all_if_flag(init);
 	}
-	// printf("DEBUT time sleep de philo n.%d = %d\n", philo->philo_id,  init->time_to_sleep);
 	usleep(init->time_to_sleep * 1000);
-	// printf("FIN time sleep de philo n.%d = %d\n\n", philo->philo_id, init->time_to_sleep);
-
-	print_action(philo, philo->philo_id, "is sleeping");
+	print_action(init, philo->philo_id, "is sleeping");
 }

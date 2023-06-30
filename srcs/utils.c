@@ -6,11 +6,12 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/29 11:35:23 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/30 16:03:50 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
 int	write_error(char *str)
 {
 	int	len;
@@ -31,20 +32,20 @@ long long	get_time_philo(void)
 	if (gettimeofday(&current_time, NULL))
 		return (-1);
 
-	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000)); // - time start ? 
+	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
 	// 1 sec = 1 000 milisecondes
 }
 
-void	print_action(t_philo *philo, int id, char *str)
+void	print_action(t_data *data, int id, char *str)
 {
-	// Vérifiez si la simulation est terminée.
-	// if (init->end_flag != 1) 
-	// {
-		printf("%lli ", get_time_philo() - philo->time_init);
-		printf("%i ", id); // + 1);
-		printf("%s\n", str);
-		
-	// }
+	pthread_mutex_init(&data->init->write_mutex, NULL);
+
+	pthread_mutex_lock(&data->init->write_mutex);
+	printf("%lli ", get_time_philo() - data->philo->time_init);
+	printf("%i ", id); // + 1);
+	printf("%s\n", str);
+	pthread_mutex_unlock(&data->init->write_mutex);
+
 }
 
 void cleanup_forks(t_init *data)
@@ -66,17 +67,12 @@ void cleanup_forks(t_init *data)
 }
 
 
-// void	ft_free_tab(char **tab)
-// {
-// 	int	i;
+/* FAIRE UNE FONCTION QUI VA SUPP TOUS LES MUTEX*/
+/*
 
-// 	i = 0;
-// 	if (tab == NULL)
-// 		return (NULL);
-// 	while (tab[i])
-// 	{
-// 		free(tab[i]);
-// 		i++;
-// 	}
-// 	free(tab);
-// }
+destroy the mutex after all threads have finished
+pthread_mutex_destroy(&write_mutex);
+
+
+
+*/

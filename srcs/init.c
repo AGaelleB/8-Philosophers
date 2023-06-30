@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/30 10:14:40 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/06/30 16:02:18 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,20 @@ t_init	*init_mutex(t_init *data)
 	return (data);
 }
 
+// t_init	*init_write_mutex(t_init *data)
+// {
+// 	// Initialisation du mutex pour le write_mutex
+// 	if (pthread_mutex_init(&data->write_mutex, NULL) != 0)
+// 	{
+// 		printf("Failed to initialize mutex for write\n");
+// 		free(data->philo);
+// 		free(data);
+// 		return (NULL);
+// 	}
+// 	return (data);
+// }
+
+
 t_init	*init_eat_count_mutex(t_init *data)
 {
 	// Initialisation du mutex pour le compteur
@@ -46,6 +60,9 @@ t_init	*init_eat_count_mutex(t_init *data)
 	}
 	return (data);
 }
+
+
+
 
 
 t_init	*init_forks(t_init *data)
@@ -89,7 +106,10 @@ t_init	*init_philo(t_init *data)
 		data->philo[i].philo_id = i + 1; // + 1 ajouter pour decompte;
 		data->philo[i].nb_time_eat = 0;
 		data->philo[i].left_fork_id = i;
-		data->philo[i].right_fork_id = (i + 1) % data->nb_of_philo; // lili  Cela permet de connecter le dernier philosophe avec la première fourchette du tableau, formant ainsi une boucle.
+		if (data->nb_of_philo == 1)
+			data->philo[i].right_fork_id = (i + 1);
+		else
+			data->philo[i].right_fork_id = (i + 1) % data->nb_of_philo; // lili  Cela permet de connecter le dernier philosophe avec la première fourchette du tableau, formant ainsi une boucle.
 		data->philo[i].time_last_eat = 0;
 
 		// printf("%s***** INIT PHILO nb : '%d' *****\n", BLUE, data->philo[i].philo_id);
