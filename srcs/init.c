@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/30 17:50:31 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/03 11:33:43 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ t_init	*init_philo(t_init *data)
 	i = data->nb_of_philo - 1;
 	data->philo = malloc(sizeof(t_philo) * (data->nb_of_philo));
 	if (data->philo == NULL)
+	{
+		free(data);
 		return (NULL);
+	}
 	while(i >= 0)
 	{
 		data->philo[i].philo_id = i + 1; // + 1 ajouter pour decompte;

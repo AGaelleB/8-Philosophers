@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:19 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/30 17:52:15 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/03 11:32:14 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ int	main(int ac, char **av)
 	if (data == NULL)
 		return (write_error("Failed to initialize forks"));
 	run_routine_philo(data);
+	wait_threads(data);
 	cleanup_forks(data);
-	//add fonction qui va clean mes mutex
+	cleanup_all_mutex(data);
 	return (0);
 }

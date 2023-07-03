@@ -6,28 +6,31 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/30 17:44:19 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/03 14:27:03 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-void	action_think(t_philo *philo, t_init *init)
+int	action_think(t_philo *philo, t_init *init)
 {
 	if (check_if_philo_died(philo, init) == 1)
 	{
 		init->end_flag = 1;
 		stop_all_if_flag(init);
+		return (0);
 	}
 	print_action(philo, init, philo->philo_id, "is thinking");
+	return (1);
 }
 
-void action_eat(t_philo *philo, t_init *init)
+int action_eat(t_philo *philo, t_init *init)
 {
 	if (check_if_philo_died(philo, init) == 1)
 	{
 		init->end_flag = 1;
 		stop_all_if_flag(init);
+		return (0);
 	}
 	pthread_mutex_lock(&init->death_mutex);
 	if (init->nb_must_eat != 0)
@@ -44,24 +47,26 @@ void action_eat(t_philo *philo, t_init *init)
 				printf("%sAll Philosophers eat %d/%d. stopping program\n%s", RED, philo->nb_time_eat, init->nb_must_eat, RESET);
 				pthread_mutex_unlock(&init->death_mutex);
 				stop_all_if_flag(init);
-				return ;
+				return (1);
 			}
 			print_action(philo, init, philo->philo_id, "is eating");
 			pthread_mutex_unlock(&init->death_mutex);
-			return ;
+			return (1);
 		}
 	}
 	print_action(philo, init, philo->philo_id, "is eating");
 	philo->time_last_eat = get_time_philo();
 	pthread_mutex_unlock(&init->death_mutex);
+	return (1);
 }
 
-void	action_grab_fork(t_philo *philo, t_init *init)
+int action_grab_fork(t_philo *philo, t_init *init)
 {
 	if (check_if_philo_died(philo, init) == 1)
 	{
 		init->end_flag = 1;
 		stop_all_if_flag(init);
+		return (0);
 	}
 	if (philo->left_fork_id < philo->right_fork_id)
 	{
@@ -77,15 +82,16 @@ void	action_grab_fork(t_philo *philo, t_init *init)
 	print_action(philo, init, philo->philo_id, "has taken a fork"); // right fork 2
 	action_eat(philo, init);
 	usleep(init->time_to_eat * 1000);
-	// action_drop_fork(philo, init); // doublons ?? 
+	return (1);
 }
 
-void	action_drop_fork(t_philo *philo, t_init *init)
+int	action_drop_fork(t_philo *philo, t_init *init)
 {
 	if (check_if_philo_died(philo, init) == 1)
 	{
 		init->end_flag = 1;
 		stop_all_if_flag(init);
+		return (0);
 	}
 	
 	if (philo->left_fork_id < philo->right_fork_id)
@@ -98,15 +104,19 @@ void	action_drop_fork(t_philo *philo, t_init *init)
 		pthread_mutex_unlock(&init->forks[philo->right_fork_id]);
 		pthread_mutex_unlock(&init->forks[philo->left_fork_id]);
 	}
+	return (1);
 }
 
-void	action_sleep(t_philo *philo, t_init *init)
+int	action_sleep(t_philo *philo, t_init *init)
 {
 	if (check_if_philo_died(philo, init) == 1)
 	{
 		init->end_flag = 1;
 		stop_all_if_flag(init);
+		return (0);
+
 	}
 	usleep(init->time_to_sleep * 1000);
 	print_action(philo, init, philo->philo_id, "is sleeping");
+	return (1);
 }

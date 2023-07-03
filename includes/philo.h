@@ -80,7 +80,8 @@ void		ft_free_tab(char **tab);
 long long	get_time_philo(void);
 void		print_action(t_philo *philo, t_init *init, int id, char *str);
 void		cleanup_forks(t_init *data);
-
+void		wait_threads(t_init *data);
+void		cleanup_all_mutex(t_init *data);
 
 /******************************* libft_philo.c ********************************/
 int	ft_atoi_philo(char *str);
@@ -95,11 +96,15 @@ t_init		*init_write_mutex(t_init *init);
 
 /***************************** actions_philos.c ********************************/
 
-void		action_think(t_philo *philo, t_init *data);
-void		action_eat(t_philo *philo, t_init *data);
-void		action_drop_fork(t_philo *philo, t_init *data);
-void		action_grab_fork(t_philo *philo, t_init *data);
-void		action_sleep(t_philo *philo, t_init *data);
+int		action_think(t_philo *philo, t_init *data);
+int		action_eat(t_philo *philo, t_init *data);
+int		action_drop_fork(t_philo *philo, t_init *data);
+// void		action_grab_fork(t_philo *philo, t_init *data);
+int		action_sleep(t_philo *philo, t_init *data);
+
+
+int action_grab_fork(t_philo *philo, t_init *init);
+
 
 /***************************** routine.c ********************************/
 

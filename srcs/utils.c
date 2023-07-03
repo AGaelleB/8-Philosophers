@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/06/30 17:31:59 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/03 11:32:11 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,36 @@ void	print_action(t_philo *philo, t_init *init, int id, char *str)
 	pthread_mutex_unlock(&init->write_mutex);
 }
 
+void wait_threads(t_init *data)
+{
+	int	i;
+
+	i = 0;
+	while(i < data->nb_of_philo)
+	{
+		pthread_join(data->philo[i].thread_philo, NULL);
+		i++;
+	}
+}
+
+void cleanup_all_mutex(t_init *data)
+{
+	int i;
+
+	pthread_mutex_destroy(&data->eat_count_mutex);
+	pthread_mutex_destroy(&data->death_mutex);
+	pthread_mutex_destroy(&data->write_mutex);
+
+	for (i = 0; i < data->nb_of_philo; i++)
+	{
+		pthread_mutex_destroy(&data->philo[i].mutex);
+		pthread_mutex_destroy(&data->forks[i]);
+	}
+	
+	free(data->forks);
+	free(data->philo);
+	free(data);
+}
 
 void cleanup_forks(t_init *data)
 {
@@ -73,6 +103,9 @@ void cleanup_forks(t_init *data)
 		data->forks = NULL;
 	}
 }
+
+
+
 
 
 /* FAIRE UNE FONCTION QUI VA SUPP TOUS LES MUTEX*/
