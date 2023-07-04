@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/04 12:12:36 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/04 15:37:17 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void stop_all_if_flag(t_init *init)
 {
-	// usleep(50); // test
+	// usleep(42); // test
 	pthread_mutex_lock(&init->death_mutex);
 	if (init->end_flag == 1)
 	{
-		printf("%sEnd flag is set : %d. stopping program%s\n", RED, init->end_flag == 1, RESET);
+		printf("%sPhilo died%s\n", RED, RESET);
 		pthread_mutex_unlock(&init->death_mutex);
 		exit(0);
 	}
@@ -27,7 +27,7 @@ void stop_all_if_flag(t_init *init)
 
 int	check_if_philo_died(t_philo *philo, t_init *init)
 {
-	// usleep(50); // test
+	// usleep(42); // test
 	if ((get_time_philo() - philo->time_last_eat) > init->time_to_die)
 	{
 		print_action(philo, init, philo->philo_id, "died");
@@ -46,16 +46,21 @@ void *thread_routine(void *arg)
 
 	while (1)
 	{
-		// usleep(50); // test
-
-		action_grab_fork(data->philo, data->init);
-		action_eat(data->philo, data->init);
-		action_drop_fork(data->philo, data->init);
-		action_sleep(data->philo, data->init);
-		action_think(data->philo, data->init);
+		if (!action_take_fork(data->philo, data->init))
+			break;
+		// usleep(50);
+		// if (!action_eat(data->philo, data->init))
+		// 	break;
+		if (!action_drop_fork(data->philo, data->init))
+			break;
+		if (!action_sleep(data->philo, data->init))
+			break;
+		if (!action_think(data->philo, data->init))
+			break;
 	}
 	return (NULL);
 }
+
 
 void	run_routine_philo(t_init *init)
 {
@@ -65,7 +70,6 @@ void	run_routine_philo(t_init *init)
 
 	time_init = get_time_philo();
 
-	// création des threads par philosophers
 	i = init->nb_of_philo - 1;
 	while(i >= 0)
 	{
@@ -81,10 +85,9 @@ void	run_routine_philo(t_init *init)
 		i--;
 	}
 	while (!init->end_flag)
-		usleep(100); // wait for some time, then check again
+		usleep(42); // wait for some time, then check again
 	
 	i = init->nb_of_philo - 1;
-	// pthread_join attend que tous les threads se terminent avant de continuer
 	while (i >= 0) 
 	{
 		pthread_join(init->philo[i].thread_philo, NULL);

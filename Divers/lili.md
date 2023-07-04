@@ -51,7 +51,7 @@ Enfin, vous devrez écrire le code pour imprimer les états des philosophes (pre
 
 **************************************
 
-De plus, à première vue, il semble que votre programme soit bloqué à l'étape "thinking" parce que les autres étapes dépendent d'une certaine synchronisation entre les threads qui n'est peut-être pas mise en place correctement. Vous devriez vérifier votre gestion des mutex et votre logique de synchronisation des threads. Par exemple, dans votre fonction action_grab_fork, vous utilisez des mutex pour synchroniser l'accès aux fourchettes, mais il est possible que vous rencontriez une situation de blocage, où chaque philosophe a saisi une fourchette et attend que l'autre la libère.
+De plus, à première vue, il semble que votre programme soit bloqué à l'étape "thinking" parce que les autres étapes dépendent d'une certaine synchronisation entre les threads qui n'est peut-être pas mise en place correctement. Vous devriez vérifier votre gestion des mutex et votre logique de synchronisation des threads. Par exemple, dans votre fonction action_take_fork, vous utilisez des mutex pour synchroniser l'accès aux fourchettes, mais il est possible que vous rencontriez une situation de blocage, où chaque philosophe a saisi une fourchette et attend que l'autre la libère.
 
 Encore une fois, il serait utile d'ajouter plus de messages de journalisation pour suivre le déroulement de votre programme et identifier l'endroit exact où les choses tournent mal. Vous pourriez aussi envisager d'ajouter un délai après chaque action pour aider à observer l'ordre des opérations.
 

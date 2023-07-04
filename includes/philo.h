@@ -91,11 +91,11 @@ t_init		*init_write_mutex(t_init *init);
 int		action_think(t_philo *philo, t_init *data);
 int		action_eat(t_philo *philo, t_init *data);
 int		action_drop_fork(t_philo *philo, t_init *data);
-// void		action_grab_fork(t_philo *philo, t_init *data);
+// void		action_take_fork(t_philo *philo, t_init *data);
 int		action_sleep(t_philo *philo, t_init *data);
 
 
-int action_grab_fork(t_philo *philo, t_init *init);
+int action_take_fork(t_philo *philo, t_init *init);
 
 
 /***************************** routine.c ********************************/
