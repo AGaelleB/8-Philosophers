@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/03 14:27:03 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/04 10:54:53 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int action_eat(t_philo *philo, t_init *init)
 			if (init->all_finished_eating == init->nb_of_philo)
 			{
 				init->end_flag = 1;
+				print_action(philo, init, philo->philo_id, "is eating");
 				printf("%sAll Philosophers eat %d/%d. stopping program\n%s", RED, philo->nb_time_eat, init->nb_must_eat, RESET);
 				pthread_mutex_unlock(&init->death_mutex);
 				stop_all_if_flag(init);
@@ -62,6 +63,7 @@ int action_eat(t_philo *philo, t_init *init)
 
 int action_grab_fork(t_philo *philo, t_init *init)
 {
+	usleep(init->time_to_eat * 1000);  // avancer pour eviter les deadlocks
 	if (check_if_philo_died(philo, init) == 1)
 	{
 		init->end_flag = 1;
@@ -80,8 +82,7 @@ int action_grab_fork(t_philo *philo, t_init *init)
 	}
 	print_action(philo, init, philo->philo_id, "has taken a fork"); // left fork 1
 	print_action(philo, init, philo->philo_id, "has taken a fork"); // right fork 2
-	action_eat(philo, init);
-	usleep(init->time_to_eat * 1000);
+	// action_eat(philo, init);
 	return (1);
 }
 
@@ -93,7 +94,6 @@ int	action_drop_fork(t_philo *philo, t_init *init)
 		stop_all_if_flag(init);
 		return (0);
 	}
-	
 	if (philo->left_fork_id < philo->right_fork_id)
 	{
 		pthread_mutex_unlock(&init->forks[philo->left_fork_id]);
@@ -109,14 +109,13 @@ int	action_drop_fork(t_philo *philo, t_init *init)
 
 int	action_sleep(t_philo *philo, t_init *init)
 {
+	usleep(init->time_to_sleep * 1000); // avancer pour eviter les deadlocks
 	if (check_if_philo_died(philo, init) == 1)
 	{
 		init->end_flag = 1;
 		stop_all_if_flag(init);
 		return (0);
-
 	}
-	usleep(init->time_to_sleep * 1000);
 	print_action(philo, init, philo->philo_id, "is sleeping");
 	return (1);
 }

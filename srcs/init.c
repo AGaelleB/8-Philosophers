@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/03 11:33:43 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/04 10:10:31 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_init	*init_philo(t_init *data)
 		if (data->nb_of_philo == 1)
 			data->philo[i].right_fork_id = (i + 1);
 		else
-			data->philo[i].right_fork_id = (i + 1) % data->nb_of_philo; // lili  Cela permet de connecter le dernier philosophe avec la première fourchette du tableau, formant ainsi une boucle.
+			data->philo[i].right_fork_id = (i + 1) % data->nb_of_philo;
 		data->philo[i].time_last_eat = 0;
 		i--;
 	}

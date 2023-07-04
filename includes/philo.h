@@ -13,20 +13,12 @@
 #ifndef PHILO_H
 # define PHILO_H
 
-# include <fcntl.h>
 # include <unistd.h>
-# include <stdlib.h>
-# include <stddef.h>
 # include <stdio.h>
-# include <stdint.h>
-# include <string.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <sys/wait.h>
-# include <errno.h>
 # include <pthread.h>
-#include <sys/time.h>
-#include <stdbool.h>
+# include <string.h>
+# include <stdlib.h>
+# include <sys/time.h>
 
 # define RESET "\033[0m"
 # define BLACK "\033[30m"
