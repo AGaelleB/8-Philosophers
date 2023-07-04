@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/04 10:56:03 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/04 12:12:36 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void stop_all_if_flag(t_init *init)
 {
+	// usleep(50); // test
 	pthread_mutex_lock(&init->death_mutex);
 	if (init->end_flag == 1)
 	{
@@ -26,7 +27,7 @@ void stop_all_if_flag(t_init *init)
 
 int	check_if_philo_died(t_philo *philo, t_init *init)
 {
-	usleep(50); // test
+	// usleep(50); // test
 	if ((get_time_philo() - philo->time_last_eat) > init->time_to_die)
 	{
 		print_action(philo, init, philo->philo_id, "died");
@@ -45,32 +46,13 @@ void *thread_routine(void *arg)
 
 	while (1)
 	{
+		// usleep(50); // test
+
 		action_grab_fork(data->philo, data->init);
 		action_eat(data->philo, data->init);
 		action_drop_fork(data->philo, data->init);
 		action_sleep(data->philo, data->init);
 		action_think(data->philo, data->init);
-		
-		// if (action_grab_fork(data->philo, data->init) == 0) 
-		// {
-		// 	action_eat(data->philo, data->init); // libérer les ressources avant de se terminer
-		// 	return NULL;
-		// }
-		// if (action_grab_fork(data->philo, data->init) == 0) 
-		// {
-		// 	action_drop_fork(data->philo, data->init); // libérer les ressources avant de se terminer
-		// 	return NULL;
-		// }
-		// if (action_sleep(data->philo, data->init) == 0) 
-		// {
-		// 	action_sleep(data->philo, data->init); // libérer les ressources avant de se terminer
-		// 	return NULL;
-		// }
-		// if (action_think(data->philo, data->init) == 0) 
-		// {
-		// 	action_think(data->philo, data->init); // libérer les ressources avant de se terminer
-		// 	return NULL;
-		// }
 	}
 	return (NULL);
 }
@@ -98,7 +80,6 @@ void	run_routine_philo(t_init *init)
 		pthread_create(&init->philo[i].thread_philo, NULL, thread_routine, data);
 		i--;
 	}
-	// ADD LILI
 	while (!init->end_flag)
 		usleep(100); // wait for some time, then check again
 	
