@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/05 11:55:29 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/05 12:09:42 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_init	*init_philo(t_init *data)
 	}
 	while(i >= 0)
 	{
-		data->philo[i].philo_id = i + 1; // + 1 ajouter pour decompte;
+		data->philo[i].philo_id = i + 1;
 		data->philo[i].nb_time_eat = 0;
 		data->philo[i].left_fork_id = i;
 		if (data->nb_of_philo == 1)

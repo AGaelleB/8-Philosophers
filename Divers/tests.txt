@@ -1,0 +1,29 @@
+a tester :
+
+./philo 1 800 200 200 
+	-> doit mourir, pas de repas
+
+./philo 5 800 200 200
+	-> boucle infini
+
+./philo 5 800 200 200 7
+	-> stop apres 7 repas
+
+./philo 4 410 200 200
+	-> boucle infini
+
+./philo 4 310 200 100
+	-> 1 mort
+
+./philo 2 310 200 100
+	-> a 10ms max, meme temps que pour 4 philosopher
+
+./philo 4 310 200 100 0
+	-> rien
+
+./philo 4 310 200 100 -1
+	-> rien
+
+./philo 4 310 200 100 fsdfs
+	-> rien
+

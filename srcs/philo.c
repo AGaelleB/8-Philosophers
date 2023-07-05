@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:19 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/05 12:07:41 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/05 12:39:20 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,16 @@ int	main(int ac, char **av)
 		free(data);
 		return (write_error("Failed to use negative value"));
 	}
+
+	if (data->nb_of_philo == 1)
+	{
+		usleep(data->time_to_die * 1000);
+		// printf("data->time_to_die = %d\n", data->time_to_die);
+		printf("%d %s died\n", ft_atoi_philo(av[2]) + 1, av[1]);
+		return (0);
+	}
+
+	
 	data = init_philo(data);
 	if (data == NULL)
 		return (write_error("Failed to initialize philo"));
