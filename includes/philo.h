@@ -78,6 +78,8 @@ void		cleanup_all_mutex(t_init *data);
 
 /******************************* libft_philo.c ********************************/
 int	ft_atoi_philo(char *str);
+int ft_isdigit_str(char *str);
+
 
 /********************************** init.c ************************************/
 t_init		*init_mutex(t_init *data);
