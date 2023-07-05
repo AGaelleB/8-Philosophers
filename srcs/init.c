@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/04 10:10:31 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/05 11:14:37 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_init	*init_recup_data(t_init *data, int ac, char **av)
 	data->time_to_die = ft_atoi_philo(av[2]);
 	data->time_to_eat = ft_atoi_philo(av[3]);
 	data->time_to_sleep = ft_atoi_philo(av[4]);
+	data->time_to_think = (data->time_to_die - (data->time_to_eat + data->time_to_sleep)) / 2;
 	data->all_finished_eating = 0;
 	if(ac == 6)
 		data->nb_must_eat = ft_atoi_philo(av[5]);
@@ -28,6 +29,10 @@ t_init	*init_recup_data(t_init *data, int ac, char **av)
 		data->nb_must_eat = 0;
 	return (data);
 }
+
+
+
+
 
 t_init	*init_philo(t_init *data)
 {

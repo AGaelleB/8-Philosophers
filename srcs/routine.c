@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/04 15:37:17 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/05 11:05:29 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void stop_all_if_flag(t_init *init)
 {
-	// usleep(42); // test
+	usleep(100); // test
 	pthread_mutex_lock(&init->death_mutex);
 	if (init->end_flag == 1)
 	{
@@ -48,11 +48,6 @@ void *thread_routine(void *arg)
 	{
 		if (!action_take_fork(data->philo, data->init))
 			break;
-		// usleep(50);
-		// if (!action_eat(data->philo, data->init))
-		// 	break;
-		if (!action_drop_fork(data->philo, data->init))
-			break;
 		if (!action_sleep(data->philo, data->init))
 			break;
 		if (!action_think(data->philo, data->init))
@@ -84,8 +79,8 @@ void	run_routine_philo(t_init *init)
 		pthread_create(&init->philo[i].thread_philo, NULL, thread_routine, data);
 		i--;
 	}
-	while (!init->end_flag)
-		usleep(42); // wait for some time, then check again
+	// while (!init->end_flag)
+	// 	usleep(100); // wait for some time, then check again
 	
 	i = init->nb_of_philo - 1;
 	while (i >= 0) 

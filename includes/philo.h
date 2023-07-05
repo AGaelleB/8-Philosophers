@@ -49,6 +49,7 @@ typedef struct			s_init
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					nb_must_eat;
+	int					time_to_think;
 	t_philo				*philo;
 	pthread_mutex_t		*forks; // me permet d utiliser pthread_mutex_lock sans erreurs
 	int					end_flag;

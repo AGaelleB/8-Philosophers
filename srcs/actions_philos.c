@@ -6,13 +6,13 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/04 15:39:11 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/05 11:12:21 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	action_think(t_philo *philo, t_init *init)
+int action_take_fork(t_philo *philo, t_init *init)
 {
 	if (check_if_philo_died(philo, init) == 1)
 	{
@@ -20,7 +20,21 @@ int	action_think(t_philo *philo, t_init *init)
 		stop_all_if_flag(init);
 		return (0);
 	}
-	print_action(philo, init, philo->philo_id, "is thinking");
+	// if (philo->left_fork_id < philo->right_fork_id)
+	if (philo->philo_id % 2 == 0)
+	{
+		pthread_mutex_lock(&init->forks[philo->left_fork_id]);
+		pthread_mutex_lock(&init->forks[philo->right_fork_id]);
+	}
+	else
+	{
+		pthread_mutex_lock(&init->forks[philo->right_fork_id]);
+		pthread_mutex_lock(&init->forks[philo->left_fork_id]);
+	}
+	print_action(philo, init, philo->philo_id, "has taken a fork"); // left fork 1
+	print_action(philo, init, philo->philo_id, "has taken a fork"); // right fork 2
+	// usleep(100);
+	action_eat(philo, init);
 	return (1);
 }
 
@@ -46,48 +60,19 @@ int action_eat(t_philo *philo, t_init *init)
 			if (init->all_finished_eating == init->nb_of_philo)
 			{
 				init->end_flag = 1;
-				print_action(philo, init, philo->philo_id, "is eating");
 				printf("%sAll Philo eat %d/%d\n%s", RED, philo->nb_time_eat, init->nb_must_eat, RESET);
 				pthread_mutex_unlock(&init->death_mutex);
 				stop_all_if_flag(init);
+				return (1);
 			}
-			print_action(philo, init, philo->philo_id, "is eating");
-			pthread_mutex_unlock(&init->death_mutex);
-			return (1);
 		}
 	}
 	philo->time_last_eat = get_time_philo();
 	pthread_mutex_unlock(&init->death_mutex);
 	usleep(init->time_to_eat * 1000); // mettre avant ou apres le mutex ? 
+	action_drop_fork(philo, init);
 	return (1);
 }
-
-int action_take_fork(t_philo *philo, t_init *init)
-{
-	// usleep(50);
-	if (check_if_philo_died(philo, init) == 1)
-	{
-		init->end_flag = 1;
-		stop_all_if_flag(init);
-		return (0);
-	}
-	if (philo->left_fork_id < philo->right_fork_id)
-	{
-		pthread_mutex_lock(&init->forks[philo->left_fork_id]);
-		pthread_mutex_lock(&init->forks[philo->right_fork_id]);
-	}
-	else 
-	{
-		pthread_mutex_lock(&init->forks[philo->right_fork_id]);
-		pthread_mutex_lock(&init->forks[philo->left_fork_id]);
-	}
-	print_action(philo, init, philo->philo_id, "has taken a fork"); // left fork 1
-	print_action(philo, init, philo->philo_id, "has taken a fork"); // right fork 2
-	// usleep(42);
-	action_eat(philo, init);
-	return (1);
-}
-
 
 int	action_drop_fork(t_philo *philo, t_init *init)
 {
@@ -97,7 +82,8 @@ int	action_drop_fork(t_philo *philo, t_init *init)
 		stop_all_if_flag(init);
 		return (0);
 	}
-	if (philo->left_fork_id < philo->right_fork_id)
+	// if (philo->left_fork_id < philo->right_fork_id)
+	if (philo->philo_id % 2 == 0)
 	{
 		pthread_mutex_unlock(&init->forks[philo->left_fork_id]);
 		pthread_mutex_unlock(&init->forks[philo->right_fork_id]);
@@ -122,3 +108,29 @@ int	action_sleep(t_philo *philo, t_init *init)
 	usleep(init->time_to_sleep * 1000);
 	return (1);
 }
+
+int	action_think(t_philo *philo, t_init *init)
+{
+	if (check_if_philo_died(philo, init) == 1)
+	{
+		init->end_flag = 1;
+		stop_all_if_flag(init);
+		return (0);
+	}
+	print_action(philo, init, philo->philo_id, "is thinking");
+	usleep(init->time_to_think * 1000);
+		return (1);
+}
+
+
+// int	action_think(t_philo *philo, t_init *init)
+// {
+// 	if (check_if_philo_died(philo, init) == 1)
+// 	{
+// 		init->end_flag = 1;
+// 		stop_all_if_flag(init);
+// 		return (0);
+// 	}
+// 	print_action(philo, init, philo->philo_id, "is thinking");
+// 	return (1);
+// }
