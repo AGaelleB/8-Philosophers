@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/05 11:05:29 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/05 11:46:32 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void stop_all_if_flag(t_init *init)
 {
-	usleep(100); // test
 	pthread_mutex_lock(&init->death_mutex);
 	if (init->end_flag == 1)
 	{
@@ -27,7 +26,6 @@ void stop_all_if_flag(t_init *init)
 
 int	check_if_philo_died(t_philo *philo, t_init *init)
 {
-	// usleep(42); // test
 	if ((get_time_philo() - philo->time_last_eat) > init->time_to_die)
 	{
 		print_action(philo, init, philo->philo_id, "died");
@@ -56,7 +54,6 @@ void *thread_routine(void *arg)
 	return (NULL);
 }
 
-
 void	run_routine_philo(t_init *init)
 {
 	int	i;
@@ -81,7 +78,6 @@ void	run_routine_philo(t_init *init)
 	}
 	// while (!init->end_flag)
 	// 	usleep(100); // wait for some time, then check again
-	
 	i = init->nb_of_philo - 1;
 	while (i >= 0) 
 	{

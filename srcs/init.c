@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/05 11:14:37 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/05 11:17:49 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,6 @@ t_init	*init_recup_data(t_init *data, int ac, char **av)
 		data->nb_must_eat = 0;
 	return (data);
 }
-
-
-
-
 
 t_init	*init_philo(t_init *data)
 {

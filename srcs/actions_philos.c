@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/05 11:12:21 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/05 11:46:12 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int action_take_fork(t_philo *philo, t_init *init)
 		stop_all_if_flag(init);
 		return (0);
 	}
-	// if (philo->left_fork_id < philo->right_fork_id)
 	if (philo->philo_id % 2 == 0)
 	{
 		pthread_mutex_lock(&init->forks[philo->left_fork_id]);
@@ -33,7 +32,7 @@ int action_take_fork(t_philo *philo, t_init *init)
 	}
 	print_action(philo, init, philo->philo_id, "has taken a fork"); // left fork 1
 	print_action(philo, init, philo->philo_id, "has taken a fork"); // right fork 2
-	// usleep(100);
+	usleep(100);
 	action_eat(philo, init);
 	return (1);
 }
@@ -69,20 +68,20 @@ int action_eat(t_philo *philo, t_init *init)
 	}
 	philo->time_last_eat = get_time_philo();
 	pthread_mutex_unlock(&init->death_mutex);
-	usleep(init->time_to_eat * 1000); // mettre avant ou apres le mutex ? 
+	usleep(init->time_to_eat * 1000);
 	action_drop_fork(philo, init);
 	return (1);
 }
 
 int	action_drop_fork(t_philo *philo, t_init *init)
 {
+	usleep(100); // test
 	if (check_if_philo_died(philo, init) == 1)
 	{
 		init->end_flag = 1;
 		stop_all_if_flag(init);
 		return (0);
 	}
-	// if (philo->left_fork_id < philo->right_fork_id)
 	if (philo->philo_id % 2 == 0)
 	{
 		pthread_mutex_unlock(&init->forks[philo->left_fork_id]);
@@ -98,6 +97,7 @@ int	action_drop_fork(t_philo *philo, t_init *init)
 
 int	action_sleep(t_philo *philo, t_init *init)
 {
+	usleep(100);
 	if (check_if_philo_died(philo, init) == 1)
 	{
 		init->end_flag = 1;
@@ -111,6 +111,7 @@ int	action_sleep(t_philo *philo, t_init *init)
 
 int	action_think(t_philo *philo, t_init *init)
 {
+	usleep(100);
 	if (check_if_philo_died(philo, init) == 1)
 	{
 		init->end_flag = 1;
@@ -121,16 +122,3 @@ int	action_think(t_philo *philo, t_init *init)
 	usleep(init->time_to_think * 1000);
 		return (1);
 }
-
-
-// int	action_think(t_philo *philo, t_init *init)
-// {
-// 	if (check_if_philo_died(philo, init) == 1)
-// 	{
-// 		init->end_flag = 1;
-// 		stop_all_if_flag(init);
-// 		return (0);
-// 	}
-// 	print_action(philo, init, philo->philo_id, "is thinking");
-// 	return (1);
-// }
