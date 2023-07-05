@@ -65,7 +65,7 @@ typedef struct	s_data
 	t_init	*init;
 }		t_data;
 
-/********************************* philo.c ************************************/
+/********************************* main_philo.c ************************************/
 
 /********************************* utils.c ************************************/
 int			write_error(char *str);
@@ -88,6 +88,7 @@ t_init		*init_recup_data(t_init *data, int ac, char **av);
 t_init		*init_forks(t_init *data);
 t_init		*init_eat_count_mutex(t_init *data);
 t_init		*init_write_mutex(t_init *init);
+t_init		*init_death_mutex(t_init *data);
 
 /***************************** actions_philos.c ********************************/
 

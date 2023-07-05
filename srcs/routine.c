@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/05 14:29:29 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/05 16:37:12 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void stop_all_if_flag(t_init *init)
 {
-	pthread_mutex_lock(&init->death_mutex);
+	pthread_mutex_lock(&init->death_mutex); // a tester de deplacer le lock et unlock dans le if voir si crash
 	if (init->end_flag == 1)
 	{
 		printf("%sPhilo died%s\n", RED, RESET);

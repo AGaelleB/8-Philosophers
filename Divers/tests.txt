@@ -3,6 +3,11 @@
 	est le flag de compilation qu'il te faut utiliser pour être sûr de ne pas avoir de race
 	attention a ne pas utiliser valgrind en meme temps sinon conflit
 
+--main-stacksize=<number>
+--fair-sched=no|yes|try
+--valgrind-stacksize=<number>
+--max-threads=<number>
+tous flags avec threads possible de valgrind
 
 a tester :
 
@@ -46,5 +51,5 @@ a tester :
 pour le moment fail avec ./philo 200 300 1 1 2
 
 
-
-valgrind --leak-check=full --show-leak-kinds=all ./philo 2 310 200 100 //segfault
+valgrind --leak-check=full --show-leak-kinds=all ./philo 2 31 20 10
+	-> bcp de leaks a regler

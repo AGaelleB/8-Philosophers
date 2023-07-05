@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/05 15:36:07 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/05 16:39:17 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_init	*init_recup_data(t_init *data, int ac, char **av)
 	data->time_to_sleep = ft_atoi_philo(av[4]);
 	data->time_to_think = (data->time_to_die - (data->time_to_eat + data->time_to_sleep)) / 2;
 	data->all_finished_eating = 0;
+	data->end_flag = 0; 
 	if(ac == 6)
 	{
 		data->nb_must_eat = ft_atoi_philo(av[5]);
@@ -108,6 +109,18 @@ t_init	*init_eat_count_mutex(t_init *data)
 	if (pthread_mutex_init(&data->eat_count_mutex, NULL) != 0)
 	{
 		printf("Failed to initialize mutex for eat count\n");
+		free(data->philo);
+		free(data);
+		return (NULL);
+	}
+	return (data);
+}
+
+t_init	*init_death_mutex(t_init *data)
+{
+	if (pthread_mutex_init(&data->death_mutex, NULL) != 0)
+	{
+		printf("Failed to initialize mutex for death check\n");
 		free(data->philo);
 		free(data);
 		return (NULL);
