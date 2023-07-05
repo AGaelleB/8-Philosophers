@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/05 11:46:32 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/05 14:29:29 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ int	check_if_philo_died(t_philo *philo, t_init *init)
 {
 	if ((get_time_philo() - philo->time_last_eat) > init->time_to_die)
 	{
-		print_action(philo, init, philo->philo_id, "died");
 		pthread_mutex_lock(&init->death_mutex);
+		print_action(philo, init, philo->philo_id, "died");
 		init->end_flag = 1;
+		exit (1); // magouille a free
 		pthread_mutex_unlock(&init->death_mutex);
-		return (1);
 	}
 	else
 		return (0);

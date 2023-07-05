@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:19 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/05 12:39:20 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/05 16:03:09 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,12 @@ int	main(int ac, char **av)
 	data = NULL;
 	if(ac != 6 && ac != 5)
 		return (write_error("Wrong numbers of arguments"));
+	if (!ft_isdigit_str(av[1]) || !ft_isdigit_str(av[2]) || !ft_isdigit_str(av[3])
+		|| !ft_isdigit_str(av[4]) || (ac == 6 && !ft_isdigit_str(av[5])))
+		return (write_error("Invalid value"));
 	data = init_recup_data(data, ac, av);
 	if (data == NULL)
 		return (write_error("Failed to initialize data"));
-	if (ac == 6 && (data->nb_must_eat == 0))
-	{
-		free(data);
-		return write(2, "", 1);
-	}
-	if (ac == 6 && (data->nb_must_eat < 0 || !ft_isdigit_str(av[5])))
-	{
-		free(data);
-		return (write_error("Failed to use negative value"));
-	}
-
-	if (data->nb_of_philo == 1)
-	{
-		usleep(data->time_to_die * 1000);
-		// printf("data->time_to_die = %d\n", data->time_to_die);
-		printf("%d %s died\n", ft_atoi_philo(av[2]) + 1, av[1]);
-		return (0);
-	}
-
-	
 	data = init_philo(data);
 	if (data == NULL)
 		return (write_error("Failed to initialize philo"));

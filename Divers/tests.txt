@@ -1,3 +1,9 @@
+
+-fsanitize=thread 
+	est le flag de compilation qu'il te faut utiliser pour être sûr de ne pas avoir de race
+	attention a ne pas utiliser valgrind en meme temps sinon conflit
+
+
 a tester :
 
 ./philo 1 800 200 200 
@@ -27,3 +33,18 @@ a tester :
 ./philo 4 310 200 100 fsdfs
 	-> rien
 
+./philo 200 300 1 1
+	-> boucle infini
+
+./philo 200 300 1 1 2 2
+	-> 400 repas (attention parfois tout ne peux pas s afficher dans le terminal car trop long)
+
+
+
+
+/!\ ne pas avoir de message apres le dernier repas ou mort /!\
+pour le moment fail avec ./philo 200 300 1 1 2
+
+
+
+valgrind --leak-check=full --show-leak-kinds=all ./philo 2 310 200 100 //segfault

@@ -51,9 +51,9 @@ typedef struct			s_init
 	int					nb_must_eat;
 	int					time_to_think;
 	t_philo				*philo;
-	pthread_mutex_t		*forks; // me permet d utiliser pthread_mutex_lock sans erreurs
 	int					end_flag;
 	int					all_finished_eating; // verif si tous les repas sont pris
+	pthread_mutex_t		*forks; // me permet d utiliser pthread_mutex_lock sans erreurs
 	pthread_mutex_t		eat_count_mutex; // Mutex pour protéger le compteur
 	pthread_mutex_t		death_mutex;
 	pthread_mutex_t		write_mutex; // permet d ecrire sans superposer 

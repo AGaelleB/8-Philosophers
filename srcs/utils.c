@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/04 09:55:32 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/05 14:18:52 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	print_action(t_philo *philo, t_init *init, int id, char *str)
 	printf("%i ", id);
 	printf("%s\n", str);
 	pthread_mutex_unlock(&init->write_mutex);
+
 }
 
 void wait_threads(t_init *data)
