@@ -83,7 +83,8 @@ void		cleanup_forks(t_init *data);
 /******************************* libft_philo.c ********************************/
 int	ft_atoi_philo(char *str);
 int ft_isdigit_str(char *str);
-
+int	ft_strcmp(char *s1, char *s2);
+int	ft_atoi_philo(char *str);
 
 /******************************** init_data.c *********************************/
 t_init		*init_mutex(t_init *data);
@@ -99,14 +100,6 @@ t_init		*init_write_mutex(t_init *init);
 t_init		*init_death_mutex(t_init *data);
 
 /***************************** actions_philos.c ********************************/
-
-// int		action_think(t_philo *philo, t_init *data);
-// int		action_eat(t_philo *philo, t_init *data);
-// int		action_drop_fork(t_philo *philo, t_init *data);
-// int		action_sleep(t_philo *philo, t_init *data);
-// int		action_take_fork(t_philo *philo, t_init *init);
-
-
 void		action_think(t_philo *philo, t_init *data);
 void		action_eat(t_philo *philo, t_init *data);
 void		action_drop_fork(t_philo *philo, t_init *data);
@@ -124,10 +117,12 @@ int	check_and_stop_if_philo_died(t_philo *philo, t_init *init);
 
 
 
-void check_death(t_init *init, t_philo *philo);
-// void check_all_deaths(t_init *init);
 
-void	check_all_deaths(t_philo *philo, t_init *init);
+
+void check_death(t_init *init, t_philo *philo);
+void check_all_deaths(t_init *init);
+
+// void	check_all_deaths(t_philo *philo, t_init *init);
 
 
 #endif

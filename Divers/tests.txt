@@ -1,4 +1,11 @@
 
+./philo number_of_philosophers 
+		time_to_die
+		time_to_eat
+		time_to_sleep
+		[number_of_times_each_philosopher_must_eat]
+
+
 -fsanitize=thread 
 	est le flag de compilation qu'il te faut utiliser pour être sûr de ne pas avoir de race
 	attention a ne pas utiliser valgrind en meme temps sinon conflit
@@ -44,6 +51,8 @@ a tester :
 ./philo 200 300 1 1 2 2
 	-> 400 repas (attention parfois tout ne peux pas s afficher dans le terminal car trop long)
 
+./philo 200 300 1 1 0
+	-> 0 repas
 
 
 
