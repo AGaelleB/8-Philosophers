@@ -40,6 +40,7 @@ typedef	struct			s_philo
 	pthread_mutex_t		mutex; // permet d init des mutex 
 	pthread_t			thread_philo; //creation de mes threads
 	long long			time_init; // ici car bug dans init
+	struct s_data *data; // Ajout d'un pointeur vers la structure t_data Baptiste
 }						t_philo;
 
 typedef struct			s_init
@@ -66,48 +67,67 @@ typedef struct	s_data
 }		t_data;
 
 /********************************* main_philo.c ************************************/
+void	cleanup_all(t_init *data);
 
 /********************************* utils.c ************************************/
 int			write_error(char *str);
 void		ft_free_tab(char **tab);
 long long	get_time_philo(void);
 void		print_action(t_philo *philo, t_init *init, int id, char *str);
-void		cleanup_forks(t_init *data);
 void		wait_threads(t_init *data);
 void		cleanup_all_mutex(t_init *data);
+void		cleanup_forks(t_init *data);
+
+
 
 /******************************* libft_philo.c ********************************/
 int	ft_atoi_philo(char *str);
 int ft_isdigit_str(char *str);
 
 
-/********************************** init.c ************************************/
+/******************************** init_data.c *********************************/
 t_init		*init_mutex(t_init *data);
 t_init		*init_philo(t_init *data);
+
+/******************************** init_philo.c *********************************/
 t_init		*init_recup_data(t_init *data, int ac, char **av);
 t_init		*init_forks(t_init *data);
+// int	init_forks(t_init *data);
+
 t_init		*init_eat_count_mutex(t_init *data);
 t_init		*init_write_mutex(t_init *init);
 t_init		*init_death_mutex(t_init *data);
 
 /***************************** actions_philos.c ********************************/
 
-int		action_think(t_philo *philo, t_init *data);
-int		action_eat(t_philo *philo, t_init *data);
-int		action_drop_fork(t_philo *philo, t_init *data);
-// void		action_take_fork(t_philo *philo, t_init *data);
-int		action_sleep(t_philo *philo, t_init *data);
+// int		action_think(t_philo *philo, t_init *data);
+// int		action_eat(t_philo *philo, t_init *data);
+// int		action_drop_fork(t_philo *philo, t_init *data);
+// int		action_sleep(t_philo *philo, t_init *data);
+// int		action_take_fork(t_philo *philo, t_init *init);
 
 
-int action_take_fork(t_philo *philo, t_init *init);
-
+void		action_think(t_philo *philo, t_init *data);
+void		action_eat(t_philo *philo, t_init *data);
+void		action_drop_fork(t_philo *philo, t_init *data);
+void		action_sleep(t_philo *philo, t_init *data);
+void		action_take_fork(t_philo *philo, t_init *init);
 
 /***************************** routine.c ********************************/
 
-void		*thread_routine(void *data);
+void		*thread_run(void *data);
 void		run_routine_philo(t_init *data);
 int			check_if_philo_died(t_philo *philo, t_init *data);
 void		stop_all_if_flag(t_init *init);
+int	check_and_stop_if_philo_died(t_philo *philo, t_init *init);
+
+
+
+
+void check_death(t_init *init, t_philo *philo);
+// void check_all_deaths(t_init *init);
+
+void	check_all_deaths(t_philo *philo, t_init *init);
 
 
 #endif

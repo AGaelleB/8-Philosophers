@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:02:31 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/05 15:08:31 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/13 16:20:01 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 
 int	ft_atoi_philo(char *str)
 {
-	int result = 0;
-	int sign = 1;
+	int	result;
+	int	sign;
 
+	result = 0;
+	sign = 1;
 	if (str == NULL)
 		return (0);
 	while (*str == ' ' || (*str >= 9 && *str <= 13))
@@ -40,7 +42,7 @@ int	ft_isdigit(int c)
 	return (0);
 }
 
-int ft_isdigit_str(char *str)
+int	ft_isdigit_str(char *str)
 {
 	if (*str == '-')
 		return (0);

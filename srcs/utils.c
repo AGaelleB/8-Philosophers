@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/05 14:18:52 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/19 12:23:00 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	write_error(char *str)
 	int	len;
 
 	len = 0;
-	while(str[len])
+	while (str[len])
 		len++;
 	write(2, "Error: ", 7);
 	write(2, str, len);
@@ -40,42 +40,31 @@ void	print_action(t_philo *philo, t_init *init, int id, char *str)
 	printf("%lli ", get_time_philo() - philo->time_init);
 	printf("%i ", id);
 	printf("%s\n", str);
+	if (strcmp(str, "died") == 0)
+		exit(-1);
 	pthread_mutex_unlock(&init->write_mutex);
-
 }
 
-void wait_threads(t_init *data)
+void	cleanup_all_mutex(t_init *data)
 {
 	int	i;
 
 	i = 0;
-	while(i < data->nb_of_philo)
-	{
-		pthread_join(data->philo[i].thread_philo, NULL);
-		i++;
-	}
-}
-
-void cleanup_all_mutex(t_init *data)
-{
-	int i;
-
 	pthread_mutex_destroy(&data->eat_count_mutex);
 	pthread_mutex_destroy(&data->death_mutex);
 	pthread_mutex_destroy(&data->write_mutex);
-
-	for (i = 0; i < data->nb_of_philo; i++)
+	while (i < data->nb_of_philo)
 	{
 		pthread_mutex_destroy(&data->philo[i].mutex);
 		pthread_mutex_destroy(&data->forks[i]);
+		i++;
 	}
-	
 	free(data->forks);
 	free(data->philo);
 	free(data);
 }
 
-void cleanup_forks(t_init *data)
+void	cleanup_forks(t_init *data)
 {
 	int	i;
 
@@ -87,7 +76,6 @@ void cleanup_forks(t_init *data)
 			pthread_mutex_destroy(&data->forks[i]);
 			i--;
 		}
-
 		free(data->forks);
 		data->forks = NULL;
 	}

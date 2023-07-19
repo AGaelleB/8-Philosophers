@@ -48,8 +48,6 @@ a tester :
 
 
 /!\ ne pas avoir de message apres le dernier repas ou mort /!\
-pour le moment fail avec ./philo 200 300 1 1 2
-
 
 valgrind --leak-check=full --show-leak-kinds=all ./philo 2 31 20 10
 	-> bcp de leaks a regler
