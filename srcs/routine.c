@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/21 17:57:07 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/21 18:41:53 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	check_and_stop_if_philo_died(t_philo *philo, t_init *init)
 {
 	if ((get_time_philo() - philo->time_last_eat) > init->time_to_die)
 	{
-		usleep(50); // permet de pas mourir fourchette a la main
+		usleep(200); // permet de pas mourir fourchette a la main
 		print_action(init, philo->philo_id, "died");
 	}
 	return (0);
@@ -78,4 +78,3 @@ void	run_routine_philo(t_init *init)
 	// }
 	// free_all_data(init);
 }
-

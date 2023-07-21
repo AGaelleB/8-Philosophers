@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/21 15:39:30 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/21 18:42:05 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,5 @@ void	print_action(t_init *init, int id, char *str)
 		// free avant de exit
 		exit(-1);
 	}
-
 	pthread_mutex_unlock(&init->write_mutex);
 }

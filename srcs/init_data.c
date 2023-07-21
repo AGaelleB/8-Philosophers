@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/21 17:27:04 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/21 18:39:29 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	calculate_and_set_time_to_think(t_init *init)
 	int	time_to_think;
 
 	time_to_eat_and_sleep = init->time_to_eat + init->time_to_sleep;
-
 	time_to_think = (init->time_to_die - (time_to_eat_and_sleep)) / 2;
 	if (time_to_think < 0)
 		time_to_think = 0;
@@ -53,7 +52,7 @@ void	check_and_set_nb_must_eat(t_init *init, int ac, char **av)
 		init->nb_must_eat = 0;
 }
 
-t_init *init_recup_data(t_init *init, int ac, char **av)
+t_init	*init_recup_data(t_init *init, int ac, char **av)
 {
 	init = malloc(sizeof(t_init));
 	if (init == NULL)
@@ -87,10 +86,8 @@ t_init	*init_philo(t_init *init)
 		else
 			init->philo[i].right_fork_id = (i + 1) % init->nb_of_philo;
 		init->philo[i].time_last_eat = 0;
-		pthread_mutex_init(&(init->philo[i].eat_mutex), NULL); // ajout rapide ici
+		pthread_mutex_init(&(init->philo[i].eat_mutex), NULL);
 		i--;
 	}
 	return (init);
 }
-
-
