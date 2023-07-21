@@ -6,17 +6,11 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:19 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/17 17:26:36 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/20 17:28:57 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-
-void	cleanup_all(t_init *data)
-{
-	cleanup_all_mutex(data);
-	cleanup_forks(data);
-}
 
 t_init	*initialize_data_and_mutex(t_init *data, int ac, char **av)
 {
@@ -44,10 +38,10 @@ int	main(int ac, char **av)
 	data = initialize_data_and_mutex(data, ac, av);
 	if (!data)
 	{
-		cleanup_all(data);
+		// free_all(data);
 		return (write_error("Failed to initialize"));
 	}
 	run_routine_philo(data);
-	cleanup_all(data);
+	// free_all(data); // Free all remaining memory
 	return (0);
 }

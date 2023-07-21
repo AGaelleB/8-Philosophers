@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/19 19:02:41 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/21 09:06:57 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,29 @@ long long	get_time_philo(void)
 	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
 }
 
-void	print_action(t_philo *philo, t_init *init, int id, char *str)
+// void print(t_init *init, int id_phil, char *str)
+// {
+// 	pthread_mutex_lock(&(init->print_mutex));
+// 	printf("%lld %d %s", (ft_get_time() - init->philo->start_time), id_phil, str);
+// 	if(str[1] == 'd')
+// 	{
+// 		ft_close(init);
+// 		exit(-1);
+// 	}
+// 	pthread_mutex_unlock(&(init->print_mutex));
+// }
+
+
+void	print_action(t_init *init, int id, char *str)
 {
 	pthread_mutex_lock(&init->write_mutex);
-	printf("%lld ", get_time_philo() - philo->time_init);
+	printf("%lld ", (get_time_philo() - init->philo->time_init));
 	printf("%d ", id);
 	printf("%s\n", str);
 	if (ft_strcmp(str, "died") == 0)
+	{
+		// free avant de exit
 		exit(-1);
+	}
 	pthread_mutex_unlock(&init->write_mutex);
 }

@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check.c                                            :+:      :+:    :+:   */
+/*   death_check.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/19 19:19:38 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/21 09:07:59 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-void	check_death(t_init *init, t_philo *philo)
+void	check_if_died(t_philo *philo, t_init *init)
 {
 	long long int	current_time;
 	long long int	time_since_last_eat;
@@ -30,20 +30,20 @@ void	check_death(t_init *init, t_philo *philo)
 	if (end == 1)
 	{
 		pthread_mutex_lock(&init->death_mutex);
-		print_action(philo, init, philo->philo_id, "died");
-		cleanup_all_mutex(init);
+		print_action(init, philo->philo_id, "died");
+		// free_all_mutex(init);
 		pthread_mutex_unlock(&init->death_mutex);
 	}
 }
 
-void	check_all_deaths(t_init *init)
+void	check_if_all_died(t_init *init)
 {
 	int	i;
 
 	i = 0;
 	while (i < init->nb_of_philo)
 	{
-		check_death(init, &init->philo[i]);
+		check_if_died(&init->philo[i], init);
 		i++;
 	}
 }
