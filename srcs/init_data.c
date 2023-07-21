@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/20 17:23:22 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/21 17:27:04 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	calculate_and_set_time_to_think(t_init *init)
 	if (time_to_think < 0)
 		time_to_think = 0;
 	init->time_to_think = time_to_think;
-	init->all_finished_eating = 0;
+	init->finished_eating = 0;
 }
 
 void	check_single_philo_and_exit(t_init *init, char **av)
@@ -80,6 +80,7 @@ t_init	*init_philo(t_init *init)
 	{
 		init->philo[i].philo_id = i + 1;
 		init->philo[i].nb_time_eat = 0;
+		init->all_eat = 0; // ici
 		init->philo[i].left_fork_id = i;
 		if (init->nb_of_philo == 1)
 			init->philo[i].right_fork_id = (i + 1);

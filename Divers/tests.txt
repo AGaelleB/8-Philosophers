@@ -54,7 +54,12 @@ a tester :
 ./philo 200 300 1 1 0
 	-> 0 repas
 
+./philo 200 1 1 1
+	-> est-ce normal de mourir immediatement ???????????
 
+
+./philo 200 100 90 20 1
+	-> le R fait tous les repas mais moi je meurs 
 
 /!\ ne pas avoir de message apres le dernier repas ou mort /!\
 

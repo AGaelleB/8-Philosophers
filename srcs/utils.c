@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/21 09:06:57 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/21 15:39:30 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,6 @@ long long	get_time_philo(void)
 	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
 }
 
-// void print(t_init *init, int id_phil, char *str)
-// {
-// 	pthread_mutex_lock(&(init->print_mutex));
-// 	printf("%lld %d %s", (ft_get_time() - init->philo->start_time), id_phil, str);
-// 	if(str[1] == 'd')
-// 	{
-// 		ft_close(init);
-// 		exit(-1);
-// 	}
-// 	pthread_mutex_unlock(&(init->print_mutex));
-// }
-
-
 void	print_action(t_init *init, int id, char *str)
 {
 	pthread_mutex_lock(&init->write_mutex);
@@ -58,5 +45,11 @@ void	print_action(t_init *init, int id, char *str)
 		// free avant de exit
 		exit(-1);
 	}
+	if ((init->end_flag == 1) && (ft_strcmp(str, "is eating") == 0))
+	{
+		// free avant de exit
+		exit(-1);
+	}
+
 	pthread_mutex_unlock(&init->write_mutex);
 }

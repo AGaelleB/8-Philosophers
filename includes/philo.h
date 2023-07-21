@@ -46,6 +46,8 @@ typedef	struct			s_philo
 
 typedef struct			s_init
 {
+	int					all_eat;
+	int					end_flag; //again
 	int					nb_of_philo;
 	int					time_to_die;
 	int					time_to_eat;
@@ -53,11 +55,12 @@ typedef struct			s_init
 	int					nb_must_eat;
 	int					time_to_think;
 	t_philo				*philo;
-	int					all_finished_eating;
+	int					finished_eating;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		eat_count_mutex;
 	pthread_mutex_t		death_mutex;
 	pthread_mutex_t		write_mutex;
+	pthread_mutex_t		end_flag_mutex;
 }						t_init;
 
 typedef struct	s_data

@@ -6,123 +6,34 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/20 17:23:54 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/21 17:57:07 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-
-// void	routine_one(t_init*init, t_philo *philo)
-// {
-// 	int nb_time_eat;
-
-// 	nb_time_eat = 0;
-// 	while (nb_time_eat != init->nb_must_eat)
-// 	{
-// 		action_take_fork(philo, init);
-// 		nb_time_eat++;
-// 		if (nb_time_eat == init->nb_must_eat)
-// 			break ;
-// 		check_if_all_died(init);
-// 		action_sleep(philo, init);
-// 		check_if_all_died(init);
-// 		action_think(philo, init);
-// 		check_if_all_died(init);
-// 	}
-// }
-
-///////////////////////////
-
-// void routine_one(t_init *init, t_philo *philo)
-// {
-//     int nb_time_eat = 0;
-
-//     while (nb_time_eat < init->nb_must_eat)
-//     {
-//         action_take_fork(philo, init);
-//         nb_time_eat++;
-//         if (nb_time_eat == init->nb_must_eat)
-//             break;
-//         check_if_all_died(init);
-//         action_sleep(philo, init);
-//         check_if_all_died(init);
-//         action_think(philo, init);
-//         check_if_all_died(init);
-//     }
-// }
-
-// void	routine_two(t_init *init, t_philo *philo)
-// {
-// 	while (1)
-// 	{
-// 		action_take_fork(philo, init);
-// 		check_if_all_died(init);
-// 		action_sleep(philo, init);
-// 		check_if_all_died(init);
-// 		action_think(philo, init);
-// 		check_if_all_died(init);
-// 	}
-// }
-
-// void	*thread_run(void *arg)
-// {
-// 	t_data	*data;
-
-// 	data = (t_data *)arg;
-	
-// 	// printf("%s data->init->nb_must_eat = %d %s\n", GREEN, data->init->nb_must_eat ,RESET);
-// 	// printf("%s init->nb_must_eat = %d %s\n", BLUE, init->nb_must_eat ,RESET);
-	
-// 	if (data->init->nb_must_eat > 0)
-// 		routine_one(data->init, data->philo);
-// 	else
-// 		routine_two(data->init, data->philo);
-// 	return (NULL);
-// }
-
-//////////////////////////
-
-void	routine_one(t_init *init, t_philo *philo)
-{
-	while (philo->nb_time_eat != init->nb_must_eat)
-	{
-		action_take_fork(philo, init);
-		if (philo->nb_time_eat == init->nb_must_eat)
-			break ;
-		check_if_all_died(init);
-		action_sleep(philo, init);
-		check_if_all_died(init);
-		action_think(philo, init);
-		check_if_all_died(init);
-	}
-	// free(philo->data); // Free data structure for this philosopher
-}
-
-void	routine_two(t_init *init, t_philo *philo)
-{
-	while (1)
-	{
-		action_take_fork(philo, init);
-		check_if_all_died(init);
-		action_sleep(philo, init);
-		check_if_all_died(init);
-		action_think(philo, init);
-		check_if_all_died(init);
-	}
-	// free(philo->data); // Free data structure for this philosopher
-}
 
 void	*thread_run(void *arg)
 {
 	t_data	*data;
 
 	data = (t_data *)arg;
-	if (data->init->nb_must_eat > 0)
-		routine_one(data->init, data->philo);
-	else
-		routine_two(data->init, data->philo);
-	// free(data); // Free data structure after thread completes
+	while (1)
+	{
+		action_take_fork(data->philo, data->init);
+		action_sleep(data->philo, data->init);
+		action_think(data->philo, data->init);
+	}
 	return (NULL);
+}
+
+int	check_and_stop_if_philo_died(t_philo *philo, t_init *init)
+{
+	if ((get_time_philo() - philo->time_last_eat) > init->time_to_die)
+	{
+		usleep(50); // permet de pas mourir fourchette a la main
+		print_action(init, philo->philo_id, "died");
+	}
+	return (0);
 }
 
 void	init_run_philosophers(t_init *init, long long int time_init)
@@ -167,3 +78,4 @@ void	run_routine_philo(t_init *init)
 	// }
 	// free_all_data(init);
 }
+

@@ -8,6 +8,7 @@
         "string_view": "c",
         "types.h": "c",
         "wait.h": "c",
-        "*.tcc": "c"
+        "*.tcc": "c",
+        "numbers": "c"
     }
 }

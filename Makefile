@@ -6,7 +6,7 @@
 #    By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/17 10:44:39 by abonnefo          #+#    #+#              #
-#    Updated: 2023/07/20 08:59:48 by abonnefo         ###   ########.fr        #
+#    Updated: 2023/07/21 17:55:50 by abonnefo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,6 @@ OBJ_DIR_PHILO = srcs/obj_philo
 
 SRCS = srcs/main_philo.c \
 	srcs/actions_philos.c \
-	srcs/death_check.c \
 	srcs/init_data.c \
 	srcs/init_mutex.c \
 	srcs/libft_philo.c \
