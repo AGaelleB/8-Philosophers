@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 18:50:50 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/24 18:58:22 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/26 17:35:27 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct s_init
 	int					end_flag;
 	t_philo				*philo;
 	pthread_mutex_t		write_mutex;
-	pthread_mutex_t		death_mutex;
+	pthread_mutex_t		end_flag_mutex;
 	pthread_mutex_t		*forks;
 }						t_init;
 
@@ -82,7 +82,7 @@ void		action_take_fork(t_philo *philo, t_init *init);
 t_init		*init_mutex(t_init *data);
 t_init		*init_write_mutex(t_init *init);
 t_init		*init_eat_mutex(t_init *data);
-t_init		*init_death_mutex(t_init *data);
+t_init		*init_end_flag_mutex(t_init *data);
 t_init		*init_forks(t_init *data);
 
 /******************************* libft_philo.c ********************************/
@@ -98,5 +98,10 @@ void		run_routine_philo(t_init *init);
 int			write_error(char *str);
 long long	get_time_philo(void);
 void		print_action(t_init *init, int id, char *str);
+
+
+void	action_eat(t_philo *philo, t_init *init);
+void	action_drop_fork(t_philo *philo, t_init *init);
+
 
 #endif

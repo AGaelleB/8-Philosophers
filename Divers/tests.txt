@@ -18,16 +18,16 @@ tous flags avec threads possible de valgrind
 
 a tester :
 
-./philo 1 800 200 200 
+./philo 1 800 200 200
 	-> doit mourir, pas de repas
 
-./philo 5 800 200 200
+./philo 5 800 200 200					/!\	je meurs /!\
 	-> boucle infini
 
-./philo 5 800 200 200 7
+./philo 5 800 200 200 7					/!\	je meurs /!\
 	-> stop apres 7 repas
 
-./philo 4 410 200 200
+./philo 4 410 200 200					/!\	je meurs /!\
 	-> boucle infini
 
 ./philo 4 310 200 100
@@ -37,7 +37,7 @@ a tester :
 	-> a 10ms max, meme temps que pour 4 philosopher
 
 ./philo 4 310 200 100 0
-	-> rien
+	-> 4 repas
 
 ./philo 4 310 200 100 -1
 	-> rien
@@ -45,18 +45,17 @@ a tester :
 ./philo 4 310 200 100 fsdfs
 	-> rien
 
-./philo 200 300 1 1
+./philo 200 300 1 1					/!\	cette boucle fonctionne /!\
 	-> boucle infini
 
 ./philo 200 300 1 1 2 2
 	-> 400 repas (attention parfois tout ne peux pas s afficher dans le terminal car trop long)
 
 ./philo 200 300 1 1 0
-	-> 0 repas
+	-> 200 repas
 
 ./philo 200 1 1 1
-	-> est-ce normal de mourir immediatement ???????????
-
+	-> ?
 
 ./philo 200 100 90 20 1
 	-> le R fait tous les repas mais moi je meurs 

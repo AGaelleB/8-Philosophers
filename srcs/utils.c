@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/24 15:57:33 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/26 15:54:46 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,19 +36,12 @@ long long	get_time_philo(void)
 
 void	print_action(t_init *init, int id, char *str)
 {
-	pthread_mutex_lock(&init->write_mutex);
-	printf("%lld ", (get_time_philo() - init->philo->time_init));
-	printf("%d ", id);
-	printf("%s\n", str);
-	if (ft_strcmp(str, "died") == 0)
+	if (init->end_flag != 1)
 	{
-		free_all_mutex_and_forks(init);
-		exit (-1);
+		pthread_mutex_lock(&init->write_mutex);
+		printf("%lld ", (get_time_philo() - init->philo->time_init));
+		printf("%d ", id);
+		printf("%s\n", str);
+		pthread_mutex_unlock(&init->write_mutex);
 	}
-	if ((init->end_flag == 1) && (ft_strcmp(str, "is eating") == 0))
-	{
-		free_all_mutex_and_forks(init);
-		exit (-1);
-	}
-	pthread_mutex_unlock(&init->write_mutex);
 }

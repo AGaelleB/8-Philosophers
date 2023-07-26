@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/26 12:27:03 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/26 16:06:42 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,13 @@ void	calculate_and_set_time_to_think(t_init *init)
 	init->time_to_think = time_to_think;
 }
 
-void	check_single_philo_and_exit(t_init *init, char **av)
+void	check_single_philo_and_exit(t_init *init, char **av) // probleme a regler
 {
 	if (init->nb_of_philo == 1)
 	{
 		usleep(init->time_to_die * 1000);
 		printf("%d %s died\n", ft_atoi_philo(av[2]) + 1, av[1]);
-		free_all_mutex_and_forks(init);
-		exit (-1);
+		return ;
 	}
 }
 
@@ -41,11 +40,7 @@ void	check_and_set_nb_must_eat(t_init *init, int ac, char **av)
 	{
 		init->nb_must_eat = ft_atoi_philo(av[5]);
 		if (init->nb_must_eat == 0)
-		{
-			write(2, "", 1);
-			free_all_mutex_and_forks(init);
-			exit (-1);
-		}
+			init->nb_must_eat = 1; // permet de faire 1 tour de repas qd meme
 	}
 	else
 		init->nb_must_eat = 0;
@@ -53,12 +48,10 @@ void	check_and_set_nb_must_eat(t_init *init, int ac, char **av)
 
 t_init	*init_recup_data(t_init *init, int ac, char **av)
 {
+	(void)ac;
 	init = malloc(sizeof(t_init));
 	if (init == NULL)
-	{
-		free_all_mutex_and_forks(init);
 		return (NULL);
-	}
 	init->nb_of_philo = ft_atoi_philo(av[1]);
 	init->time_to_die = ft_atoi_philo(av[2]);
 	init->time_to_eat = ft_atoi_philo(av[3]);
@@ -76,10 +69,7 @@ t_init	*init_philo(t_init *init)
 	i = init->nb_of_philo - 1;
 	init->philo = malloc(sizeof(t_philo) * (init->nb_of_philo));
 	if (init->philo == NULL)
-	{
-		free_all_mutex_and_forks(init);
 		return (NULL);
-	}
 	while (i >= 0)
 	{
 		init->philo[i].philo_id = i + 1;
