@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 18:50:50 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/21 18:51:48 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/24 18:58:22 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,30 +37,26 @@ typedef struct s_philo
 	int					left_fork_id;
 	int					right_fork_id;
 	long long			time_last_eat;
-	pthread_mutex_t		eat_mutex;
-	pthread_mutex_t		mutex;
-	pthread_t			thread_philo;
 	long long			time_init;
+	pthread_mutex_t		eat_mutex;
+	pthread_t			thread_philo;
 	struct s_data		*data;
 }						t_philo;
 
 typedef struct s_init
 {
-	int					all_eat;
-	int					end_flag;
 	int					nb_of_philo;
 	int					time_to_die;
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					nb_must_eat;
 	int					time_to_think;
+	int					all_eat;
+	int					end_flag;
 	t_philo				*philo;
-	int					finished_eating;
-	pthread_mutex_t		*forks;
-	pthread_mutex_t		eat_count_mutex;
-	pthread_mutex_t		death_mutex;
 	pthread_mutex_t		write_mutex;
-	pthread_mutex_t		end_flag_mutex;
+	pthread_mutex_t		death_mutex;
+	pthread_mutex_t		*forks;
 }						t_init;
 
 typedef struct s_data
@@ -74,8 +70,8 @@ void		action_think(t_philo *philo, t_init *init);
 void		action_sleep(t_philo *philo, t_init *init);
 
 /********************************* free_all.c *********************************/
-void		free_all(t_init *data);
-void		free_all_data(t_init *init);
+void		free_all_mutex_and_forks(t_init *init);
+void		free_data(t_data *data);
 
 /******************************** init_data.c *********************************/
 t_init		*init_recup_data(t_init *init, int ac, char **av);
@@ -85,7 +81,7 @@ void		action_take_fork(t_philo *philo, t_init *init);
 /******************************** init_mutex.c ********************************/
 t_init		*init_mutex(t_init *data);
 t_init		*init_write_mutex(t_init *init);
-t_init		*init_eat_count_mutex(t_init *data);
+t_init		*init_eat_mutex(t_init *data);
 t_init		*init_death_mutex(t_init *data);
 t_init		*init_forks(t_init *data);
 

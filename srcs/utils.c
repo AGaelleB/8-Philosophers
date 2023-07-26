@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/21 18:42:05 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/24 15:57:33 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ void	print_action(t_init *init, int id, char *str)
 	printf("%s\n", str);
 	if (ft_strcmp(str, "died") == 0)
 	{
-		// free avant de exit
-		exit(-1);
+		free_all_mutex_and_forks(init);
+		exit (-1);
 	}
 	if ((init->end_flag == 1) && (ft_strcmp(str, "is eating") == 0))
 	{
-		// free avant de exit
-		exit(-1);
+		free_all_mutex_and_forks(init);
+		exit (-1);
 	}
 	pthread_mutex_unlock(&init->write_mutex);
 }

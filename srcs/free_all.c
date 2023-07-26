@@ -6,63 +6,46 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:02:10 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/21 18:39:42 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/26 12:29:15 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-void	free_all_mutex(t_init *init)
+void	free_data(t_data *data)
 {
-	int	i;
+	free(data);
+}
 
-	i = 0;
-	pthread_mutex_destroy(&init->eat_count_mutex);
-	pthread_mutex_destroy(&init->death_mutex);
-	pthread_mutex_destroy(&init->write_mutex);
+void free_all_mutex(t_init *init)
+{
+	int i = 0;
 	while (i < init->nb_of_philo)
 	{
-		pthread_mutex_destroy(&init->philo[i].mutex);
-		pthread_mutex_destroy(&init->forks[i]);
+		pthread_mutex_destroy(&init->philo[i].eat_mutex);
 		i++;
 	}
-	// free(init->forks);
-	// free(init->philo);
-	// free(init);
+	pthread_mutex_destroy(&init->write_mutex);
+	pthread_mutex_destroy(&init->death_mutex);
 }
 
 void	free_all_forks(t_init *init)
 {
 	int	i;
 
-	if (init->forks != NULL)
-	{
-		i = 0;
-		while (i < init->nb_of_philo)
-		{
-			pthread_mutex_destroy(&init->forks[i]);
-			i++;
-		}
-		// free(init->forks);
-		init->forks = NULL;
-	}
-}
-
-void	free_all_data(t_init *init)
-{
-	int	i;
-
 	i = 0;
 	while (i < init->nb_of_philo)
 	{
-		// free(init->philo[i].data);
+		pthread_mutex_destroy(&init->forks[i]);
 		i++;
 	}
-	// free(init->philo);
 }
 
-void	free_all(t_init *data)
+void free_all_mutex_and_forks(t_init *init)
 {
-	free_all_mutex(data);
-	free_all_forks(data);
+	free_all_forks(init);
+	free(init->forks);
+	free_all_mutex(init);
+	free(init->philo);
+	free(init);
 }
