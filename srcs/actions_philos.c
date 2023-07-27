@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/26 17:54:02 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/27 10:27:47 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	action_think(t_philo *philo, t_init *init)
 {
-	if (check_and_stop_if_philo_died(philo, init))
+	if (check_end_flag(init))
 		return;
 	print_action(init, philo->philo_id, "is thinking");
 	usleep(init->time_to_think * 1000);
@@ -22,7 +22,7 @@ void	action_think(t_philo *philo, t_init *init)
 
 void	action_sleep(t_philo *philo, t_init *init)
 {
-	if (check_and_stop_if_philo_died(philo, init))
+	if (check_end_flag(init))
 		return;
 	print_action(init, philo->philo_id, "is sleeping");
 	usleep(init->time_to_sleep * 1000);
@@ -30,9 +30,6 @@ void	action_sleep(t_philo *philo, t_init *init)
 
 void	action_drop_fork(t_philo *philo, t_init *init)
 {
-	if (check_and_stop_if_philo_died(philo, init))
-		return;
-
 	if (philo->philo_id % 2 == 0)
 	{
 		pthread_mutex_unlock(&init->forks[philo->left_fork_id]);
@@ -47,6 +44,8 @@ void	action_drop_fork(t_philo *philo, t_init *init)
 
 void	action_eat(t_philo *philo, t_init *init)
 {
+	if (check_end_flag(init))
+		return;
 	int	i;
 
 	i = 0;
@@ -73,6 +72,35 @@ void	action_eat(t_philo *philo, t_init *init)
 
 void	action_take_fork(t_philo *philo, t_init *init)
 {
+	if (check_end_flag(init))
+		return;
+	if (philo->philo_id % 2 == 0)
+	{
+		pthread_mutex_lock(&init->forks[philo->left_fork_id]);
+		check_and_stop_if_philo_died(philo, init);
+		print_action(init, philo->philo_id, "has taken a fork");
+		pthread_mutex_lock(&init->forks[philo->right_fork_id]);
+		check_and_stop_if_philo_died(philo, init);
+		print_action(init, philo->philo_id, "has taken a fork");
+	}
+	else
+	{
+		pthread_mutex_lock(&init->forks[philo->right_fork_id]);
+		check_and_stop_if_philo_died(philo, init);
+		print_action(init, philo->philo_id, "has taken a fork");
+		pthread_mutex_lock(&init->forks[philo->left_fork_id]);
+		check_and_stop_if_philo_died(philo, init);
+		print_action(init, philo->philo_id, "has taken a fork");
+	}
+	// print_action(init, philo->philo_id, "has taken a fork");
+	// print_action(init, philo->philo_id, "has taken a fork");
+}
+
+
+
+
+
+	// fonction que j ai creer pour pas mourir fourchettes en main
 	// if (((get_time_philo() - philo->time_last_eat) + init->time_to_eat) >= (init->time_to_die))
 	// {
 	// 	print_action(init, philo->philo_id, "died");
@@ -81,28 +109,3 @@ void	action_take_fork(t_philo *philo, t_init *init)
 	// 	pthread_mutex_unlock(&(init->end_flag_mutex));
 	// 	return ;
 	// }
-
-	// check_and_stop_if_philo_died(philo, init);
-
-	// if (init->end_flag == 1)
-	// 	return ;
-
-	// if (check_and_stop_if_philo_died(philo, init))
-	// 	return;
-	
-	// if (init->end_flag == 1)
-	// 	return;
-	
-	if (philo->philo_id % 2 == 0)
-	{
-		pthread_mutex_lock(&init->forks[philo->left_fork_id]);
-		pthread_mutex_lock(&init->forks[philo->right_fork_id]);
-	}
-	else
-	{
-		pthread_mutex_lock(&init->forks[philo->right_fork_id]);
-		pthread_mutex_lock(&init->forks[philo->left_fork_id]);
-	}
-	print_action(init, philo->philo_id, "has taken a fork");
-	print_action(init, philo->philo_id, "has taken a fork");
-}

@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 18:50:50 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/26 17:35:27 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/27 10:24:00 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int			ft_isdigit_str(char *str);
 int			ft_strcmp(char *s1, char *s2);
 
 /********************************* routine.c **********************************/
+int			check_end_flag(t_init *init);
 int			check_and_stop_if_philo_died(t_philo *philo, t_init *init);
 void		run_routine_philo(t_init *init);
 

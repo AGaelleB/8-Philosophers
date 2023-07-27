@@ -6,50 +6,22 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/26 17:52:32 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/27 10:31:13 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-// void *thread_run(void *arg)
-// {
-// 	t_data *data;
-
-// 	data = (t_data *)arg;
-// 	while (data->init->end_flag != 1)
-// 	{
-// 		action_take_fork(data->philo, data->init);
-// 		action_sleep(data->philo, data->init);
-// 		action_think(data->philo, data->init);
-// 	}
-// 	return (NULL);
-// }
-
-void *thread_run(void *arg)
+int	check_end_flag(t_init *init)
 {
-	t_data *data;
-
-	data = (t_data *)arg;
-	while (data->init->end_flag != 1)
+	pthread_mutex_lock(&init->end_flag_mutex);
+	if (init->end_flag == 1)
 	{
-		action_take_fork(data->philo, data->init);
-		if (check_and_stop_if_philo_died(data->philo, data->init))
-			break;
-		action_eat(data->philo, data->init);
-		if (check_and_stop_if_philo_died(data->philo, data->init))
-			break;
-		action_drop_fork(data->philo, data->init);
-		if (check_and_stop_if_philo_died(data->philo, data->init))
-			break;
-		action_sleep(data->philo, data->init);
-		if (check_and_stop_if_philo_died(data->philo, data->init))
-			break;
-		action_think(data->philo, data->init);
-		if (check_and_stop_if_philo_died(data->philo, data->init))
-			break;
+		pthread_mutex_unlock(&init->end_flag_mutex);
+		return (1);
 	}
-	return (NULL);
+	pthread_mutex_unlock(&init->end_flag_mutex);
+	return (0);
 }
 
 int check_and_stop_if_philo_died(t_philo *philo, t_init *init)
@@ -65,14 +37,40 @@ int check_and_stop_if_philo_died(t_philo *philo, t_init *init)
 	return (0);
 }
 
+void *thread_run(void *arg)
+{
+	t_data *data;
+
+	data = (t_data *)arg;
+	while (data->init->end_flag != 1)
+	{
+		if (check_and_stop_if_philo_died(data->philo, data->init) == 1)
+			break;
+		action_take_fork(data->philo, data->init);
+		if (check_and_stop_if_philo_died(data->philo, data->init) == 1)
+			break;
+		action_eat(data->philo, data->init);
+		if (check_and_stop_if_philo_died(data->philo, data->init) == 1)
+			break;
+		action_drop_fork(data->philo, data->init);
+		if (check_and_stop_if_philo_died(data->philo, data->init) == 1)
+			break;
+		action_sleep(data->philo, data->init);
+		if (check_and_stop_if_philo_died(data->philo, data->init) == 1)
+			break;
+		action_think(data->philo, data->init);
+	}
+	return (NULL);
+}
+
 void init_run_philosophers(t_init *init, long long int time_init)
 {
 	t_data *data;
 	int i;
 
 	i = 0;
-	if (init->end_flag != 1)
-	{
+	// if (init->end_flag != 1) // pas utile je crois
+	// {
 		while ((i < init->nb_of_philo))
 		{
 			data = malloc(sizeof(t_data));
@@ -85,10 +83,10 @@ void init_run_philosophers(t_init *init, long long int time_init)
 			data->philo->time_init = time_init;
 			if (pthread_create(&init->philo[i].thread_philo, NULL, thread_run, data))
 				return ;
-			// usleep(100); // permet de pas avoir de doublons de died ?
+			usleep(100); // permet d'avoir moins de message apres le end ?
 			i++;
 		}
-	}
+	// }
 }
 
 void run_routine_philo(t_init *init)
