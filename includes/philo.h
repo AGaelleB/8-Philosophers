@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 18:50:50 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/27 10:24:00 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/27 19:46:41 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ typedef struct s_philo
 
 typedef struct s_init
 {
+	int					death_printed;
+
 	int					nb_of_philo;
 	int					time_to_die;
 	int					time_to_eat;
@@ -52,10 +54,13 @@ typedef struct s_init
 	int					nb_must_eat;
 	int					time_to_think;
 	int					all_eat;
-	int					end_flag;
+	int					flag_all_eat;
+	int					flag_died;
 	t_philo				*philo;
 	pthread_mutex_t		write_mutex;
-	pthread_mutex_t		end_flag_mutex;
+	pthread_mutex_t		flag_died_mutex;
+	pthread_mutex_t		flag_all_eat_mutex;
+	pthread_mutex_t		death_printed_mutex;
 	pthread_mutex_t		*forks;
 }						t_init;
 
@@ -82,7 +87,9 @@ void		action_take_fork(t_philo *philo, t_init *init);
 t_init		*init_mutex(t_init *data);
 t_init		*init_write_mutex(t_init *init);
 t_init		*init_eat_mutex(t_init *data);
-t_init		*init_end_flag_mutex(t_init *data);
+t_init		*init_flag_died_mutex(t_init *data);
+t_init		*init_flag_all_eat_mutex(t_init *init);
+t_init		*init_death_printed(t_init *init);
 t_init		*init_forks(t_init *data);
 
 /******************************* libft_philo.c ********************************/
@@ -91,8 +98,9 @@ int			ft_isdigit_str(char *str);
 int			ft_strcmp(char *s1, char *s2);
 
 /********************************* routine.c **********************************/
-int			check_end_flag(t_init *init);
-int			check_and_stop_if_philo_died(t_philo *philo, t_init *init);
+int			check_flag_all_eat(t_init *init);
+int			check_flag_died(t_init *init);
+int			check_time_for_philo_to_die(t_philo *philo, t_init *init);
 void		run_routine_philo(t_init *init);
 
 /********************************* utils.c ************************************/
@@ -103,6 +111,7 @@ void		print_action(t_init *init, int id, char *str);
 
 void	action_eat(t_philo *philo, t_init *init);
 void	action_drop_fork(t_philo *philo, t_init *init);
+int	check_single_philo_and_exit(t_init *init, char **av);
 
 
 #endif

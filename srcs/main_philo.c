@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:19 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/26 17:01:27 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/27 20:03:20 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,13 @@ t_init *initialize_data_and_mutex(t_init *data, int ac, char **av)
 	data = init_write_mutex(data);
 	if (!data)
 		return (NULL);
-	data = init_end_flag_mutex(data);
+	data = init_flag_died_mutex(data);
+	if (!data)
+		return (NULL);
+	data = init_flag_all_eat_mutex(data);
+	if (!data)
+		return (NULL);
+	data = init_death_printed(data);
 	if (!data)
 		return (NULL);
 	data = init_forks(data);
@@ -49,8 +55,13 @@ int	main(int ac, char **av)
 		free(data);
 		return (write_error("Failed to initialize"));
 	}
+	if (check_single_philo_and_exit(data, av))
+	{
+		free_all_mutex_and_forks(data);
+		return (1);
+	}
 	run_routine_philo(data);
-	if (data->end_flag)
+	if (data->flag_died || data->flag_all_eat)
 	{
 		free_all_mutex_and_forks(data);
 		return (1);

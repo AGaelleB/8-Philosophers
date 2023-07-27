@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:02:10 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/26 16:07:24 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/27 19:46:41 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ void free_all_mutex(t_init *init)
 		i++;
 	}
 	pthread_mutex_destroy(&init->write_mutex);
-	pthread_mutex_destroy(&init->end_flag_mutex);
+	pthread_mutex_destroy(&init->flag_died_mutex);
+	pthread_mutex_destroy(&init->flag_all_eat_mutex);
+	pthread_mutex_destroy(&init->death_printed_mutex);
 }
 
 void	free_all_forks(t_init *init)

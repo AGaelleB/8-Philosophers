@@ -21,13 +21,13 @@ a tester :
 ./philo 1 800 200 200
 	-> doit mourir, pas de repas
 
-./philo 5 800 200 200					/!\	je meurs /!\
+./philo 5 800 200 200
 	-> boucle infini
 
-./philo 5 800 200 200 7					/!\	je meurs /!\
+./philo 5 800 200 200 7
 	-> stop apres 7 repas
 
-./philo 4 410 200 200					/!\	je meurs /!\
+./philo 4 410 200 200
 	-> boucle infini
 
 ./philo 4 310 200 100
@@ -45,7 +45,7 @@ a tester :
 ./philo 4 310 200 100 fsdfs
 	-> rien
 
-./philo 200 300 1 1					/!\	cette boucle fonctionne /!\
+./philo 200 300 1 1
 	-> boucle infini
 
 ./philo 200 300 1 1 2 2
@@ -54,11 +54,15 @@ a tester :
 ./philo 200 300 1 1 0
 	-> 200 repas
 
-./philo 200 1 1 1
-	-> ?
+./philo 200 1 1 1			/!\	parfois un affichage apres died et termine trop vite /!\
+	-> died
 
 ./philo 200 100 90 20 1
 	-> le R fait tous les repas mais moi je meurs 
+
+
+
+
 
 /!\ ne pas avoir de message apres le dernier repas ou mort /!\
 

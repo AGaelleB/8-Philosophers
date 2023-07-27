@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/26 18:03:36 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/27 19:40:56 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,31 @@ long long	get_time_philo(void)
 	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
 }
 
-void	print_action(t_init *init, int id, char *str)
+void print_action(t_init *init, int id, char *str)
 {
-	if (init->end_flag != 1)
+
+	if (check_flag_all_eat(init))
 	{
-		pthread_mutex_lock(&init->write_mutex);
-		printf("%lld ", (get_time_philo() - init->philo->time_init));
-		printf("%d ", id);
-		printf("%s\n", str);
-		pthread_mutex_unlock(&init->write_mutex);
+		return;
 	}
+	if (check_flag_died(init))
+	{
+		pthread_mutex_lock(&init->death_printed_mutex);
+		if (init->death_printed == 0)
+		{
+			init->death_printed = 1;
+			pthread_mutex_unlock(&init->death_printed_mutex);
+			pthread_mutex_lock(&init->write_mutex);
+			printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
+			printf("died\n");
+			pthread_mutex_unlock(&init->write_mutex);
+		}
+		else
+			pthread_mutex_unlock(&init->death_printed_mutex);
+		return;
+	}
+	pthread_mutex_lock(&init->write_mutex);
+	printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
+	printf("%s\n", str);
+	pthread_mutex_unlock(&init->write_mutex);
 }
