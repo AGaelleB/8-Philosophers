@@ -58,7 +58,7 @@ a tester :
 	-> died
 
 ./philo 200 100 90 20 1
-	-> le R fait tous les repas mais moi je meurs 
+	-> 200 repas
 
 
 
