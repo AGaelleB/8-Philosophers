@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/27 20:00:24 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/28 14:56:20 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void *thread_run(void *arg)
 	return (NULL);
 }
 
-void init_run_philosophers(t_init *init, long long int time_init)
+void init_and_create_threads(t_init *init, long long int time_init)
 {
 	t_data *data;
 	int i;
@@ -93,7 +93,6 @@ void init_run_philosophers(t_init *init, long long int time_init)
 		data->philo->time_init = time_init;
 		if (pthread_create(&init->philo[i].thread_philo, NULL, thread_run, data))
 			return ;
-		// usleep(150); // permet d'avoir de ne pas bug dans la prise de forks
 		i++;
 	}
 }
@@ -105,24 +104,15 @@ void run_routine_philo(t_init *init)
 
 	time_init = get_time_philo();
 	i = 0;
-	init_run_philosophers(init, time_init);
-	while ((i < init->nb_of_philo) && (init->flag_died != 1) && (init->flag_all_eat != 1))
+	init_and_create_threads(init, time_init);
+	while ((i < init->nb_of_philo))
 	{
-		// if (check_flag_all_eat(init))
-		// {
-		// 	// faire des free
-		// 	return ;
-		// }
-		if (check_flag_died(init))
-		{
-			check_time_for_philo_to_die(init->philo, init); // permet d'arrêter de créer de nouveaux threads si un philo meurt avant que tous les threads soient créés
-			// pthread_mutex_destroy(&init->flag_died_mutex);
-			// pas free des threads crees si fin prematuree
-			return ;
-		}
+		// bug car essaie de créer de nouveaux threads meme si un philo meurt pendant les inits
+		// ajoue de cette condif pour arranger mais cree des leaks
+		if (check_time_for_philo_to_die(init->philo, init))
+			return;
 		pthread_join(init->philo[i].thread_philo, NULL);
-		free(init->philo[i].data); // m'a supprime des leaks !
+		free(init->philo[i].data);
 		i++;
 	}
 }
-

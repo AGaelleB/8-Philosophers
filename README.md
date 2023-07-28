@@ -47,6 +47,8 @@ phthread_t      ->  1 - creer une structure
 pthread_create  ->  2 - creer le thread
 pthread_join    ->  3 - wait execution
 
+pthread_create est utilisé pour lancer un nouveau thread, tandis que pthread_join est utilisé pour attendre qu'un thread se termine.
+
 ## **Mutex :**
 
 Un mutex est l'abrégé de « mutual exclusion ».

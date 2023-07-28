@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/27 20:12:53 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/28 12:43:33 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	action_eat(t_philo *philo, t_init *init)
 
 	print_action(init, philo->philo_id, "is eating");
 	
-	pthread_mutex_lock(&(philo->eat_mutex)); // tout mettre dans ce mutex pour eviter les bugs
+	pthread_mutex_lock(&(philo->eat_mutex));
 	init->all_eat++;
 	pthread_mutex_unlock(&(philo->eat_mutex));
 	
@@ -62,9 +62,6 @@ void	action_eat(t_philo *philo, t_init *init)
 	}
 	philo->time_last_eat = get_time_philo();
 	usleep(init->time_to_eat * 1000); //en haut plus opti mais bug pour les repas
-
-	// if (check_flag_died(init) || check_flag_all_eat(init))
-	// 	return;
 }
 
 void	action_take_fork(t_philo *philo, t_init *init)

@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/27 19:40:56 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/28 12:45:00 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,7 @@ void print_action(t_init *init, int id, char *str)
 {
 
 	if (check_flag_all_eat(init))
-	{
 		return;
-	}
 	if (check_flag_died(init))
 	{
 		pthread_mutex_lock(&init->death_printed_mutex);
