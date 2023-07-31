@@ -30,17 +30,20 @@ a tester :
 ./philo 4 410 200 200
 	-> boucle infini
 
-./philo 5 310 200 100						/!\ PROGRAM DONT STOP /!\
+./philo 5 310 200 100						==>	OK PAS DE LEAKS
 	-> 1 mort
 
-./philo 2 310 200 100						==>	OK PAS DE LEAKS [rayan a des leaks]
+./philo 2 310 200 100						==>	OK PAS DE LEAKS
 	-> a 10ms max, meme temps que pour 4 philos
 
-./philo 2 310 200 100						==>	OK PAS DE LEAKS [rayan a des leaks]s
+./philo 4 310 200 100						==>	OK PAS DE LEAKS
 	-> a 10ms max, meme temps que pour 4 philos
 
 ./philo 4 310 200 100 00					==>	OK PAS DE LEAKS
 	-> 4 repas
+
+./philo 5 310 200 100
+	-> 1 mort
 
 ./philo 4 310 200 100 -10					==>	OK PAS DE LEAKS
 	-> rien

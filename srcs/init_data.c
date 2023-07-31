@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/27 19:35:46 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/07/31 14:57:18 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	check_and_set_nb_must_eat(t_init *init, int ac, char **av)
 	{
 		init->nb_must_eat = ft_atoi_philo(av[5]);
 		if (init->nb_must_eat == 0)
-			init->nb_must_eat = 1; // permet de faire 1 tour de repas qd meme
+			init->nb_must_eat = 1;
 	}
 	else
 		init->nb_must_eat = 0;
