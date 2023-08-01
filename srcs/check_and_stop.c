@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:15:30 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/01 15:48:42 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/01 16:31:28 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,6 @@ int	check_before_initialize(int ac, char **av)
 	}
 	return (0);
 }
-
-// int	check_int_max_and_min(t_init *init)
-// {
-// 	if (init->time_to_die < INT_MIN || init->time_to_die > INT_MAX)
-// 		return (1);
-// 	if (init->time_to_eat < INT_MIN || init->time_to_eat > INT_MAX)
-// 		return (1);
-// 	if (init->time_to_sleep < INT_MIN || init->time_to_sleep > INT_MAX)
-// 		return (1);
-// 	return (0);
-// }
 
 int	check_flag_died(t_init *init)
 {
