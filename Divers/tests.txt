@@ -1,10 +1,12 @@
+/!\ ne pas avoir de message apres le dernier repas ou mort /!\
+/!\ ne utiliser la fonction exit() ou kill() hors bonus /!\
+
 
 ./philo number_of_philosophers 
 		time_to_die
 		time_to_eat
 		time_to_sleep
 		[number_of_times_each_philosopher_must_eat]
-
 
 -fsanitize=thread 
 	est le flag de compilation qu'il te faut utiliser pour être sûr de ne pas avoir de race
@@ -66,11 +68,24 @@ a tester :
 ./philo 200 100 90 20 1
 	-> 200 repas
 
+./philo 200 2147483648 89 10
+	-> overflow d un int doit etre protegé
+
+./philo 200 2147483646 89 10
+	-> doit s executer car pas de overflow
+
+
+./philo 30 2000 100 100
+	-> a regarder dans le visualizer, ne doit pas se chevaucher 
+
+/!\ TEST UTLITME POUR CASSER /!\
+repeat 100 ./philo 200 1 1 1 | grep died -A100
+	-> ne doit afficher que des died sinon ca veut dire que e prog ne s arrete pas bien
+
+
+./philo 4 401 200 200
+	-> boucle infini 
 
 
 
-
-/!\ ne pas avoir de message apres le dernier repas ou mort /!\
-
-valgrind --leak-check=full --show-leak-kinds=all ./philo 2 31 20 10
-	-> bcp de leaks a regler
+que faire si y a 0 repas ? faire un tour ou ne pas manger ?

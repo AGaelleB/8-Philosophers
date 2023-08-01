@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 18:50:50 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/31 16:07:38 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/01 16:04:50 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <string.h>
 # include <stdlib.h>
 # include <sys/time.h>
+
+# define INT_MAX 2147483647
 
 # define RESET "\033[0m"
 # define BLACK "\033[30m"
@@ -74,10 +76,13 @@ typedef struct s_data
 void		action_think(t_philo *philo, t_init *init);
 void		action_sleep(t_philo *philo, t_init *init);
 
-/***************************** actions_philos.c ******************************/
+/***************************** check_and_stop.c ******************************/
+int			check_before_initialize(int ac, char **av);
+int			check_int_max_and_min(t_init *init);
 int			check_flag_died(t_init *init);
 int			check_flag_all_eat(t_init *init);
 int			check_time_for_philo_to_die(t_philo *philo, t_init *init);
+
 
 /********************************* free_all.c *********************************/
 void		free_all_mutex_and_forks(t_init *init);
@@ -99,7 +104,9 @@ t_init		*init_death_printed(t_init *init);
 t_init		*init_forks(t_init *data);
 
 /******************************* libft_philo.c ********************************/
-int			ft_atoi_philo(char *str);
+// int			ft_atoi_philo(char *str);
+long	ft_atoi_philo(char *str);
+
 int			ft_isdigit_str(char *str);
 int			ft_strcmp(char *s1, char *s2);
 

@@ -6,11 +6,44 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:15:30 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/07/31 16:05:34 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/01 15:48:42 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+int	check_before_initialize(int ac, char **av)
+{
+	if (ac != 6 && ac != 5)
+	{
+		write_error("Wrong numbers of arguments");
+		return (1);
+	}
+	if (!ft_isdigit_str(av[1]) || !ft_isdigit_str(av[2])
+		|| !ft_isdigit_str(av[3]) || !ft_isdigit_str(av[4])
+		|| (ac == 6 && !ft_isdigit_str(av[5])))
+	{
+		write_error("Invalid value");
+		return (1);
+	}
+	if (ac == 6 && strcmp(av[5], "0") == 0)
+	{
+		write_error("Number of meals must be > 0");
+		return (1);
+	}
+	return (0);
+}
+
+// int	check_int_max_and_min(t_init *init)
+// {
+// 	if (init->time_to_die < INT_MIN || init->time_to_die > INT_MAX)
+// 		return (1);
+// 	if (init->time_to_eat < INT_MIN || init->time_to_eat > INT_MAX)
+// 		return (1);
+// 	if (init->time_to_sleep < INT_MIN || init->time_to_sleep > INT_MAX)
+// 		return (1);
+// 	return (0);
+// }
 
 int	check_flag_died(t_init *init)
 {
@@ -38,7 +71,7 @@ int	check_flag_all_eat(t_init *init)
 
 int	check_time_for_philo_to_die(t_philo *philo, t_init *init)
 {
-	if ((get_time_philo() - philo->time_last_eat) >= init->time_to_die)
+	if ((get_time_philo() - philo->time_last_eat) > init->time_to_die)
 	{
 		pthread_mutex_lock(&(init->flag_died_mutex));
 		init->flag_died = 1;
