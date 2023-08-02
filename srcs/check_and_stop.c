@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:15:30 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/01 16:31:28 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/02 15:20:58 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,21 @@ int	check_flag_all_eat(t_init *init)
 	if (init->flag_all_eat == 1)
 	{
 		pthread_mutex_unlock(&init->flag_all_eat_mutex);
-		pthread_exit(NULL);
+		return (1);
 	}
 	pthread_mutex_unlock(&init->flag_all_eat_mutex);
+	return (0);
+}
+
+int	check_flag_death_printed(t_init *init)
+{
+	pthread_mutex_lock(&init->death_printed_mutex);
+	if (init->death_printed == 1)
+	{
+		pthread_mutex_unlock(&init->death_printed_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&init->death_printed_mutex);
 	return (0);
 }
 

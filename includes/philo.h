@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 18:50:50 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/02 11:19:59 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/02 15:21:01 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int			check_before_initialize(int ac, char **av);
 int			check_flag_died(t_init *init);
 int			check_flag_all_eat(t_init *init);
 int			check_time_for_philo_to_die(t_philo *philo, t_init *init);
+int			check_flag_death_printed(t_init *init); // ADD
 
 /********************************* free_all.c *********************************/
 void		free_all_mutex_and_forks(t_init *init);
