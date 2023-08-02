@@ -71,9 +71,8 @@ a tester :
 ./philo 200 2147483648 89 10
 	-> overflow d un int doit etre protegé
 
-./philo 200 2147483646 89 10
+./philo 200 2147483647 89 10
 	-> doit s executer car pas de overflow
-
 
 ./philo 30 2000 100 100
 	-> a regarder dans le visualizer, ne doit pas se chevaucher 

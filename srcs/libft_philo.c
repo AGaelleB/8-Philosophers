@@ -6,38 +6,35 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:02:31 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/01 16:04:06 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/02 11:23:15 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-long	ft_atoi_philo(char *str)
+long long int	ft_atoi_philo(char *str)
 {
-	long	result;
-	int		sign;
+	int				i;
+	int				sign;
+	long long int	num;
 
-	result = 0;
+	i = 0;
 	sign = 1;
-	if (str == NULL)
-		return (0);
-	while (*str == ' ' || (*str >= 9 && *str <= 13))
-		str++;
-	if (*str == '-')
-		sign = -1;
-	if (*str == '-' || *str == '+')
-		str++;
-	while (*str >= '0' && *str <= '9')
+	num = 0;
+	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+		i++;
+	if (str[i] == '-' || str[i] == '+')
 	{
-		if (result > (INT_MAX - (*str - '0')) / 10)
-		{
-			if (sign == 1)
-				return (INT_MAX);
-		}
-		result = result * 10 + *str - '0';
-		str++;
+		if (str[i] == '-')
+			sign = -1;
+		i++;
 	}
-	return (sign * result);
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		num = num * 10 + (str[i] - '0');
+		i++;
+	}
+	return (sign * num);
 }
 
 int	ft_isdigit(int c)

@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/01 16:27:47 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/02 11:20:21 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	check_single_philo_and_exit(t_init *init, char **av)
 	if (init->nb_of_philo == 1)
 	{
 		usleep(init->time_to_die * 1000);
-		printf("%ld %s died\n", ft_atoi_philo(av[2]) + 1, av[1]);
+		printf("%lld %s died\n", ft_atoi_philo(av[2]) + 1, av[1]);
 		return (1);
 	}
 	return (0);
@@ -53,8 +53,8 @@ t_init	*init_recup_data(t_init *init, int ac, char **av)
 	init->time_to_die = ft_atoi_philo(av[2]);
 	init->time_to_eat = ft_atoi_philo(av[3]);
 	init->time_to_sleep = ft_atoi_philo(av[4]);
-	if (init->time_to_die >= INT_MAX || init->time_to_eat >= INT_MAX
-		|| init->time_to_sleep >= INT_MAX)
+	if (init->time_to_die > INT_MAX || init->time_to_eat > INT_MAX
+		|| init->time_to_sleep > INT_MAX)
 	{
 		free(init);
 		return (NULL);

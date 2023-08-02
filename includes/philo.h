@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 18:50:50 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/01 16:32:06 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/02 11:19:59 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,12 @@ typedef struct s_init
 {
 	int					death_printed;
 
-	int					nb_of_philo;
-	int					time_to_die;
-	int					time_to_eat;
-	int					time_to_sleep;
-	int					nb_must_eat;
-	int					time_to_think;
+	long long int		nb_of_philo;
+	long long int		time_to_die;
+	long long int		time_to_eat;
+	long long int		time_to_sleep;
+	long long int		nb_must_eat;
+	long long int		time_to_think;
 	int					all_eat;
 	int					flag_all_eat;
 	int					flag_died;
@@ -102,7 +102,9 @@ t_init		*init_death_printed(t_init *init);
 t_init		*init_forks(t_init *data);
 
 /******************************* libft_philo.c ********************************/
-long		ft_atoi_philo(char *str);
+// long		ft_atoi_philo(char *str);
+long long int	ft_atoi_philo(char *str);
+
 int			ft_isdigit_str(char *str);
 int			ft_strcmp(char *s1, char *s2);
 
