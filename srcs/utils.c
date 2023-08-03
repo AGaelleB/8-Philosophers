@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/03 15:28:59 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/03 15:56:52 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	print_action(t_init *init, int id, char *str)
 	pthread_mutex_lock(&init->death_printed_mutex);
 	if (check_flag_all_eat(init))
 	{
-		// pthread_mutex_unlock(&init->death_printed_mutex);
+		pthread_mutex_unlock(&init->death_printed_mutex);
 		return ;
 	}
 	pthread_mutex_unlock(&init->death_printed_mutex);
@@ -79,42 +79,3 @@ void	print_action(t_init *init, int id, char *str)
 		return ;
 	}
 }
-
-
-// void	print_action(t_init *init, int id, char *str)
-// {
-// 	pthread_mutex_lock(&init->death_printed_mutex);
-// 	if (check_flag_died(init))
-// 	{
-// 		if (init->death_printed == 0)
-// 		{
-// 			init->death_printed++;
-// 			pthread_mutex_lock(&init->write_mutex);
-// 			printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
-// 			printf("%sdied%s\n", RED, RESET);
-// 			pthread_mutex_unlock(&init->write_mutex);
-// 		}
-// 		pthread_mutex_unlock(&init->death_printed_mutex);
-// 		return ;
-// 	}
-// 	if (check_flag_all_eat(init))
-// 		return ;
-// 	pthread_mutex_unlock(&init->death_printed_mutex);
-	
-// 	pthread_mutex_lock(&init->death_printed_mutex);
-// 	if (init->death_printed == 0)
-// 	{
-// 		pthread_mutex_lock(&init->write_mutex);
-// 		printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
-// 		printf("%s\n", str);
-// 		pthread_mutex_unlock(&init->write_mutex);
-// 		pthread_mutex_unlock(&init->death_printed_mutex);
-// 		return ;
-// 	}
-// 	else
-// 	{
-// 		pthread_mutex_unlock(&init->death_printed_mutex);
-// 		return ;
-// 	}
-// }
-

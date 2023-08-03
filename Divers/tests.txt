@@ -12,8 +12,10 @@
 	est le flag de compilation qu'il te faut utiliser pour être sûr de ne pas avoir de race
 	attention a ne pas utiliser valgrind en meme temps sinon conflit
 
-valgrind --leak-check=full --show-leak-kinds=all --fair-sched=yes ./philo X X X X X
+CFLAGS = -Wall -Werror -Wextra -pthread -g -fsanitize=thread
+	-> je peux utiliser ces differents flags de compil plus efficace que Valgrind.
 
+valgrind --leak-check=full --show-leak-kinds=all --fair-sched=yes ./philo X X X X X
 
 a tester :
 
@@ -36,7 +38,7 @@ a tester :
 	-> a 10ms max, meme temps que pour 4 philos
 
 ./philo 4 310 200 100						==>	OK PAS DE LEAKS
-	-> a 10ms max, meme temps que pour 4 philos
+	-> a 10ms max, meme temps que pour 2 philos
 
 ./philo 4 310 200 100 00					==>	OK PAS DE LEAKS
 	-> 0 repas,
@@ -57,7 +59,7 @@ a tester :
 ./philo 200 300 1 1 2
 	-> 400 repas (attention parfois tout ne peux pas s afficher dans le terminal car trop long)
 
-./philo 200 1 1 1			/!\	parfois un affichage apres died et termine trop vite /!\
+./philo 200 1 1 1			/!\ si pas opti	affichage des actions apres died /!\
 	-> died
 
 ./philo 200 100 90 10 1		/!\	hyper dur, doit ettre super opti /!\
@@ -73,12 +75,9 @@ a tester :
 	-> a regarder dans le visualizer, ne doit pas se chevaucher 
 	-> https://nafuka11.github.io/philosophers-visualizer/
 
-./philo 4 401 200 200
+./philo 4 401 200 200		/!\	hyper dur, doit ettre super opti /!\
 	-> boucle infini 
 
 /!\ TEST UTLITME POUR CASSER /!\
 repeat 100 ./philo 200 1 1 1 | grep died -A100
 	-> ne doit afficher que des died sinon ca veut dire que e prog ne s arrete pas bien
-
-
-que faire si y a 0 repas ? faire un tour ou ne pas manger ?

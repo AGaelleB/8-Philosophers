@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/03 15:29:31 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/03 15:50:13 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,15 @@ void	action_eat(t_philo *philo, t_init *init)
 	pthread_mutex_lock(&(init->flag_all_eat_mutex));
 	init->all_eat++;
 	pthread_mutex_unlock(&(init->flag_all_eat_mutex));
-	// pthread_mutex_lock(&(init->flag_all_eat_mutex));
+	pthread_mutex_lock(&(init->flag_all_eat_mutex));
 	if (init->nb_must_eat != 0
 		&& ((init->nb_of_philo * init->nb_must_eat) == init->all_eat))
 	{
 		init->flag_all_eat = 1;
-		// pthread_mutex_unlock(&(init->flag_all_eat_mutex));
+		pthread_mutex_unlock(&(init->flag_all_eat_mutex));
 		return ;
 	}
-	// pthread_mutex_unlock(&(init->flag_all_eat_mutex));
+	pthread_mutex_unlock(&(init->flag_all_eat_mutex));
 	philo->time_last_eat = get_time_philo();
 	usleep(init->time_to_eat * 1000);
 }
