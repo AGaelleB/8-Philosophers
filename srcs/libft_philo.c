@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:02:31 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/02 11:23:15 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/03 13:29:18 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,20 @@ int	ft_isdigit(int c)
 
 int	ft_isdigit_str(char *str)
 {
+	int	len;
+
+	len = 0;
 	if (*str == '-')
 		return (0);
 	while (*str)
 	{
 		if (!ft_isdigit(*str))
 			return (0);
+		len++;
 		str++;
 	}
+	if (len > 10)
+		return (0);
 	return (1);
 }
 

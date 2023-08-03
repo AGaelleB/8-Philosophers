@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 18:50:50 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/02 15:21:01 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/03 15:04:51 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ typedef struct s_philo
 	int					right_fork_id;
 	long long			time_last_eat;
 	long long			time_init;
-	pthread_mutex_t		eat_mutex;
 	pthread_t			thread_philo;
 	struct s_data		*data;
 }						t_philo;
@@ -73,51 +72,43 @@ typedef struct s_data
 }		t_data;
 
 /***************************** actions_philos.c ******************************/
-void		action_think(t_philo *philo, t_init *init);
-void		action_sleep(t_philo *philo, t_init *init);
+void			action_think(t_philo *philo, t_init *init);
+void			action_sleep(t_philo *philo, t_init *init);
+void			action_take_fork(t_philo *philo, t_init *init);
 
 /***************************** check_and_stop.c ******************************/
-int			check_before_initialize(int ac, char **av);
-int			check_flag_died(t_init *init);
-int			check_flag_all_eat(t_init *init);
-int			check_time_for_philo_to_die(t_philo *philo, t_init *init);
-int			check_flag_death_printed(t_init *init); // ADD
+int				check_before_initialize(int ac, char **av);
+int				check_flag_died(t_init *init);
+int				check_flag_all_eat(t_init *init);
+int				check_flag_death_printed(t_init *init);
+int				check_time_for_philo_to_die(t_philo *philo, t_init *init);
 
 /********************************* free_all.c *********************************/
-void		free_all_mutex_and_forks(t_init *init);
-void		free_data(t_data *data);
+void			free_all_mutex_and_forks(t_init *init);
 
 /******************************** init_data.c *********************************/
-t_init		*init_recup_data(t_init *init, int ac, char **av);
-t_init		*init_philo(t_init *init);
-void		action_take_fork(t_philo *philo, t_init *init);
-int			check_single_philo_and_exit(t_init *init, char **av);
+int				check_single_philo_and_exit(t_init *init, char **av);
+t_init			*init_recup_data(t_init *init, int ac, char **av);
+t_init			*init_philo(t_init *init);
 
 /******************************** init_mutex.c ********************************/
-t_init		*init_mutex(t_init *data);
-t_init		*init_write_mutex(t_init *init);
-t_init		*init_eat_mutex(t_init *data);
-t_init		*init_flag_died_mutex(t_init *data);
-t_init		*init_flag_all_eat_mutex(t_init *init);
-t_init		*init_death_printed(t_init *init);
-t_init		*init_forks(t_init *data);
+t_init			*init_write_mutex(t_init *init);
+t_init			*init_flag_died_mutex(t_init *data);
+t_init			*init_flag_all_eat_mutex(t_init *init);
+t_init			*init_death_printed_mutex(t_init *init);
+t_init			*init_forks(t_init *data);
 
 /******************************* libft_philo.c ********************************/
-// long		ft_atoi_philo(char *str);
 long long int	ft_atoi_philo(char *str);
-
-int			ft_isdigit_str(char *str);
-int			ft_strcmp(char *s1, char *s2);
+int				ft_isdigit_str(char *str);
+int				ft_strcmp(char *s1, char *s2);
 
 /********************************* routine.c **********************************/
-int			check_flag_all_eat(t_init *init);
-int			check_flag_died(t_init *init);
-int			check_time_for_philo_to_die(t_philo *philo, t_init *init);
-void		run_routine_philo(t_init *init);
+void			run_routine_philo(t_init *init);
 
 /********************************* utils.c ************************************/
-int			write_error(char *str);
-long long	get_time_philo(void);
-void		print_action(t_init *init, int id, char *str);
+int				write_error(char *str);
+long long		get_time_philo(void);
+void			print_action(t_init *init, int id, char *str);
 
 #endif
