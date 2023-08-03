@@ -42,7 +42,8 @@ a tester :
 	-> a 10ms max, meme temps que pour 4 philos
 
 ./philo 4 310 200 100 00					==>	OK PAS DE LEAKS
-	-> 4 repas
+	-> 0 repas,
+	/!\ attention verifier si le double 0 est géré /!\
 
 ./philo 5 310 200 100
 	-> 1 mort
@@ -56,16 +57,13 @@ a tester :
 ./philo 200 300 1 1
 	-> boucle infini
 
-./philo 200 300 1 1 2 2
+./philo 200 300 1 1 2
 	-> 400 repas (attention parfois tout ne peux pas s afficher dans le terminal car trop long)
-
-./philo 200 300 1 1 0
-	-> 200 repas
 
 ./philo 200 1 1 1			/!\	parfois un affichage apres died et termine trop vite /!\
 	-> died
 
-./philo 200 100 90 20 1
+./philo 200 100 90 10 1		/!\	hyper dur, doit ettre super opti /!\
 	-> 200 repas
 
 ./philo 200 2147483648 89 10
@@ -76,18 +74,14 @@ a tester :
 
 ./philo 30 2000 100 100
 	-> a regarder dans le visualizer, ne doit pas se chevaucher 
+	-> https://nafuka11.github.io/philosophers-visualizer/
 
 ./philo 4 401 200 200
 	-> boucle infini 
 
-
-
 /!\ TEST UTLITME POUR CASSER /!\
 repeat 100 ./philo 200 1 1 1 | grep died -A100
 	-> ne doit afficher que des died sinon ca veut dire que e prog ne s arrete pas bien
-
-./philo 200 1 1 1 | grep --color=always 'died\|'
-	-> retourne tout le resultat avec en rouge le died (mais je crois que ca bloque les affichage d apres)
 
 
 que faire si y a 0 repas ? faire un tour ou ne pas manger ?

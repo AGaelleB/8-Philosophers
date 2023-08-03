@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/02 15:20:54 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/03 10:07:09 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,16 @@ void	*thread_run(void *arg)
 	while (1) //(data->init->flag_died != 1 || data->init->flag_all_eat != 1) // || data->init->death_printed != 1)
 	{
 		if (check_flag_died(data->init) || check_flag_all_eat(data->init) || check_flag_death_printed(data->init))
-			break ;
+			return (NULL);
+			// break ;
 		action_take_fork(data->philo, data->init);
 		if (check_flag_died(data->init) || check_flag_all_eat(data->init) || check_flag_death_printed(data->init))
-			break ;
+			return (NULL);
+			// break ;
 		action_sleep(data->philo, data->init);
 		if (check_flag_died(data->init) || check_flag_all_eat(data->init) || check_flag_death_printed(data->init))
-			break ;
+			return (NULL);
+			// break ;
 		action_think(data->philo, data->init);
 	}
 	return (NULL);

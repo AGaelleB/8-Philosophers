@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/02 16:12:08 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/03 10:59:46 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	write_error(char *str)
 
 	len = 0;
 	while (str[len])
+	
 		len++;
 	write(2, "Error: ", 7);
 	write(2, str, len);
@@ -36,29 +37,77 @@ long long	get_time_philo(void)
 
 void	print_action(t_init *init, int id, char *str)
 {
-	if (check_flag_all_eat(init))
-		return ;
+	pthread_mutex_lock(&init->death_printed_mutex);
 	if (check_flag_died(init))
 	{
-		pthread_mutex_lock(&init->death_printed_mutex);
 		if (init->death_printed == 0)
 		{
 			init->death_printed++;
-			pthread_mutex_unlock(&init->death_printed_mutex);
 			pthread_mutex_lock(&init->write_mutex);
 			printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
 			printf("%sdied%s\n", RED, RESET);
 			pthread_mutex_unlock(&init->write_mutex);
 		}
-		else
-			pthread_mutex_unlock(&init->death_printed_mutex);
+		pthread_mutex_unlock(&init->death_printed_mutex);
 		return ;
 	}
-	pthread_mutex_lock(&init->write_mutex);
-	printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
-	printf("%s\n", str);
-	pthread_mutex_unlock(&init->write_mutex);
+	if (check_flag_all_eat(init))
+		return ;
+	pthread_mutex_unlock(&init->death_printed_mutex);
+	
+	pthread_mutex_lock(&init->death_printed_mutex);
+	if (init->death_printed == 0)
+	{
+		pthread_mutex_lock(&init->write_mutex);
+		printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
+		printf("%s\n", str);
+		pthread_mutex_unlock(&init->write_mutex);
+		pthread_mutex_unlock(&init->death_printed_mutex);
+		return ;
+	}
+	else
+	{
+		pthread_mutex_unlock(&init->death_printed_mutex);
+		return ;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+// void	print_action(t_init *init, int id, char *str)
+// {
+// 	if (check_flag_all_eat(init))
+// 		return ;
+// 	if (check_flag_died(init))
+// 	{
+// 		pthread_mutex_lock(&init->death_printed_mutex);
+// 		if (init->death_printed == 0)
+// 		{
+// 			init->death_printed++;
+// 			pthread_mutex_unlock(&init->death_printed_mutex);
+// 			pthread_mutex_lock(&init->write_mutex);
+// 			printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
+// 			printf("%sdied%s\n", RED, RESET);
+// 			pthread_mutex_unlock(&init->write_mutex);
+// 		}
+// 		else
+// 			pthread_mutex_unlock(&init->death_printed_mutex);
+// 		return ;
+// 	}
+// 	pthread_mutex_lock(&init->write_mutex);
+// 	printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
+// 	printf("%s\n", str);
+// 	pthread_mutex_unlock(&init->write_mutex);
+// }
 
 // void	print_action(t_init *init, int id, char *str)
 // {

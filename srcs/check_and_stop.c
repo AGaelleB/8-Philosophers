@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:15:30 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/02 15:20:58 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/03 11:05:12 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	check_before_initialize(int ac, char **av)
 		write_error("Invalid value");
 		return (1);
 	}
-	if (ac == 6 && strcmp(av[5], "0") == 0)
+	if (ac == 6 && ft_atoi_philo(av[5]) == 0)
 	{
 		write_error("Number of meals must be > 0");
 		return (1);

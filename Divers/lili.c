@@ -1,119 +1,101 @@
-les threads en attente affiche quand meme leur message apres "printf("STOP PLEASE\n");" alors que je veux que tout s arrete, meme les autres threads en attente. Comment modifier mon code pour regler ce probleme ? 
+comment faire pour m'assurer que les threads en attentes n'imprime pas une fois qu un philo died 
+j utilise deja plusieurs flags mais ca ne fonctionne pas bien. faut il ajouter des verifications quelque part ? 
 
-voici les resultats d execution : 
  ./philo 200 1 1 1 
+2 action_take_fork = 0
 0 1 has taken a fork
-1 2 has taken a fork
-1 4 has taken a fork
-1 5 has taken a fork
-1 5 has taken a fork
-1 5 is eating
-1 3 has taken a fork
-1 7 has taken a fork
+2 action_take_fork = 0
+0 1 has taken a fork
+ action_eat = 0
+0 1 is eating
+2 action_take_fork = 0
+0 3 has taken a fork
+2 action_take_fork = 0
+0 3 has taken a fork
+ action_eat = 0
+0 3 is eating
+2 action_take_fork = 0
+0 5 has taken a fork
+2 action_take_fork = 0
+0 5 has taken a fork
+ action_eat = 0
+0 5 is eating
+[...]
+1 action_take_fork = 0
+1 6 has taken a fork
+1 action_take_fork = 0
+2 action_take_fork = 0
+1 7 is sleeping
+ action_eat = 0
+1 6 is eating
 1 8 has taken a fork
+1 action_take_fork = 0
+1 action_take_fork = 0
+ action_sleep = 0
+2 action_take_fork = 0
 1 8 has taken a fork
-1 8 is eating
-1 10 has taken a fork
-1 10 has taken a fork
-1 10 is eating
-1 12 has taken a fork
-1 12 has taken a fork
-1 12 is eating
-1 14 has taken a fork
-1 14 has taken a fork
-1 14 is eating
-1 16 has taken a fork
-1 16 has taken a fork
-1 16 is eating
-1 18 has taken a fork
-1 18 has taken a fork
-1 18 is eating
-1 20 has taken a fork
-1 20 has taken a fork
-1 20 is eating
-1 23 has taken a fork
-1 23 has taken a fork
-1 23 is eating
-1 22 has taken a fork
-1 25 has taken a fork
-1 25 has taken a fork
-1 25 is eating
-1 27 has taken a fork
-1 27 has taken a fork
-1 27 is eating
-2 29 has taken a fork
-2 29 has taken a fork
-2 29 is eating
-2 31 has taken a fork
-2 31 has taken a fork
-2 31 is eating
-2 33 has taken a fork
-2 33 has taken a fork
-2 33 is eating
-2 35 has taken a fork
-2 35 has taken a fork
-2 35 is eating
-2 5 is sleeping
-2 4 has taken a fork
+ action_eat = 0
+ action_sleep = 0
+1 9 is sleeping
+1 action_take_fork = 0
+1 13 is sleeping
+ action_sleep = 0
+1 23 is sleeping
+2 action_take_fork = 0
+1 action_take_fork = 0
+1 98 has taken a fork
+2 25 died
+2 14 has taken a fork
+2 10 has taken a fork
+2 12 has taken a fork
+2 101 has taken a fork
+2 11 is sleeping
+2 3 is sleeping
+2 103 has taken a fork
+2 95 has taken a fork
+2 16 has taken a fork
+2 15 is sleeping
 2 4 is eating
-2 6 has taken a fork
-2 37 has taken a fork
-2 37 has taken a fork
-2 37 is eating
-2 8 is sleeping
-2 39 has taken a fork
-2 7 has taken a fork
-2 7 is eating
-2 10 is sleeping
-2 11 has taken a fork
-2 39 has taken a fork
-2 39 is eating
-2 42 has taken a fork
-2 12 is sleeping
-2 9 has taken a fork
-2 9 has taken a fork
-2 9 is eating
-2 14 is sleeping
-2 15 has taken a fork
-2 15 has taken a fork
-2 15 is eating
-2 42 has taken a forkmake register
-2 42 is eating
-2 47 has taken a fork
-2 47 has taken a fork
-2 13 has taken a fork
-2 19 has taken a fork
-2 16 is sleeping
-2 17 has taken a fork
-2 17 has taken a fork
-2 17 is eating
-2 44 has taken a fork
-2 20 is sleeping
-2 11 has taken a fork
-2 11 is eating
-2 13 has taken a fork
-2 13 is eating
-2 45 has taken a fork
-2 41 has taken a fork
-2 21 has taken a fork
-2 49 has taken a fork
-2 19 has taken a fork
-3 19 died
-STOP PLEASE
-3 18 is sleeping
-3 50 has taken a fork
-3 47 is eating
-3 51 has taken a fork
-3 23 is sleeping
-3 22 has taken a fork
-3 46 has taken a fork
-3 24 has taken a fork
-3 52 has taken a fork
-3 53 has taken a fork
-3 25 is sleeping
-3 54 has taken a fork
+2 17 is sleeping
+2 105 has taken a fork
+2 18 has taken a fork
+2 107 has taken a fork
+2 20 has taken a fork
+2 19 is sleeping
+2 99 has taken a fork
+2 109 has taken a fork
+2 8 is eating
+2 21 is sleeping
+2 22 has taken a fork
+2 111 has taken a fork
+2 24 has taken a fork
 
-voici mon code : 
+
+voici mon code :
+
+int	write_error(char *str)
+{
+	int	len;
+
+	len = 0;
+	while (str[len])
+	
+		len++;
+	write(2, "Error: ", 7);
+	write(2, str, len);
+	write(2, "\n", 1);
+	return (0);
+}
+
+long long	get_time_philo(void)
+{
+	struct timeval	current_time;
+
+	if (gettimeofday(&current_time, NULL))
+		return (-1);
+	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
+}
+
 void	print_action(t_init *init, int id, char *str)
 {
 	if (check_flag_all_eat(init))
@@ -123,13 +105,12 @@ void	print_action(t_init *init, int id, char *str)
 		pthread_mutex_lock(&init->death_printed_mutex);
 		if (init->death_printed == 0)
 		{
-			init->death_printed = 1;
+			init->death_printed++;
 			pthread_mutex_unlock(&init->death_printed_mutex);
 			pthread_mutex_lock(&init->write_mutex);
 			printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
-			printf("died\n");
+			printf("%sdied%s\n", RED, RESET);
 			pthread_mutex_unlock(&init->write_mutex);
-			printf("STOP PLEASE\n");
 		}
 		else
 			pthread_mutex_unlock(&init->death_printed_mutex);
@@ -140,6 +121,7 @@ void	print_action(t_init *init, int id, char *str)
 	printf("%s\n", str);
 	pthread_mutex_unlock(&init->write_mutex);
 }
+
 
 int	check_before_initialize(int ac, char **av)
 {
@@ -187,6 +169,18 @@ int	check_flag_all_eat(t_init *init)
 	return (0);
 }
 
+int	check_flag_death_printed(t_init *init)
+{
+	pthread_mutex_lock(&init->death_printed_mutex);
+	if (init->death_printed == 1)
+	{
+		pthread_mutex_unlock(&init->death_printed_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&init->death_printed_mutex);
+	return (0);
+}
+
 int	check_time_for_philo_to_die(t_philo *philo, t_init *init)
 {
 	if ((get_time_philo() - philo->time_last_eat) > init->time_to_die)
@@ -200,104 +194,114 @@ int	check_time_for_philo_to_die(t_philo *philo, t_init *init)
 	return (0);
 }
 
-void	action_think(t_philo *philo, t_init *init)
+void action_think(t_philo *philo, t_init *init)
 {
-	check_time_for_philo_to_die(philo, init); // NEW
-	if (check_flag_died(init) || check_flag_all_eat(init))
-		return ;
-
-	print_action(init, philo->philo_id, "is thinking");
+	check_time_for_philo_to_die(philo, init);
+	if (check_flag_died(init) || check_flag_all_eat(init) || check_flag_death_printed(init))
+		return;
+	if (init->death_printed == 0)
+	{
+		printf("%s action_think = %d%s\n",YELLOW, init->death_printed, RESET );
+		print_action(init, philo->philo_id, "is thinking");
+	}
 	usleep(init->time_to_think * 1000);
 
-	check_time_for_philo_to_die(philo, init); // NEW
-	if (check_flag_died(init) || check_flag_all_eat(init)) // NEW
-		return ; // NEW
 }
 
-void	action_sleep(t_philo *philo, t_init *init)
+void action_sleep(t_philo *philo, t_init *init)
 {
-	check_time_for_philo_to_die(philo, init); // NEW
-	if (check_flag_died(init) || check_flag_all_eat(init))
-		return ;
-
-	print_action(init, philo->philo_id, "is sleeping");
+	check_time_for_philo_to_die(philo, init);
+	if (check_flag_died(init) || check_flag_all_eat(init) || check_flag_death_printed(init))
+		return;
+	if (init->death_printed == 0)
+	{
+		printf("%s action_sleep = %d%s\n",YELLOW, init->death_printed, RESET );
+		print_action(init, philo->philo_id, "is sleeping");
+	}
 	usleep(init->time_to_sleep * 1000);
-
-	check_time_for_philo_to_die(philo, init); // NEW
-	if (check_flag_died(init) || check_flag_all_eat(init)) // NEW
-		return ; // NEW
 }
 
-void	action_drop_fork(t_philo *philo, t_init *init)
+void action_drop_fork(t_philo *philo, t_init *init)
 {
-	if(philo->left_fork_id < philo->right_fork_id)
+	if (philo->philo_id % 2 == 0)
 	{
 		pthread_mutex_unlock(&init->forks[philo->left_fork_id]);
 		pthread_mutex_unlock(&init->forks[philo->right_fork_id]);
 	}
-	else if(philo->left_fork_id > philo->right_fork_id)
+	else if (philo->philo_id % 2 != 0)
 	{
 		pthread_mutex_unlock(&init->forks[philo->right_fork_id]);
 		pthread_mutex_unlock(&init->forks[philo->left_fork_id]);
 	}
 }
 
-void	action_eat(t_philo *philo, t_init *init)
+void action_eat(t_philo *philo, t_init *init)
 {
-	check_time_for_philo_to_die(philo, init); // NEW
-	if (check_flag_died(init) || check_flag_all_eat(init))
-		return ;
-
-	print_action(init, philo->philo_id, "is eating");
+	check_time_for_philo_to_die(philo, init);
+	if (check_flag_died(init) || check_flag_all_eat(init) || check_flag_death_printed(init))
+		return;
+	if (init->death_printed == 0)
+	{
+		printf("%s action_eat = %d%s\n",YELLOW, init->death_printed, RESET );
+		print_action(init, philo->philo_id, "is eating");
+	}
 	pthread_mutex_lock(&(philo->eat_mutex));
 	init->all_eat++;
 	pthread_mutex_unlock(&(philo->eat_mutex));
-	if (init->nb_must_eat != 0
-		&& ((init->nb_of_philo * init->nb_must_eat) == init->all_eat))
+	if (init->nb_must_eat != 0 && ((init->nb_of_philo * init->nb_must_eat) == init->all_eat))
 	{
 		pthread_mutex_lock(&(init->flag_all_eat_mutex));
 		init->flag_all_eat = 1;
 		pthread_mutex_unlock(&(init->flag_all_eat_mutex));
-		return ;
+		return;
 	}
 	philo->time_last_eat = get_time_philo();
 	usleep(init->time_to_eat * 1000);
-
-	check_time_for_philo_to_die(philo, init); // NEW
-	if (check_flag_died(init) || check_flag_all_eat(init)) // NEW
-		return ; // NEW
 }
 
-void	action_take_fork(t_philo *philo, t_init *init)
+void action_take_fork(t_philo *philo, t_init *init)
 {
-	check_time_for_philo_to_die(philo, init); // NEW
-	if (check_flag_died(init) || check_flag_all_eat(init))
-		return ;
-	if(philo->left_fork_id < philo->right_fork_id)
+	check_time_for_philo_to_die(philo, init);
+	if (check_flag_died(init) || check_flag_all_eat(init) || check_flag_death_printed(init))
+		return;
+	if (philo->philo_id % 2 == 0)
 	{
 		pthread_mutex_lock(&init->forks[philo->left_fork_id]);
 		check_time_for_philo_to_die(philo, init);
-		print_action(init, philo->philo_id, "has taken a fork");
+		if (init->death_printed == 0)
+		{
+			printf("%s1 action_take_fork = %d%s\n",YELLOW, init->death_printed, RESET );
+			print_action(init, philo->philo_id, "has taken a fork");
+		}
 		pthread_mutex_lock(&init->forks[philo->right_fork_id]);
 		check_time_for_philo_to_die(philo, init);
-		print_action(init, philo->philo_id, "has taken a fork");
+		if (init->death_printed == 0)
+		{
+			printf("%s1 action_take_fork = %d%s\n",YELLOW, init->death_printed, RESET );
+			print_action(init, philo->philo_id, "has taken a fork");
+		}
 		action_eat(philo, init);
 		action_drop_fork(philo, init);
 	}
-	else if(philo->left_fork_id > philo->right_fork_id)
+	else if (philo->philo_id % 2 != 0)
 	{
 		pthread_mutex_lock(&init->forks[philo->right_fork_id]);
 		check_time_for_philo_to_die(philo, init);
-		print_action(init, philo->philo_id, "has taken a fork");
+		if (init->death_printed == 0)
+		{
+			printf("%s2 action_take_fork = %d%s\n",YELLOW, init->death_printed, RESET );
+			print_action(init, philo->philo_id, "has taken a fork");
+		}
 		pthread_mutex_lock(&init->forks[philo->left_fork_id]);
 		check_time_for_philo_to_die(philo, init);
-		print_action(init, philo->philo_id, "has taken a fork");
+		if (init->death_printed == 0)
+		{
+			printf("%s2 action_take_fork = %d%s\n",YELLOW, init->death_printed, RESET );
+			print_action(init, philo->philo_id, "has taken a fork");
+		}
 		action_eat(philo, init);
 		action_drop_fork(philo, init);
 	}
-	check_time_for_philo_to_die(philo, init); // NEW
-	if (check_flag_died(init) || check_flag_all_eat(init)) // NEW
-		return ; // NEW
 }
 
 void	*thread_run(void *arg)
@@ -305,15 +309,15 @@ void	*thread_run(void *arg)
 	t_data	*data;
 
 	data = (t_data *)arg;
-	while (data->init->flag_died != 1 || data->init->flag_all_eat != 1)
+	while (1) //(data->init->flag_died != 1 || data->init->flag_all_eat != 1) // || data->init->death_printed != 1)
 	{
-		if (check_flag_died(data->init) || check_flag_all_eat(data->init))
+		if (check_flag_died(data->init) || check_flag_all_eat(data->init) || check_flag_death_printed(data->init))
 			break ;
 		action_take_fork(data->philo, data->init);
-		if (check_flag_died(data->init) || check_flag_all_eat(data->init))
+		if (check_flag_died(data->init) || check_flag_all_eat(data->init) || check_flag_death_printed(data->init))
 			break ;
 		action_sleep(data->philo, data->init);
-		if (check_flag_died(data->init) || check_flag_all_eat(data->init))
+		if (check_flag_died(data->init) || check_flag_all_eat(data->init) || check_flag_death_printed(data->init))
 			break ;
 		action_think(data->philo, data->init);
 	}
@@ -358,3 +362,30 @@ void	run_routine_philo(t_init *init)
 		i++;
 	}
 }
+
+int	main(int ac, char **av)
+{
+	t_init	*data;
+
+	data = NULL;
+	if (check_before_initialize(ac, av) == 0)
+	{
+		data = initialize_data_and_mutex(data, ac, av);
+		if (data == NULL)
+			return (write_error("Failed to initialize"));
+		if (check_single_philo_and_exit(data, av))
+		{
+			free_all_mutex_and_forks(data);
+			return (1);
+		}
+		run_routine_philo(data);
+		if (data->flag_died || data->flag_all_eat)
+		{
+			free_all_mutex_and_forks(data);
+			return (1);
+		}
+		free_all_mutex_and_forks(data);
+	}
+	return (0);
+}
+
