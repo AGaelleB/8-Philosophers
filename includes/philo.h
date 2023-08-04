@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 18:50:50 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/04 13:17:11 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/04 17:10:36 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,9 @@ typedef struct s_data
 	t_philo	*philo;
 	t_init	*init;
 }		t_data;
+
+int	check_all_deaths(t_init *init);
+
 
 /***************************** actions_philos.c ******************************/
 void			action_think(t_philo *philo, t_init *init);

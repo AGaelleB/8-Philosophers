@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/04 13:46:13 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/04 16:44:44 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,6 @@ void	print_if_philosopher_death(t_init *init, int id)
 			init->death_printed++;
 			pthread_mutex_lock(&init->write_mutex);
 			printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
-
-			// printf("%stime_last_eat %lld %s\n", MAGENTA, init->philo->time_last_eat, RESET);
-			// printf("%stime_init %lld %s\n", YELLOW, init->philo->time_init, RESET);
-			// printf("%sget_time_philo() %lld %s\n", GREEN, get_time_philo(), RESET);
-
-			// printf("%lld %d ", (init->philo->time_init - init->philo->time_last_eat + init->time_to_die), id);
 			printf("died\n");
 			pthread_mutex_unlock(&init->write_mutex);
 		}
@@ -85,3 +79,4 @@ void	print_action(t_init *init, int id, char *str)
 		return ;
 	}
 }
+

@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:15:30 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/04 13:17:41 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/04 17:10:27 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,20 @@ int	check_time_for_philo_to_die(t_philo *philo, t_init *init)
 		pthread_mutex_unlock(&(init->flag_died_mutex));
 		print_action(init, philo->philo_id, "died");
 		return (1);
+	}
+	return (0);
+}
+
+int	check_all_deaths(t_init *init)
+{
+	int	i;
+
+	i = 0;
+	while (i < init->nb_of_philo) // && (check_flag_died(init) == 0))
+	{
+		if (check_time_for_philo_to_die(&init->philo[i], init))
+			return (1);
+		i++;
 	}
 	return (0);
 }

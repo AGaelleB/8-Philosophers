@@ -15,7 +15,8 @@
 CFLAGS = -Wall -Werror -Wextra -pthread -g -fsanitize=thread
 	-> je peux utiliser ces differents flags de compil plus efficace que Valgrind.
 
-valgrind --leak-check=full --show-leak-kinds=all --fair-sched=yes --tool=helgrind ./philo X X X X X
+valgrind --leak-check=full --show-leak-kinds=all --fair-sched=yes ./philo X X X X X
+valgrind --tool=helgrind ./philo X X X X X
 
 a tester :
 
@@ -59,7 +60,7 @@ a tester :
 ./philo 200 300 1 1 2
 	-> 400 repas (attention parfois tout ne peux pas s afficher dans le terminal car trop long)
 
-./philo 200 1 1 1			/!\ si pas opti	affichage des actions apres died /!\
+./philo 200 60 60 60			/!\ si pas opti	affichage des actions apres died /!\
 	-> died
 
 ./philo 200 100 90 10 1		/!\	hyper dur, doit ettre super opti /!\
@@ -88,10 +89,6 @@ a tester :
 /!\ TEST UTLITME POUR CASSER /!\
 repeat 100 ./philo 200 1 1 1 | grep died -A100
 	-> ne doit afficher que des died sinon ca veut dire que e prog ne s arrete pas bien
-
-
-
-
 
 
 
