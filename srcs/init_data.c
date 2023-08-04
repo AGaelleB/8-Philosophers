@@ -6,22 +6,11 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 18:36:34 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/03 15:09:32 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/04 13:12:48 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-
-int	check_single_philo_and_exit(t_init *init, char **av)
-{
-	if (init->nb_of_philo == 1)
-	{
-		usleep(init->time_to_die * 1000);
-		printf("%lld %s died\n", ft_atoi_philo(av[2]) + 1, av[1]);
-		return (1);
-	}
-	return (0);
-}
 
 void	calculate_and_set_time_to_think(t_init *init)
 {

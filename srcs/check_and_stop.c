@@ -6,40 +6,11 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:15:30 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/03 16:20:18 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/04 13:17:41 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-
-int	check_before_initialize(int ac, char **av)
-{
-	if (ac != 6 && ac != 5)
-	{
-		write_error("Wrong numbers of arguments");
-		return (1);
-	}
-	if (!ft_isdigit_str(av[1]) || !ft_isdigit_str(av[2])
-		|| !ft_isdigit_str(av[3]) || !ft_isdigit_str(av[4])
-		|| (ac == 6 && !ft_isdigit_str(av[5])))
-	{
-		write_error("Invalid value");
-		return (1);
-	}
-	if (ft_atoi_philo(av[1]) > INT_MAX || ft_atoi_philo(av[2]) > INT_MAX
-		|| ft_atoi_philo(av[3]) > INT_MAX || ft_atoi_philo(av[4]) > INT_MAX
-		|| (ac == 6 && ft_atoi_philo(av[5]) > INT_MAX))
-	{
-		write_error("Invalid value");
-		return (1);
-	}
-	if (ac == 6 && ft_atoi_philo(av[5]) == 0)
-	{
-		write_error("Number of meals must be > 0");
-		return (1);
-	}
-	return (0);
-}
 
 int	check_flag_died(t_init *init)
 {

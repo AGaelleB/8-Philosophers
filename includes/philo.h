@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 18:50:50 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/03 15:04:51 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/04 13:17:11 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ void			action_sleep(t_philo *philo, t_init *init);
 void			action_take_fork(t_philo *philo, t_init *init);
 
 /***************************** check_and_stop.c ******************************/
-int				check_before_initialize(int ac, char **av);
 int				check_flag_died(t_init *init);
 int				check_flag_all_eat(t_init *init);
 int				check_flag_death_printed(t_init *init);

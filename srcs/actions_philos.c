@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:57 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/03 15:50:13 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/04 13:27:06 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,26 @@
 
 void	action_think(t_philo *philo, t_init *init)
 {
-	check_time_for_philo_to_die(philo, init);
-	if (check_flag_died(init) || check_flag_all_eat(init))
-		return ;
-	print_action(init, philo->philo_id, "is thinking");
-	usleep(init->time_to_think * 1000);
+	if (init->nb_of_philo > 1) // Check ici
+	{
+		check_time_for_philo_to_die(philo, init);
+		if (check_flag_died(init) || check_flag_all_eat(init))
+			return ;
+		print_action(init, philo->philo_id, "is thinking");
+		usleep(init->time_to_think * 1000);
+	}
 }
 
 void	action_sleep(t_philo *philo, t_init *init)
 {
-	check_time_for_philo_to_die(philo, init);
-	if (check_flag_died(init) || check_flag_all_eat(init))
-		return ;
-	print_action(init, philo->philo_id, "is sleeping");
-	usleep(init->time_to_sleep * 1000);
+	if (init->nb_of_philo > 1) // Check ici
+	{
+		check_time_for_philo_to_die(philo, init);
+		if (check_flag_died(init) || check_flag_all_eat(init))
+			return ;
+		print_action(init, philo->philo_id, "is sleeping");
+		usleep(init->time_to_sleep * 1000);
+	}
 }
 
 void	action_drop_fork(t_philo *philo, t_init *init)
@@ -68,24 +74,27 @@ void	action_take_fork(t_philo *philo, t_init *init)
 	check_time_for_philo_to_die(philo, init);
 	if (check_flag_died(init) || check_flag_all_eat(init))
 		return ;
-	if (philo->philo_id % 2 == 0)
+	if (init->nb_of_philo > 1) // Check ici
 	{
-		pthread_mutex_lock(&init->forks[philo->left_fork_id]);
-		check_time_for_philo_to_die(philo, init);
-		print_action(init, philo->philo_id, "has taken a fork");
-		pthread_mutex_lock(&init->forks[philo->right_fork_id]);
-		print_action(init, philo->philo_id, "has taken a fork");
-		action_eat(philo, init);
-		action_drop_fork(philo, init);
-	}
-	else if (philo->philo_id % 2 != 0)
-	{
-		pthread_mutex_lock(&init->forks[philo->right_fork_id]);
-		check_time_for_philo_to_die(philo, init);
-		print_action(init, philo->philo_id, "has taken a fork");
-		pthread_mutex_lock(&init->forks[philo->left_fork_id]);
-		print_action(init, philo->philo_id, "has taken a fork");
-		action_eat(philo, init);
-		action_drop_fork(philo, init);
+		if (philo->philo_id % 2 == 0)
+		{
+			pthread_mutex_lock(&init->forks[philo->left_fork_id]);
+			check_time_for_philo_to_die(philo, init);
+			print_action(init, philo->philo_id, "has taken a fork");
+			pthread_mutex_lock(&init->forks[philo->right_fork_id]);
+			print_action(init, philo->philo_id, "has taken a fork");
+			action_eat(philo, init);
+			action_drop_fork(philo, init);
+		}
+		else if (philo->philo_id % 2 != 0)
+		{
+			pthread_mutex_lock(&init->forks[philo->right_fork_id]);
+			check_time_for_philo_to_die(philo, init);
+			print_action(init, philo->philo_id, "has taken a fork");
+			pthread_mutex_lock(&init->forks[philo->left_fork_id]);
+			print_action(init, philo->philo_id, "has taken a fork");
+			action_eat(philo, init);
+			action_drop_fork(philo, init);
+		}
 	}
 }
