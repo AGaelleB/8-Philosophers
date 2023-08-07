@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 18:50:50 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/04 17:10:36 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/07 12:26:48 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ int				check_flag_died(t_init *init);
 int				check_flag_all_eat(t_init *init);
 int				check_flag_death_printed(t_init *init);
 int				check_time_for_philo_to_die(t_philo *philo, t_init *init);
+// int				check_time_for_philo_to_die(t_init *init); // modifié pour tous les philos 
+// int				check_time_for_philo_to_die(t_philo *philo, t_init *init); // modifié pour verifs tous les philos 
 
 /********************************* free_all.c *********************************/
 void			free_all_mutex_and_forks(t_init *init);
@@ -109,6 +111,7 @@ int				ft_strcmp(char *s1, char *s2);
 void			run_routine_philo(t_init *init);
 
 /********************************* utils.c ************************************/
+int				write_error_and_return(char *str);
 int				write_error(char *str);
 long long		get_time_philo(void);
 void			print_action(t_init *init, int id, char *str);

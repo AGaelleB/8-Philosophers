@@ -6,17 +6,11 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:19 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/04 13:16:53 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/07 09:35:59 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-
-int	write_error_and_return(char *str)
-{
-	write_error(str);
-	return (1);
-}
 
 int	check_before_initialize(int ac, char **av)
 {

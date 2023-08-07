@@ -92,8 +92,6 @@ repeat 100 ./philo 200 1 1 1 | grep died -A100
 
 
 
-
-
 /*************************************************/
 mettre message erruer pour 0 
 faire 1 thread pour 1 philo

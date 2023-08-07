@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/04 13:56:09 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/07 12:18:11 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	*thread_run(void *arg)
 	t_data	*data;
 
 	data = (t_data *)arg;
+	// usleep(5000);
 	while (1)
 	{
 		if (check_flag_died(data->init) || check_flag_all_eat(data->init)

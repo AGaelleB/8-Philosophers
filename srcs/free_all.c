@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:02:10 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/03 15:05:06 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/07 12:01:17 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	destroy_all_mutex(t_init *init)
 		pthread_mutex_destroy(&init->forks[i]);
 		i++;
 	}
+	i = 0;
 	pthread_mutex_destroy(&init->write_mutex);
 	pthread_mutex_destroy(&init->flag_died_mutex);
 	pthread_mutex_destroy(&init->flag_all_eat_mutex);
