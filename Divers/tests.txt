@@ -76,7 +76,7 @@ a tester :
 	-> a regarder dans le visualizer, ne doit pas se chevaucher 
 	-> https://nafuka11.github.io/philosophers-visualizer/
 
-./philo 4 401 200 200		/!\	hyper dur, doit ettre super opti /!\
+./philo 4 460 200 200		/!\	dur, doit etre super opti /!\
 	-> boucle infini 
 
  ./philo 2 400 100 5600

@@ -1,35 +1,59 @@
+comment faire pour regler mon probleme de datarace ?
+
+int	check_flag_died(t_init *init)
+{
+	pthread_mutex_lock(&(init->flag_died_mutex));
+	if (init->flag_died == 1)
+	{
+		pthread_mutex_unlock(&init->flag_died_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&init->flag_died_mutex);
+	return (0);
+}
+
+int	check_time_for_philo_to_die(t_philo *philo, t_init *init)
+{
+	if ((get_time_philo() - philo->time_last_eat) > init->time_to_die)
+	{
+		pthread_mutex_lock(&(init->flag_died_mutex));
+		init->flag_died = 1;
+		pthread_mutex_unlock(&(init->flag_died_mutex));
+		print_action(init, philo->philo_id, "died");
+		return (1);
+	}
+	return (0);
+}
+
+void	ft_usleep(long long duration, t_init *init)
+{
+	long long	start;
+
+	start = get_time_philo();
+	while (!check_time_for_philo_to_die(init->philo, init))
+	{
+		if (get_time_philo() - start >= duration)
+			break ;
+		usleep(init->nb_of_philo * 2);
+	}
+}
+
+
 void	action_think(t_philo *philo, t_init *init)
 {
-
-	check_time_for_philo_to_die(init);
-	if (check_flag_died(init) || check_flag_all_eat(init))
-		return ;
-
-
 	if (init->nb_of_philo > 1)
 	{
-		check_time_for_philo_to_die(init);
-		if (check_flag_died(init) || check_flag_all_eat(init))
-			return ;
 		print_action(init, philo->philo_id, "is thinking");
-		usleep(init->time_to_think);
+		ft_usleep(init->time_to_think, init);
 	}
 }
 
 void	action_sleep(t_philo *philo, t_init *init)
 {
-
-	check_time_for_philo_to_die(init);
-	if (check_flag_died(init) || check_flag_all_eat(init))
-		return ;
-	
 	if (init->nb_of_philo > 1)
 	{
-		check_time_for_philo_to_die(init);
-		if (check_flag_died(init) || check_flag_all_eat(init))
-			return ;
 		print_action(init, philo->philo_id, "is sleeping");
-		usleep(init->time_to_sleep * 1000);
+		ft_usleep(init->time_to_sleep, init);
 	}
 }
 
@@ -52,8 +76,6 @@ void	action_eat(t_philo *philo, t_init *init)
 	print_action(init, philo->philo_id, "is eating");
 	pthread_mutex_lock(&(init->flag_all_eat_mutex));
 	init->all_eat++;
-	pthread_mutex_unlock(&(init->flag_all_eat_mutex));
-	pthread_mutex_lock(&(init->flag_all_eat_mutex));
 	if (init->nb_must_eat != 0
 		&& ((init->nb_of_philo * init->nb_must_eat) == init->all_eat))
 	{
@@ -62,14 +84,13 @@ void	action_eat(t_philo *philo, t_init *init)
 		return ;
 	}
 	pthread_mutex_unlock(&(init->flag_all_eat_mutex));
-
 	philo->time_last_eat = get_time_philo();
-	usleep(init->time_to_eat * 1000);
+	ft_usleep(init->time_to_eat, init);
 }
 
 void	action_take_fork(t_philo *philo, t_init *init)
 {
-	check_time_for_philo_to_die(init);
+	check_time_for_philo_to_die(philo, init);
 	if (check_flag_died(init) || check_flag_all_eat(init))
 		return ;
 
@@ -78,7 +99,7 @@ void	action_take_fork(t_philo *philo, t_init *init)
 		if (philo->philo_id % 2 == 0)
 		{
 			pthread_mutex_lock(&init->forks[philo->left_fork_id]);
-			check_time_for_philo_to_die(init);
+			check_time_for_philo_to_die(philo, init);
 			print_action(init, philo->philo_id, "has taken a fork");
 			pthread_mutex_lock(&init->forks[philo->right_fork_id]);
 			print_action(init, philo->philo_id, "has taken a fork");
@@ -88,7 +109,7 @@ void	action_take_fork(t_philo *philo, t_init *init)
 		else if (philo->philo_id % 2 != 0)
 		{
 			pthread_mutex_lock(&init->forks[philo->right_fork_id]);
-			check_time_for_philo_to_die(init);
+			check_time_for_philo_to_die(philo, init);
 			print_action(init, philo->philo_id, "has taken a fork");
 			pthread_mutex_lock(&init->forks[philo->left_fork_id]);
 			print_action(init, philo->philo_id, "has taken a fork");
@@ -98,180 +119,79 @@ void	action_take_fork(t_philo *philo, t_init *init)
 	}
 }
 
-long long	get_time_philo(void)
-{
-	struct timeval	current_time;
+./philo 5 310 200 1500
+1 1 has taken a fork
+1 1 has taken a fork
+1 1 is eating
+1 3 has taken a fork
+1 3 has taken a fork
+1 3 is eating
+==================
+WARNING: ThreadSanitizer: data race (pid=458782)
+  Read of size 8 at 0x7b3c00000010 by thread T3 (mutexes: write M5, write M6):
+    #0 check_time_for_philo_to_die srcs/check_and_stop.c:53 (philo+0x233d)
+    #1 ft_usleep3 srcs/actions_philos.c:46 (philo+0x19db)
+    #2 action_eat srcs/actions_philos.c:112 (philo+0x1e44)
+    #3 action_take_fork srcs/actions_philos.c:140 (philo+0x2147)
+    #4 thread_run srcs/routine.c:25 (philo+0x313c)
 
-	if (gettimeofday(&current_time, NULL))
-		return (-1);
-	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
-}
+  Previous write of size 8 at 0x7b3c00000010 by thread T1 (mutexes: write M7, write M8):
+    #0 action_eat srcs/actions_philos.c:110 (philo+0x1e15)
+    #1 action_take_fork srcs/actions_philos.c:140 (philo+0x2147)
+    #2 thread_run srcs/routine.c:25 (philo+0x313c)
 
-void	print_if_philosopher_death(t_init *init, int id)
-{
-	pthread_mutex_lock(&init->death_printed_mutex);
-	if (check_flag_died(init))
-	{
-		if (init->death_printed == 0)
-		{
-			init->death_printed++;
-			pthread_mutex_lock(&init->write_mutex);
-			printf("%lld %d ", init->philo[id - 1].time_last_eat + init->time_to_die - init->philo->time_init, id);
-			// printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
-			printf("died\n");
-			pthread_mutex_unlock(&init->write_mutex);
-		}
-		pthread_mutex_unlock(&init->death_printed_mutex);
-		return ;
-	}
-	pthread_mutex_unlock(&init->death_printed_mutex);
-}
+  Location is heap block of size 240 at 0x7b3c00000000 allocated by main thread:
+    #0 malloc ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:655 (libtsan.so.0+0x31c57)
+    #1 init_philo srcs/init_data.c:59 (philo+0x2757)
+    #2 initialize_data_and_mutex srcs/main_philo.c:39 (philo+0x1687)
+    #3 main srcs/main_philo.c:67 (philo+0x179a)
 
+  Mutex M5 (0x7b3400000078) created at:
+    #0 pthread_mutex_init ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1227 (libtsan.so.0+0x4bee1)
+    #1 init_forks srcs/init_mutex.c:69 (philo+0x2c48)
+    #2 initialize_data_and_mutex srcs/main_philo.c:54 (philo+0x1720)
+    #3 main srcs/main_philo.c:67 (philo+0x179a)
 
-void	print_action(t_init *init, int id, char *str)
-{
-	print_if_philosopher_death(init, id);
-	pthread_mutex_lock(&init->death_printed_mutex);
-	if (check_flag_all_eat(init))
-	{
-		pthread_mutex_unlock(&init->death_printed_mutex);
-		return ;
-	}
-	pthread_mutex_unlock(&init->death_printed_mutex);
-	pthread_mutex_lock(&init->death_printed_mutex);
-	if (init->death_printed == 0)
-	{
-		pthread_mutex_lock(&init->write_mutex);
-		printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
-		printf("%s\n", str);
-		pthread_mutex_unlock(&init->write_mutex);
-		pthread_mutex_unlock(&init->death_printed_mutex);
-		return ;
-	}
-	else
-	{
-		pthread_mutex_unlock(&init->death_printed_mutex);
-		return ;
-	}
-}
+  Mutex M6 (0x7b3400000050) created at:
+    #0 pthread_mutex_init ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1227 (libtsan.so.0+0x4bee1)
+    #1 init_forks srcs/init_mutex.c:69 (philo+0x2c48)
+    #2 initialize_data_and_mutex srcs/main_philo.c:54 (philo+0x1720)
+    #3 main srcs/main_philo.c:67 (philo+0x179a)
 
-int	check_time_for_philo_to_die(t_init *init) // modifié pour verifs tous les philos 
-{
-	int	i;
+  Mutex M7 (0x7b3400000028) created at:
+    #0 pthread_mutex_init ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1227 (libtsan.so.0+0x4bee1)
+    #1 init_forks srcs/init_mutex.c:69 (philo+0x2c48)
+    #2 initialize_data_and_mutex srcs/main_philo.c:54 (philo+0x1720)
+    #3 main srcs/main_philo.c:67 (philo+0x179a)
 
-	i = 0;
-	while (i < init->nb_of_philo)
-	{
-		if ((get_time_philo() - init->philo[i].time_last_eat) > init->time_to_die)
-		{
-			pthread_mutex_lock(&(init->flag_died_mutex));
-			init->flag_died = 1;
-			pthread_mutex_unlock(&(init->flag_died_mutex));
-			print_action(init, init->philo[i].philo_id, "died");
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
+  Mutex M8 (0x7b3400000000) created at:
+    #0 pthread_mutex_init ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1227 (libtsan.so.0+0x4bee1)
+    #1 init_forks srcs/init_mutex.c:69 (philo+0x2c48)
+    #2 initialize_data_and_mutex srcs/main_philo.c:54 (philo+0x1720)
+    #3 main srcs/main_philo.c:67 (philo+0x179a)
 
-valgrind --tool=helgrind ./philo 5 310 200 1500
-==345031== Helgrind, a thread error detector
-==345031== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
-==345031== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
-==345031== Command: ./philo 5 310 200 1500
-==345031== 
-==345031== ---Thread-Announcement------------------------------------------
-==345031== 
-==345031== Thread #2 was created
-==345031==    at 0x49A0BA3: clone (clone.S:76)
-==345031==    by 0x49A1A9E: __clone_internal (clone-internal.c:83)
-==345031==    by 0x490F758: create_thread (pthread_create.c:295)
-==345031==    by 0x491027F: pthread_create@@GLIBC_2.34 (pthread_create.c:828)
-==345031==    by 0x4853767: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
-==345031==    by 0x10A767: init_and_create_threads (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x10A7C5: run_routine_philo (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x10960B: main (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031== 
-==345031== ---Thread-Announcement------------------------------------------
-==345031== 
-==345031== Thread #1 is the program's root thread
-==345031== 
-==345031== ----------------------------------------------------------------
-==345031== 
-==345031== Possible data race during read of size 8 at 0x4AA61C0 by thread #2
-==345031== Locks held: none
-==345031==    at 0x109CF4: check_time_for_philo_to_die (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x1099AA: action_take_fork (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x10A5BA: thread_run (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x485396A: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
-==345031==    by 0x490FB42: start_thread (pthread_create.c:442)
-==345031==    by 0x49A0BB3: clone (clone.S:100)
-==345031== 
-==345031== This conflicts with a previous write of size 8 by thread #1
-==345031== Locks held: none
-==345031==    at 0x10A6F4: init_and_create_threads (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x10A7C5: run_routine_philo (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x10960B: main (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==  Address 0x4aa61c0 is 64 bytes inside a block of size 240 alloc'd
-==345031==    at 0x484A919: malloc (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
-==345031==    by 0x109F6D: init_philo (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x1094F0: initialize_data_and_mutex (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x1095E6: main (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==  Block was alloc'd by thread #1
-==345031== 
--1691401488088 4 died
-==345031== ----------------------------------------------------------------
-==345031== 
-==345031==  Lock at 0x4AA6090 was first observed
-==345031==    at 0x4854BFE: pthread_mutex_init (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
-==345031==    by 0x10A0D4: init_write_mutex (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x109511: initialize_data_and_mutex (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x1095E6: main (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==  Address 0x4aa6090 is 80 bytes inside a block of size 248 alloc'd
-==345031==    at 0x484A919: malloc (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
-==345031==    by 0x109E5C: init_recup_data (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x1094CF: initialize_data_and_mutex (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x1095E6: main (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==  Block was alloc'd by thread #1
-==345031== 
-==345031==  Lock at 0x4AA6108 was first observed
-==345031==    at 0x4854BFE: pthread_mutex_init (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
-==345031==    by 0x10A1C2: init_death_printed_mutex (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x10956B: initialize_data_and_mutex (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x1095E6: main (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==  Address 0x4aa6108 is 200 bytes inside a block of size 248 alloc'd
-==345031==    at 0x484A919: malloc (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
-==345031==    by 0x109E5C: init_recup_data (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x1094CF: initialize_data_and_mutex (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x1095E6: main (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==  Block was alloc'd by thread #1
-==345031== 
-==345031== Possible data race during write of size 8 at 0x4AA6220 by thread #1
-==345031== Locks held: none
-==345031==    at 0x10A6F4: init_and_create_threads (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x10A7C5: run_routine_philo (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x10960B: main (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031== 
-==345031== This conflicts with a previous read of size 8 by thread #2
-==345031== Locks held: 2, at addresses 0x4AA6090 0x4AA6108
-==345031==    at 0x10A9E4: print_if_philosopher_death (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x10AA89: print_action (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x109D67: check_time_for_philo_to_die (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x1099AA: action_take_fork (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x10A5BA: thread_run (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x485396A: ??? (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
-==345031==    by 0x490FB42: start_thread (pthread_create.c:442)
-==345031==    by 0x49A0BB3: clone (clone.S:100)
-==345031==  Address 0x4aa6220 is 160 bytes inside a block of size 240 alloc'd
-==345031==    at 0x484A919: malloc (in /usr/libexec/valgrind/vgpreload_helgrind-amd64-linux.so)
-==345031==    by 0x109F6D: init_philo (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x1094F0: initialize_data_and_mutex (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==    by 0x1095E6: main (in /mnt/nfs/homes/abonnefo/Documents/Stud-42/8-Philosophers/philo)
-==345031==  Block was alloc'd by thread #1
-==345031== 
-==345031== 
-==345031== Use --history-level=approx or =none to gain increased speed, at
-==345031== the cost of reduced accuracy of conflicting-access information
-==345031== For lists of detected and suppressed errors, rerun with: -s
-==345031== ERROR SUMMARY: 3 errors from 2 contexts (suppressed: 28 from 7)
+  Thread T3 (tid=458786, running) created by main thread at:
+    #0 pthread_create ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:969 (libtsan.so.0+0x605b8)
+    #1 init_and_create_threads srcs/routine.c:54 (philo+0x3429)
+    #2 run_routine_philo srcs/routine.c:71 (philo+0x34ac)
+    #3 main srcs/main_philo.c:70 (philo+0x17c1)
+
+  Thread T1 (tid=458784, running) created by main thread at:
+    #0 pthread_create ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:969 (libtsan.so.0+0x605b8)
+    #1 init_and_create_threads srcs/routine.c:54 (philo+0x3429)
+    #2 run_routine_philo srcs/routine.c:71 (philo+0x34ac)
+    #3 main srcs/main_philo.c:70 (philo+0x17c1)
+
+SUMMARY: ThreadSanitizer: data race srcs/check_and_stop.c:53 in check_time_for_philo_to_die
+==================
+201 5 has taken a fork
+201 5 has taken a fork
+201 5 is eating
+201 1 is sleeping
+201 3 is sleeping
+201 2 has taken a fork
+201 4 has taken a fork
+201 2 has taken a fork
+201 2 is eating
+312 1 died
+ThreadSanitizer: reported 1 warnings

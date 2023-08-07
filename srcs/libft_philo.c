@@ -6,11 +6,17 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 13:02:31 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/03 13:29:18 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/07 17:50:32 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
+int	write_error_and_return(char *str)
+{
+	write_error(str);
+	return (1);
+}
 
 long long int	ft_atoi_philo(char *str)
 {

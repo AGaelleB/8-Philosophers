@@ -6,17 +6,11 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:40:03 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/07 12:26:11 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/07 17:53:40 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-
-int	write_error_and_return(char *str)
-{
-	write_error(str);
-	return (1);
-}
 
 int	write_error(char *str)
 {
@@ -31,6 +25,19 @@ int	write_error(char *str)
 	return (0);
 }
 
+void	ft_usleep(long long duration, t_init *init)
+{
+	long long	start;
+
+	start = get_time_philo();
+	while (!check_time_for_philo_to_die(init->philo, init))
+	{
+		if (get_time_philo() - start >= duration)
+			break ;
+		usleep(init->nb_of_philo * 2);
+	}
+}
+
 long long	get_time_philo(void)
 {
 	struct timeval	current_time;
@@ -39,7 +46,6 @@ long long	get_time_philo(void)
 		return (-1);
 	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
 }
-
 
 void	print_if_philosopher_death(t_init *init, int id)
 {
@@ -86,62 +92,3 @@ void	print_action(t_init *init, int id, char *str)
 		return ;
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-// void	print_if_philosopher_death(t_init *init, int id)
-// {
-// 	pthread_mutex_lock(&init->death_printed_mutex);
-// 	if (check_flag_died(init))
-// 	{
-// 		if (init->death_printed == 0)
-// 		{
-// 			init->death_printed++;
-// 			pthread_mutex_lock(&init->write_mutex);
-// 			printf("%lld %d ", init->philo[id - 1].time_last_eat + init->time_to_die - init->philo->time_init, id);
-// 			// printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
-// 			printf("died\n");
-// 			pthread_mutex_unlock(&init->write_mutex);
-// 		}
-// 		pthread_mutex_unlock(&init->death_printed_mutex);
-// 		return ;
-// 	}
-// 	pthread_mutex_unlock(&init->death_printed_mutex);
-// }
-
-
-// void	print_action(t_init *init, int id, char *str)
-// {
-// 	print_if_philosopher_death(init, id);
-// 	pthread_mutex_lock(&init->death_printed_mutex);
-// 	if (check_flag_all_eat(init))
-// 	{
-// 		pthread_mutex_unlock(&init->death_printed_mutex);
-// 		return ;
-// 	}
-// 	pthread_mutex_unlock(&init->death_printed_mutex);
-// 	pthread_mutex_lock(&init->death_printed_mutex);
-// 	if (init->death_printed == 0)
-// 	{
-// 		pthread_mutex_lock(&init->write_mutex);
-// 		printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
-// 		printf("%s\n", str);
-// 		pthread_mutex_unlock(&init->write_mutex);
-// 		pthread_mutex_unlock(&init->death_printed_mutex);
-// 		return ;
-// 	}
-// 	else
-// 	{
-// 		pthread_mutex_unlock(&init->death_printed_mutex);
-// 		return ;
-// 	}
-// }
-

@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 10:30:19 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/07 09:35:59 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/07 17:46:54 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@ t_init	*initialize_data_and_mutex(t_init *data, int ac, char **av)
 	if (!data)
 		return (NULL);
 	data = init_forks(data);
+	if (!data)
+		return (NULL);
+	data = init_time_last_eat_mutex(data);
 	if (!data)
 		return (NULL);
 	return (data);
