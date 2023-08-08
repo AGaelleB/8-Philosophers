@@ -6,7 +6,7 @@
 #    By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/17 10:44:39 by abonnefo          #+#    #+#              #
-#    Updated: 2023/08/07 16:46:36 by abonnefo         ###   ########.fr        #
+#    Updated: 2023/08/07 18:05:24 by abonnefo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,8 @@ NAME = philo
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
-# CFLAGS = -Wall -Werror -Wextra -pthread -g -fsanitize=thread
+# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Werror -Wextra -pthread -g -fsanitize=thread
 
 
 OBJ_DIR_PHILO = srcs/obj_philo

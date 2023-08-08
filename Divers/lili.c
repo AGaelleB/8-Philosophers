@@ -1,4 +1,53 @@
-comment faire pour regler mon probleme de datarace ?
+je devrais touhours avoir un died vers 310 avec cette commande mais parfois je died a 400, pourquoi ? 
+
+./philo 4 310 200 100
+0 1 has taken a fork
+0 1 has taken a fork
+0 1 is eating
+0 3 has taken a fork
+0 3 has taken a fork
+0 3 is eating
+200 1 is sleeping
+200 2 has taken a fork
+200 2 has taken a fork
+200 2 is eating
+200 3 is sleeping
+200 4 has taken a fork
+200 4 has taken a fork
+200 4 is eating
+300 3 is thinking
+300 1 is thinking
+311 1 died
+➜  8-Philosophers git:(main) ✗ ./philo 4 310 200 100
+1 1 has taken a fork
+1 1 has taken a fork
+1 1 is eating
+1 4 has taken a fork
+201 1 is sleeping
+201 4 has taken a fork
+201 4 is eating
+201 2 has taken a fork
+201 2 has taken a fork
+201 2 is eating
+301 1 is thinking
+312 1 died
+➜  8-Philosophers git:(main) ✗ ./philo 4 310 200 100
+0 2 has taken a fork
+1 2 has taken a fork
+1 2 is eating
+1 3 has taken a fork
+201 2 is sleeping
+201 1 has taken a fork
+201 1 has taken a fork
+201 1 is eating
+201 3 has taken a fork
+201 3 is eating
+301 2 is thinking
+401 1 is sleeping
+401 2 died
+
+mon code : 
+
 
 int	check_flag_died(t_init *init)
 {
@@ -12,9 +61,38 @@ int	check_flag_died(t_init *init)
 	return (0);
 }
 
+int	check_flag_all_eat(t_init *init)
+{
+	pthread_mutex_lock(&init->flag_all_eat_mutex);
+	if (init->flag_all_eat == 1)
+	{
+		pthread_mutex_unlock(&init->flag_all_eat_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&init->flag_all_eat_mutex);
+	return (0);
+}
+
+int	check_flag_death_printed(t_init *init)
+{
+	pthread_mutex_lock(&init->death_printed_mutex);
+	if (init->death_printed == 1)
+	{
+		pthread_mutex_unlock(&init->death_printed_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&init->death_printed_mutex);
+	return (0);
+}
+
 int	check_time_for_philo_to_die(t_philo *philo, t_init *init)
 {
-	if ((get_time_philo() - philo->time_last_eat) > init->time_to_die)
+	long long	time_last_eat;
+
+	pthread_mutex_lock(&philo->time_last_eat_mutex);
+	time_last_eat = philo->time_last_eat;
+	pthread_mutex_unlock(&philo->time_last_eat_mutex);
+	if ((get_time_philo() - time_last_eat) > init->time_to_die)
 	{
 		pthread_mutex_lock(&(init->flag_died_mutex));
 		init->flag_died = 1;
@@ -24,6 +102,7 @@ int	check_time_for_philo_to_die(t_philo *philo, t_init *init)
 	}
 	return (0);
 }
+
 
 void	ft_usleep(long long duration, t_init *init)
 {
@@ -38,9 +117,66 @@ void	ft_usleep(long long duration, t_init *init)
 	}
 }
 
+long long	get_time_philo(void)
+{
+	struct timeval	current_time;
+
+	if (gettimeofday(&current_time, NULL))
+		return (-1);
+	return ((current_time.tv_sec * 1000) + (current_time.tv_usec / 1000));
+}
+
+void	print_if_philosopher_death(t_init *init, int id)
+{
+	pthread_mutex_lock(&init->death_printed_mutex);
+	if (check_flag_died(init))
+	{
+		if (init->death_printed == 0)
+		{
+			init->death_printed++;
+			pthread_mutex_lock(&init->write_mutex);
+			printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
+			printf("died\n");
+			pthread_mutex_unlock(&init->write_mutex);
+		}
+		pthread_mutex_unlock(&init->death_printed_mutex);
+		return ;
+	}
+	pthread_mutex_unlock(&init->death_printed_mutex);
+}
+
+void	print_action(t_init *init, int id, char *str)
+{
+	print_if_philosopher_death(init, id);
+	pthread_mutex_lock(&init->death_printed_mutex);
+	if (check_flag_all_eat(init))
+	{
+		pthread_mutex_unlock(&init->death_printed_mutex);
+		return ;
+	}
+	pthread_mutex_unlock(&init->death_printed_mutex);
+	pthread_mutex_lock(&init->death_printed_mutex);
+	if (init->death_printed == 0)
+	{
+		pthread_mutex_lock(&init->write_mutex);
+		printf("%lld %d ", (get_time_philo() - init->philo->time_init), id);
+		printf("%s\n", str);
+		pthread_mutex_unlock(&init->write_mutex);
+		pthread_mutex_unlock(&init->death_printed_mutex);
+		return ;
+	}
+	else
+	{
+		pthread_mutex_unlock(&init->death_printed_mutex);
+		return ;
+	}
+}
 
 void	action_think(t_philo *philo, t_init *init)
 {
+	check_time_for_philo_to_die(philo, init);
+	if (check_flag_died(init) || check_flag_all_eat(init))
+		return ;
 	if (init->nb_of_philo > 1)
 	{
 		print_action(init, philo->philo_id, "is thinking");
@@ -50,6 +186,9 @@ void	action_think(t_philo *philo, t_init *init)
 
 void	action_sleep(t_philo *philo, t_init *init)
 {
+	check_time_for_philo_to_die(philo, init);
+	if (check_flag_died(init) || check_flag_all_eat(init))
+		return ;
 	if (init->nb_of_philo > 1)
 	{
 		print_action(init, philo->philo_id, "is sleeping");
@@ -93,15 +232,15 @@ void	action_take_fork(t_philo *philo, t_init *init)
 	check_time_for_philo_to_die(philo, init);
 	if (check_flag_died(init) || check_flag_all_eat(init))
 		return ;
-
 	if (init->nb_of_philo > 1)
 	{
 		if (philo->philo_id % 2 == 0)
 		{
 			pthread_mutex_lock(&init->forks[philo->left_fork_id]);
-			check_time_for_philo_to_die(philo, init);
+			check_time_for_philo_to_die(philo, init); // au lieu d avoir died a 400 pour ./philo 4 310 200 100 j'ai 500
 			print_action(init, philo->philo_id, "has taken a fork");
 			pthread_mutex_lock(&init->forks[philo->right_fork_id]);
+			// check_time_for_philo_to_die(philo, init);
 			print_action(init, philo->philo_id, "has taken a fork");
 			action_eat(philo, init);
 			action_drop_fork(philo, init);
@@ -112,6 +251,7 @@ void	action_take_fork(t_philo *philo, t_init *init)
 			check_time_for_philo_to_die(philo, init);
 			print_action(init, philo->philo_id, "has taken a fork");
 			pthread_mutex_lock(&init->forks[philo->left_fork_id]);
+			// check_time_for_philo_to_die(philo, init);
 			print_action(init, philo->philo_id, "has taken a fork");
 			action_eat(philo, init);
 			action_drop_fork(philo, init);
@@ -119,79 +259,65 @@ void	action_take_fork(t_philo *philo, t_init *init)
 	}
 }
 
-./philo 5 310 200 1500
-1 1 has taken a fork
-1 1 has taken a fork
-1 1 is eating
-1 3 has taken a fork
-1 3 has taken a fork
-1 3 is eating
-==================
-WARNING: ThreadSanitizer: data race (pid=458782)
-  Read of size 8 at 0x7b3c00000010 by thread T3 (mutexes: write M5, write M6):
-    #0 check_time_for_philo_to_die srcs/check_and_stop.c:53 (philo+0x233d)
-    #1 ft_usleep3 srcs/actions_philos.c:46 (philo+0x19db)
-    #2 action_eat srcs/actions_philos.c:112 (philo+0x1e44)
-    #3 action_take_fork srcs/actions_philos.c:140 (philo+0x2147)
-    #4 thread_run srcs/routine.c:25 (philo+0x313c)
+void	*thread_run(void *arg)
+{
+	t_data	*data;
 
-  Previous write of size 8 at 0x7b3c00000010 by thread T1 (mutexes: write M7, write M8):
-    #0 action_eat srcs/actions_philos.c:110 (philo+0x1e15)
-    #1 action_take_fork srcs/actions_philos.c:140 (philo+0x2147)
-    #2 thread_run srcs/routine.c:25 (philo+0x313c)
+	data = (t_data *)arg;
+	while (1)
+	{
+		if (check_flag_died(data->init) || check_flag_all_eat(data->init)
+			|| check_flag_death_printed(data->init))
+			return (NULL);
+		action_take_fork(data->philo, data->init);
+		if (check_flag_died(data->init) || check_flag_all_eat(data->init)
+			|| check_flag_death_printed(data->init))
+			return (NULL);
+		action_sleep(data->philo, data->init);
+		if (check_flag_died(data->init) || check_flag_all_eat(data->init)
+			|| check_flag_death_printed(data->init))
+			return (NULL);
+		action_think(data->philo, data->init);
+	}
+	return (NULL);
+}
 
-  Location is heap block of size 240 at 0x7b3c00000000 allocated by main thread:
-    #0 malloc ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:655 (libtsan.so.0+0x31c57)
-    #1 init_philo srcs/init_data.c:59 (philo+0x2757)
-    #2 initialize_data_and_mutex srcs/main_philo.c:39 (philo+0x1687)
-    #3 main srcs/main_philo.c:67 (philo+0x179a)
+void	init_and_create_threads(t_init *init, long long int time_init)
+{
+	t_data	*data;
+	int		i;
 
-  Mutex M5 (0x7b3400000078) created at:
-    #0 pthread_mutex_init ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1227 (libtsan.so.0+0x4bee1)
-    #1 init_forks srcs/init_mutex.c:69 (philo+0x2c48)
-    #2 initialize_data_and_mutex srcs/main_philo.c:54 (philo+0x1720)
-    #3 main srcs/main_philo.c:67 (philo+0x179a)
+	i = 0;
+	while ((i < init->nb_of_philo))
+	{
+		data = malloc(sizeof(t_data));
+		if (data == NULL)
+			return ;
+		data->init = init;
+		data->philo = &init->philo[i];
+		data->philo->time_last_eat = get_time_philo();
+		init->philo[i].data = data;
+		data->philo->time_init = time_init;
+		if (pthread_create(&init->philo[i].thread_philo, NULL,
+				thread_run, data))
+			return ;
+		i++;
+	}
+}
 
-  Mutex M6 (0x7b3400000050) created at:
-    #0 pthread_mutex_init ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1227 (libtsan.so.0+0x4bee1)
-    #1 init_forks srcs/init_mutex.c:69 (philo+0x2c48)
-    #2 initialize_data_and_mutex srcs/main_philo.c:54 (philo+0x1720)
-    #3 main srcs/main_philo.c:67 (philo+0x179a)
+void	run_routine_philo(t_init *init)
+{
+	long long int	time_init;
+	int				i;
 
-  Mutex M7 (0x7b3400000028) created at:
-    #0 pthread_mutex_init ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1227 (libtsan.so.0+0x4bee1)
-    #1 init_forks srcs/init_mutex.c:69 (philo+0x2c48)
-    #2 initialize_data_and_mutex srcs/main_philo.c:54 (philo+0x1720)
-    #3 main srcs/main_philo.c:67 (philo+0x179a)
+	time_init = get_time_philo();
+	i = 0;
+	init_and_create_threads(init, time_init);
+	while ((i < init->nb_of_philo))
+	{
+		pthread_join(init->philo[i].thread_philo, NULL);
+		free(init->philo[i].data);
+		i++;
+	}
+}
 
-  Mutex M8 (0x7b3400000000) created at:
-    #0 pthread_mutex_init ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:1227 (libtsan.so.0+0x4bee1)
-    #1 init_forks srcs/init_mutex.c:69 (philo+0x2c48)
-    #2 initialize_data_and_mutex srcs/main_philo.c:54 (philo+0x1720)
-    #3 main srcs/main_philo.c:67 (philo+0x179a)
-
-  Thread T3 (tid=458786, running) created by main thread at:
-    #0 pthread_create ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:969 (libtsan.so.0+0x605b8)
-    #1 init_and_create_threads srcs/routine.c:54 (philo+0x3429)
-    #2 run_routine_philo srcs/routine.c:71 (philo+0x34ac)
-    #3 main srcs/main_philo.c:70 (philo+0x17c1)
-
-  Thread T1 (tid=458784, running) created by main thread at:
-    #0 pthread_create ../../../../src/libsanitizer/tsan/tsan_interceptors_posix.cpp:969 (libtsan.so.0+0x605b8)
-    #1 init_and_create_threads srcs/routine.c:54 (philo+0x3429)
-    #2 run_routine_philo srcs/routine.c:71 (philo+0x34ac)
-    #3 main srcs/main_philo.c:70 (philo+0x17c1)
-
-SUMMARY: ThreadSanitizer: data race srcs/check_and_stop.c:53 in check_time_for_philo_to_die
-==================
-201 5 has taken a fork
-201 5 has taken a fork
-201 5 is eating
-201 1 is sleeping
-201 3 is sleeping
-201 2 has taken a fork
-201 4 has taken a fork
-201 2 has taken a fork
-201 2 is eating
-312 1 died
-ThreadSanitizer: reported 1 warnings

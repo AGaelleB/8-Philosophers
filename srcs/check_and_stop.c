@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 11:15:30 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/07 17:53:15 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/08 09:40:32 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,29 +65,3 @@ int	check_time_for_philo_to_die(t_philo *philo, t_init *init)
 	}
 	return (0);
 }
-
-/*
-int	check_time_for_philo_to_die(t_philo *philo, t_init *init)
-{
-	int	i;
-
-	i = 0;
-	while (i < init->nb_of_philo) // pb car philo[i].time_last_eat n est jamais libere
-	{
-		pthread_mutex_lock(&philo->time_last_eat_mutex);
-		long long time_last_eat = philo->time_last_eat;
-		pthread_mutex_unlock(&philo->time_last_eat_mutex);
-		
-		if ((get_time_philo() - time_last_eat) > init->time_to_die)
-		{
-			pthread_mutex_lock(&(init->flag_died_mutex));
-			init->flag_died = 1;
-			pthread_mutex_unlock(&(init->flag_died_mutex));
-			print_action(init, init->philo[i].philo_id, "died");
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-*/
