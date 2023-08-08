@@ -20,35 +20,35 @@ valgrind --tool=helgrind ./philo X X X X X
 
 a tester : ATTENTION TESTER AVEC FSANITEZER PEUT RALLENTIR LE PROGRAMME ET EMPECHER DES BOUCLES INFINIES
 
-./philo 1 800 200 200						==>	OK PAS DE LEAKS
+./philo 1 800 200 200								==>	OK PAS DE LEAKS
 	-> doit mourir, pas de repas
 
 ./philo 5 800 200 200
 	-> boucle infini
 
-./philo 5 800 200 200 7						==>	OK PAS DE LEAKS
+./philo 5 800 200 200 7 | grep eating |  wc -l		==>	OK PAS DE LEAKS
 	-> stop apres 7 repas
 
 ./philo 4 410 200 200
 	-> boucle infini
 
-./philo 5 310 200 100						==>	OK PAS DE LEAKS
+./philo 5 310 200 100								==>	OK PAS DE LEAKS
 	-> 1 mort
 
-./philo 2 310 200 100						==>	OK PAS DE LEAKS
+./philo 2 310 200 100								==>	OK PAS DE LEAKS
 	-> a 10ms max, meme temps que pour 4 philos
 
-./philo 4 310 200 100						==>	OK PAS DE LEAKS
+./philo 4 310 200 100								==>	OK PAS DE LEAKS
 	-> a 10ms max, meme temps que pour 2 philos
 
-./philo 4 310 200 100 00					==>	OK PAS DE LEAKS
+./philo 4 310 200 100 00							==>	OK PAS DE LEAKS
 	-> 0 repas,
 	/!\ attention verifier si le double 0 est géré /!\
 
-./philo 4 310 200 100 -10					==>	OK PAS DE LEAKS
+./philo 4 310 200 100 -10							==>	OK PAS DE LEAKS
 	-> rien
 
-./philo 4 310 200 100 fsdfs0				==>	OK PAS DE LEAKS
+./philo 4 310 200 100 fsdfs0						==>	OK PAS DE LEAKS
 	-> rien
 
 ./philo 200 300 60 60

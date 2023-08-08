@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 19:02:10 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/07 12:01:17 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/08 10:57:57 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	destroy_all_mutex(t_init *init)
 	i = 0;
 	while (i < init->nb_of_philo)
 	{
+		pthread_mutex_destroy(&init->philo[i].time_last_eat_mutex);
 		pthread_mutex_destroy(&init->forks[i]);
 		i++;
 	}
