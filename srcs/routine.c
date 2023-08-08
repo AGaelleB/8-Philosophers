@@ -6,7 +6,7 @@
 /*   By: abonnefo <abonnefo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 14:50:11 by abonnefo          #+#    #+#             */
-/*   Updated: 2023/08/07 17:51:13 by abonnefo         ###   ########.fr       */
+/*   Updated: 2023/08/08 10:23:13 by abonnefo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	init_and_create_threads(t_init *init, long long int time_init)
 		if (pthread_create(&init->philo[i].thread_philo, NULL,
 				thread_run, data))
 			return ;
+		usleep(50);
 		i++;
 	}
 }

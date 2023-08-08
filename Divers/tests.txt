@@ -18,7 +18,7 @@ CFLAGS = -Wall -Werror -Wextra -pthread -g -fsanitize=thread
 valgrind --leak-check=full --show-leak-kinds=all --fair-sched=yes ./philo X X X X X
 valgrind --tool=helgrind ./philo X X X X X
 
-a tester :
+a tester : ATTENTION TESTER AVEC FSANITEZER PEUT RALLENTIR LE PROGRAMME ET EMPECHER DES BOUCLES INFINIES
 
 ./philo 1 800 200 200						==>	OK PAS DE LEAKS
 	-> doit mourir, pas de repas
@@ -45,25 +45,22 @@ a tester :
 	-> 0 repas,
 	/!\ attention verifier si le double 0 est géré /!\
 
-./philo 5 310 200 100
-	-> 1 mort
-
 ./philo 4 310 200 100 -10					==>	OK PAS DE LEAKS
 	-> rien
 
 ./philo 4 310 200 100 fsdfs0				==>	OK PAS DE LEAKS
 	-> rien
 
-./philo 200 300 1 1
+./philo 200 300 60 60
 	-> boucle infini
 
-./philo 200 300 1 1 2
+./philo 200 300 60 60 2 | grep eating |  wc -l
 	-> 400 repas (attention parfois tout ne peux pas s afficher dans le terminal car trop long)
 
 ./philo 200 60 60 60			/!\ si pas opti	affichage des actions apres died /!\
 	-> died
 
-./philo 200 100 90 10 1		/!\	hyper dur, doit ettre super opti /!\
+./philo 200 120 60 60 1		/!\	hyper dur, doit etre super opti /!\
 	-> 200 repas
 
 ./philo 200 2147483648 89 10
@@ -76,7 +73,7 @@ a tester :
 	-> a regarder dans le visualizer, ne doit pas se chevaucher 
 	-> https://nafuka11.github.io/philosophers-visualizer/
 
-./philo 4 460 200 200		/!\	dur, doit etre super opti /!\
+./philo 4 460 200 200		/!\	dur, doit etre bien opti /!\
 	-> boucle infini 
 
  ./philo 2 400 100 5600
@@ -87,21 +84,6 @@ a tester :
 	-> permet de verif si tous les repas sont pris
 
 /!\ TEST UTLITME POUR CASSER /!\
-repeat 100 ./philo 200 1 1 1 | grep died -A100
+repeat 100 ./philo 200 60 60 60 | grep died -A100
 	-> ne doit afficher que des died sinon ca veut dire que e prog ne s arrete pas bien
 
-
-
-/*************************************************/
-mettre message erruer pour 0 
-faire 1 thread pour 1 philo
-faire afficher la mort au bon moment 
-
-faire un truc genre :
-void ft_usleep(int time_usleep)
-{
-	int start = gettime();
-
-	while(start + time_usleep > get_time && check_time_for_philo_to_die())
-		usleep(100);
-}
