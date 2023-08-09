@@ -1,6 +1,6 @@
 # **8-Philosophers**
 
-Debut le 19 juin 2023 - Validé le 8 aout 2023
+Debut le 19 juin 2023 - Validé le 8 aout 2023 => 50 jours, BH gagné 38 jours
 
 ## **INTRODUCTION :**
 
